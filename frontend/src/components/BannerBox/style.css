@@ -1,0 +1,7 @@
+.box.bannerBox img {
+    transition: transform 0.1s ease;
+}
+
+.box.bannerBox:hover img {
+    transform: scale(1.1);
+}

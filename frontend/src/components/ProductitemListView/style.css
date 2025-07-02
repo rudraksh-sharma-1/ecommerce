@@ -1,0 +1,58 @@
+/* ProductItemListView Styles */
+.flex-col-reverse {
+  flex-direction: column-reverse;
+}
+
+.productItem .title{line-height: 18px;}
+.productItem .actions button:hover svg{color: white !important;}
+.productItem .actions button svg{pointer-events:none !important;}
+
+/* Touch-friendly styles for mobile */
+@media (max-width: 640px) {
+  /* Ensure buttons have proper touch targets */
+  .product-action-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Ensure proper spacing on mobile */
+  .product-list-item {
+    padding: 12px;
+  }
+  
+  /* Improve image handling on mobile */
+  .product-image-container {
+    height: 180px;
+  }
+}
+
+/* Transition effects */
+.product-hover-effect {
+  transition: all 0.3s ease;
+}
+
+.product-hover-effect:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Add to cart button animation */
+.add-to-cart-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.add-to-cart-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease-out;
+}
+
+.add-to-cart-button:hover::after {
+  left: 100%;
+}

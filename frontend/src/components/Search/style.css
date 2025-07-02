@@ -1,0 +1,48 @@
+/* Search component styles */
+.search-container {
+  width: 100%;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.search-container.focused {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.search-container input {
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-right: none;
+}
+
+.search-container input::placeholder {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.search-container input:focus {
+  background-color: #fff;
+}
+
+.search-button {
+  transition: background-color 0.2s ease;
+}
+
+/* Ensure proper touch targets on mobile */
+@media (max-width: 767px) {
+  .search-container input,
+  .search-button {
+    height: 44px; /* Minimum touch target height */
+  }
+  
+  .search-button {
+    min-width: 44px; /* Minimum touch target width */
+  }
+}
+
+/* Small screen optimization */
+@media (max-width: 374px) {
+  .search-container input::placeholder {
+    font-size: 0.75rem;
+  }
+}

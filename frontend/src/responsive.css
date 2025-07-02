@@ -1,0 +1,565 @@
+html, body {
+  overflow-x: hidden;
+  font-size: 16px;
+}
+
+body {
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+textarea,
+select {
+  font-size: 16px !important;
+}
+
+.container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 100%;
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+
+/* ===== Typography scaling ===== */
+h1, .h1 {
+  font-size: 1.5rem !important;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+h2, .h2 {
+  font-size: 1.3rem !important;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+h3, .h3 {
+  font-size: 1.1rem !important;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  h1, .h1 {
+    font-size: 1.75rem !important;
+  }
+  
+  h2, .h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  h3, .h3 {
+    font-size: 1.25rem !important;
+  }
+}
+
+@media (min-width: 992px) {
+  h1, .h1 {
+    font-size: 2rem !important;
+  }
+  
+  h2, .h2 {
+    font-size: 1.75rem !important;
+  }
+  
+  h3, .h3 {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* ===== Layout adjustments ===== */
+/* Adjust padding for sections */
+section {
+  padding: 2rem 0;
+}
+
+@media (min-width: 768px) {
+  section {
+    padding: 2.5rem 0;
+  }
+}
+
+@media (min-width: 992px) {
+  section {
+    padding: 3rem 0;
+  }
+}
+
+/* Fix for large tables */
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== Header & Navigation ===== */
+/* Adjust header for mobile */
+@media (max-width: 767px) {
+  .header .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .mobile-search-container {
+    padding: 0.5rem;
+  }
+  
+  /* Ensure header is not too tall on mobile */
+  .header .logo img {
+    max-height: 40px;
+  }
+}
+
+/* Improve navigation for mobile */
+@media (max-width: 767px) {
+  .navigation-menu li {
+    margin-right: 0;
+  }
+  
+  .submenu {
+    position: static !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+  }
+}
+
+/* ===== Form elements ===== */
+/* Make form elements more touch-friendly */
+button, 
+.btn, 
+a.btn,
+input[type="button"],
+input[type="submit"] {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+/* ===== Product listings ===== */
+/* Adjust product cards for mobile */
+@media (max-width: 767px) {
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+  
+  .product-card {
+    margin-bottom: 1rem;
+  }
+  
+  .product-card-title {
+    font-size: 0.875rem !important;
+  }
+  
+  .product-card-price {
+    font-size: 1rem !important;
+  }
+}
+
+/* Product items in grid and slider */
+.products-slider .swiper-slide {
+  height: auto !important;
+}
+
+/* ===== Product details ===== */
+@media (max-width: 767px) {
+  .product-details-container {
+    flex-direction: column !important;
+  }
+  
+  .product-image-container,
+  .product-info-container {
+    width: 100% !important;
+  }
+  
+  .product-info-container {
+    padding: 1rem 0 0 0 !important;
+  }
+  
+  /* Tabs on product details */
+  .MuiTabs-root {
+    min-height: 40px !important;
+  }
+  
+  .MuiTab-root {
+    min-height: 40px !important;
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ===== Cart, Checkout & Order pages ===== */
+@media (max-width: 767px) {
+  .cart-item {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 1rem 0.5rem !important;
+  }
+  
+  .cart-item-image {
+    width: 100% !important;
+    max-width: 120px !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .cart-item-details {
+    width: 100% !important;
+    text-align: center !important;
+  }
+  
+  .cart-item-actions {
+    width: 100% !important;
+    margin-top: 1rem !important;
+    justify-content: center !important;
+  }
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footer {
+    text-align: left;
+  }
+}
+
+/* ===== Blog items ===== */
+.blog-swiper {
+  padding-bottom: 40px;
+}
+
+@media (max-width: 767px) {
+  .blog-swiper .swiper-pagination {
+    bottom: 10px;
+  }
+}
+
+/* ===== Home page specific adjustments ===== */
+@media (max-width: 767px) {
+  /* Shipping banner */
+  .shipping-banner {
+    padding: 12px;
+    text-align: center;
+  }
+  
+  /* Home category slider */
+  .home-category-slider .category-item {
+    flex: 0 0 48%;
+  }
+  
+  /* Adjust spacing in product tabs */
+  .MuiTabs-flexContainer {
+    gap: 0 !important;
+  }
+  
+  .MuiTabs-indicator {
+    height: 2px !important;
+  }
+}
+
+/* ===== Miscellaneous fixes ===== */
+/* MUI component styles override */
+.MuiButton-root {
+  text-transform: none !important;
+  font-weight: 500 !important;
+  min-height: 44px !important;
+}
+
+.MuiIconButton-root {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+/* Prevent text from being too small */
+.text-xs {
+  font-size: 0.75rem !important;
+}
+
+/* Fixes for mobile touch events */
+@media (max-width: 767px) {
+  a, button, 
+  [role="button"],
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+  
+  /* Add additional spacing to clickable elements */
+  button + button,
+  a + button,
+  button + a,
+  a + a {
+    margin-left: 8px;
+  }
+}
+
+/* High contrast mode and accessibility */
+@media (forced-colors: active) {
+  .btn, button, a.button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Prevent horizontal scrollbar */
+.container {
+  overflow-x: hidden;
+}
+
+/* Fix image aspect ratios */
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Global Responsive Styles */
+
+/* Utility classes for responsive designs */
+.container-fluid {
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Touch-friendly improvements */
+@media (max-width: 767px) {
+  /* Increase touch targets for better mobile usability */
+  button, 
+  a, 
+  input[type="button"], 
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve input fields on mobile */
+  input, 
+  select, 
+  textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+  }
+}
+
+/* Swiper overrides for better mobile experience */
+.swiper-button-next,
+.swiper-button-prev {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 18px !important;
+  font-weight: bold;
+  color: #333;
+}
+
+@media (max-width: 767px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 14px !important;
+  }
+  
+  .swiper-pagination-bullet {
+    width: 6px !important;
+    height: 6px !important;
+  }
+}
+
+/* Grid adjustments */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .responsive-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+/* Mobile menu toggle animation */
+.menu-toggle {
+  position: relative;
+  width: 28px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  position: absolute;
+  height: 2px;
+  background-color: #333;
+  transition: all 0.3s ease;
+}
+
+.menu-toggle span:nth-child(1) {
+  top: 0;
+  width: 100%;
+}
+
+.menu-toggle span:nth-child(2) {
+  top: 9px;
+  width: 100%;
+}
+
+.menu-toggle span:nth-child(3) {
+  bottom: 0;
+  width: 100%;
+}
+
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg);
+  top: 9px;
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg);
+  bottom: 9px;
+}
+
+/* Sticky header space adjustment */
+body.has-sticky-header {
+  padding-top: var(--header-height, 136px);
+}
+
+/* Enhanced focus outlines for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #3f51b5;
+  outline-offset: 2px;
+}
+
+/* Dark mode support for future implementation */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-rgb: 0, 0, 0;
+  }
+  
+  .dark-mode-ready {
+    color: rgb(var(--foreground-rgb));
+    background-color: rgb(var(--background-rgb));
+  }
+}
+
+/* Product grid and item responsiveness */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 767px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .product-item .actions {
+    opacity: 1;
+    visibility: visible;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+/* Banner responsiveness */
+.banner-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+@media (max-width: 767px) {
+  .banner-container {
+    height: auto;
+  }
+}
+
+/* Blog items grid */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 767px) {
+  .blog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+}

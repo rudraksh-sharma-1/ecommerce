@@ -1,0 +1,106 @@
+/* Announcement Bar Styles */
+.announcement-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 8px 16px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  z-index: 1001; /* Above header */
+  line-height: 1.4;
+}
+
+.announcement-bar-content {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.announcement-text {
+  flex: 1;
+  text-align: center;
+  padding: 0 32px; /* Space for close button */
+}
+
+.announcement-close {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.announcement-close:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.announcement-close:focus {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .announcement-bar {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .announcement-text {
+    padding: 0 24px;
+  }
+  
+  .announcement-close {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .announcement-bar {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+  
+  .announcement-text {
+    padding: 0 20px;
+    line-height: 1.3;
+  }
+}
+
+/* Animation for when it appears */
+.announcement-bar {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

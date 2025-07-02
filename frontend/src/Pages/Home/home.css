@@ -1,0 +1,56 @@
+/* Mobile Search Bar Styles */
+.mobile-search-bar-container {
+  position: fixed;
+  top: 96px;
+  left: 0;
+  right: 0;
+  z-index: 998;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Adjust position when announcement bar is present */
+body:has(.announcement-bar) .mobile-search-bar-container {
+  top: 136px;
+}
+
+.mobile-search-spacer {
+  height: 20px;
+}
+
+/* Adjust for different mobile screen sizes */
+@media (max-width: 480px) {
+  .mobile-search-bar-container {
+    top: 84px;
+  }
+}
+
+/* Hide on desktop and tablet */
+@media (min-width: 768px) {
+  .mobile-search-bar-container,
+  .mobile-search-spacer {
+    display: none !important;
+  }
+}
+
+/* Mobile search input and button styles */
+.mobile-search-bar-container input[type="search"] {
+  font-size: 16px !important;
+}
+
+.mobile-search-bar-container button:hover {
+  background-color: #2563eb !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.mobile-search-bar-container button:active {
+  transform: translateY(0);
+}
+
+.mobile-search-bar-container input[type="search"]:focus {
+  border-color: #3b82f6 !important;
+  background-color: #fff !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}

@@ -1,0 +1,536 @@
+/* Categories Menu Styles - Amazon Layout */
+.categories-menu-container {
+  position: relative;
+  z-index: 10000 !important;
+}
+
+.categories-menu-header {
+  background-color: #232f3e;
+  padding: 0;
+  border-bottom: none;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+/* Remove any gaps */
+.categories-menu-header .menu-toggle-btn {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+.menu-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  background: linear-gradient(to bottom, #37475a, #2a3441);
+  border: none;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 48px;
+}
+
+.menu-toggle-btn:hover {
+  background: linear-gradient(to bottom, #485769, #37475a);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.menu-toggle-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.categories-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999 !important;
+}
+
+/* Adjust overlay when announcement bar is present */
+.categories-menu-overlay.with-announcement {
+  top: 40px;
+}
+
+.categories-menu-panel {
+  position: fixed;
+  top: 0;
+  left: -400px;
+  width: 400px;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.15);
+  transition: left 0.25s ease-in-out;
+  z-index: 10000 !important;
+  overflow: hidden;
+  font-family: "Amazon Ember", Arial, sans-serif;
+}
+
+/* When announcement bar is present, position menu below it */
+.categories-menu-panel.with-announcement {
+  top: 40px;
+  height: calc(100vh - 40px);
+}
+
+.categories-menu-panel.open {
+  left: 0;
+}
+
+.categories-menu-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.categories-menu-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px; /* reduced padding */
+  background-color: #232f3e;
+  color: #ffffff;
+  border-bottom: none;
+}
+
+.categories-menu-panel-header h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.categories-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  background-color: #ffffff;
+}
+
+/* Amazon-style Menu Sections */
+.menu-section {
+  border-bottom: 1px solid #dddddd;
+}
+
+.section-header {
+  background-color: #f3f3f3;
+  padding: 8px 12px; /* reduced padding */
+  border-bottom: 1px solid #dddddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #111111;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-close-btn {
+  background: none;
+  border: none;
+  color: #666666;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #111111;
+}
+
+/* Menu Items */
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 2px 8px; /* much tighter vertical padding */
+  text-decoration: none;
+  color: #111111;
+  font-size: 10px;
+  line-height: 16px;
+  border-bottom: 1px solid #eeeeee;
+  transition: background-color 0.15s ease;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 24px; /* reduced min-height */
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover {
+  background-color: #f0f2f2;
+  text-decoration: none;
+  color: #111111;
+}
+
+.menu-item.category-main {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0px 4px;
+  position: relative;
+  min-height: 24px;
+}
+
+.menu-item.subcategory-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0px 4px 0px 24px !important;
+  font-size: 11px;
+  color: #565959;
+  background-color: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  box-sizing: border-box;
+  min-height: 20px;
+}
+
+.menu-item.group-item {
+  padding: 8px 8px 8px 60px !important;
+  font-size: 9px;
+  color: #444;
+  background: #d8d8d8;
+  border-bottom: 0px solid #ededed;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+  .menu-item.group-item {
+    padding: 4px 6px 4px 60px !important;
+    font-size: 9px;
+    min-height: 18px;
+    
+  }
+}
+
+.category-link,
+.subcategory-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.category-link:hover,
+.subcategory-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.plus-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+  min-width: 24px;
+  height: 24px;
+}
+
+.plus-icon-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.plus-icon-btn:focus {
+  outline: 2px solid #0066c0;
+  outline-offset: 1px;
+}
+
+.plus-icon {
+  font-size: 16px;
+  font-weight: bold;
+  color: #666666;
+  line-height: 1;
+  user-select: none;
+}
+
+.plus-icon-btn:hover .plus-icon {
+  color: #333333;
+}
+
+.category-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  color: #666666;
+  flex-shrink: 0;
+}
+
+.category-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.arrow-icon {
+  color: #666666;
+  font-size: 16px;
+  font-weight: normal;
+  flex-shrink: 0;
+}
+
+/* Subcategories Group */
+.category-group {
+  border-bottom: 1px solid #dddddd;
+}
+
+.subcategories-group {
+  background-color: #fafafa;
+  border-top: 1px solid #eeeeee;
+}
+
+.menu-item.subcategory-item:hover {
+  background-color: #e6f3ff;
+}
+
+.menu-item.subcategory-item:hover .subcategory-link {
+  color: #0066c0;
+}
+
+.subcategory-name {
+  display: block;
+  width: 100%;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* Force consistent subcategory alignment */
+.subcategories-group .menu-item.subcategory-item {
+  text-align: left;
+  padding-left: 52px !important;
+  margin-left: 0 !important;
+}
+
+.subcategories-group .subcategory-name {
+  text-align: left;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  display: block;
+}
+
+/* Ensure main categories are consistently aligned */
+.menu-item.category-main .category-icon {
+  margin-right: 0;
+}
+
+/* Collapsed subcategories: hide by default */
+.subcategories-group {
+  display: none;
+}
+
+/* Expanded state: show subcategories */
+.category-group .subcategories-group {
+  display: block;
+}
+
+/* Main navigation items styling */
+.main-nav-item {
+  display: block;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid #e5e5e5;
+  transition: background-color 0.2s ease;
+}
+
+.main-nav-item:hover {
+  background-color: #f7f7f7;
+  text-decoration: none;
+  color: #333;
+}
+
+.nav-item-name {
+  display: block;
+  width: 100%;
+}
+
+/* Category trigger styling */
+.category-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 16px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #e5e5e5;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.category-trigger:hover {
+  background-color: #f7f7f7;
+}
+
+/* Shop by category content */
+.shop-by-category-content {
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* Adjust existing category styles when nested */
+.shop-by-category-content .category-group {
+  border-bottom: none;
+}
+
+.shop-by-category-content .menu-item.category-main {
+  padding-left: 10px;
+  background-color: transparent;
+}
+
+.shop-by-category-content .subcategories-group .menu-item {
+  padding-left: 48px;
+}
+
+.shop-by-category-content .groups-list .menu-item {
+  padding-left: 64px;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    left: -400px;
+  }
+  to {
+    left: 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .categories-menu-panel {
+    width: 60%;
+    left: -60%;
+  }
+
+  .categories-menu-panel.open {
+    left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .categories-menu-panel {
+    width: 75%;
+    left: -75%;
+  }
+  .categories-menu-panel-header {
+    padding: 6px 8px;
+  }
+  .categories-menu-panel-header h2 {
+    font-size: 13px;
+  }
+  .section-header {
+    padding: 6px 8px;
+  }
+  .section-header h3 {
+    font-size: 10px;
+  }
+  .menu-item {
+    padding: 2px 6px;
+    font-size: 11px;
+    min-height: 20px;
+  }
+  .menu-item.subcategory-item {
+    padding: 2px 6px 2px 16px !important;
+    font-size: 10px;
+    min-height: 16px;
+  }
+}
+
+@media (min-width: 481px) {
+  .menu-item {
+    font-size: 13px;
+  }
+  .menu-item.subcategory-item {
+    font-size: 12px;
+  }
+  .menu-toggle-btn {
+    font-size: 13px;
+  }
+  .section-header h3 {
+    font-size: 13px;
+  }
+  .menu-item.group-item,
+  .group-name {
+    font-size: 12px;
+  }
+}
+
+/* Scrollbar Styling */
+.categories-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.categories-list::-webkit-scrollbar-track {
+  background: #f8f8f8;
+}
+
+.categories-list::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border-radius: 3px;
+}
+
+.categories-list::-webkit-scrollbar-thumb:hover {
+  background: #aaaaaa;
+}
+
+/* Prevent body scroll when menu is open */
+body.categories-menu-open {
+  overflow: hidden;
+}

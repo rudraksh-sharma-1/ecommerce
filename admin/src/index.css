@@ -1,0 +1,87 @@
+@import "tailwindcss";
+@import '@mantine/core/styles.css';
+
+.mantine-bg {
+  background-color: #f9fafb;
+}
+.mantine-card {
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-bg {
+  background-color: #18181b;
+}
+[data-mantine-color-scheme="dark"] .mantine-card {
+  background-color: #23232b;
+  border: 1px solid #23232b;
+}
+
+.mantine-header {
+  background-color: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+[data-mantine-color-scheme="dark"] .mantine-header {
+  background-color: #18181b;
+  border-bottom: 1px solid #23232b;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Table-table {
+  border-color: #374151 !important;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Table-thead {
+  background-color: #374151 !important;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Table-th {
+  background-color: #374151 !important;
+  color: #f9fafb !important;
+  border-color: #4b5563 !important;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Table-td {
+  border-color: #374151 !important;
+  color: #f9fafb !important;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Table-tr {
+  border-color: #374151 !important;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Table-tr:hover {
+  background-color: #374151 !important;
+}
+
+/* Additional dark theme support for modal and paper components */
+[data-mantine-color-scheme="dark"] .mantine-Modal-content {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Modal-header {
+  background-color: #1f2937 !important;
+  border-bottom-color: #374151 !important;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Paper-root {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-ScrollArea-scrollbar {
+  background-color: #374151 !important;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-ScrollArea-thumb {
+  background-color: #6b7280 !important;
+}
+
+/* Better dark theme for green light color variables */
+[data-mantine-color-scheme="dark"] {
+  --mantine-color-green-light: #065f46;
+}
+
+[data-mantine-color-scheme="light"] {
+  --mantine-color-green-light: #d1fae5;
+}

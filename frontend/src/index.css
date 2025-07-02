@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+body {
+    font-family: "Nunito", serif;
+    font-optical-sizing: auto;
+    background: rgb(230, 229, 213);
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {width: 10px !important; height: 10px !important;}
+::-webkit-scrollbar-thumb{background: rgb(215, 16, 33);}
+::-webkit-scrollbar-track{background: rgb(196, 196, 196);}
+
+.container {
+    width: 95%;
+    margin: auto;
+}
+
+.btn-org{background:#ff5252 !important; color: #fff !important; font-weight: 500; font-size:16px; padding: 7px 20px !important;}
+.btn-org:hover{background: #1d1d1d !important;}
+
+.link:hover {color: rgb(215, 16, 33);}
+
+nav button{text-transform: capitalize !important}
+
+.sliderHome{overflow: inherit !important;}
+
+.MuiTabs-indicator{background-color: rgb(229, 81, 81) !important;}
+.MuiTab-textColorPrimary.Mui-selected{color: rgb(229, 81, 81) !important;}
+
+.productsSlider .swiper-wrapper{ padding: 15px; margin-left: -15px; margin-right: -15px;}
+
+footer form input::placeholder{font-size: 14px;}
+
+.css-imrjgg-MuiButtonBase-root-MuiCheckbox-root.Mui-checked, 
+.css-imrjgg-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate {
+  color: #ff5252 !important; 
+}
+
+.MuiFormControlLabel-label{font-size: 11px !important; color: rgba(0,0,0,0.8);}
+
+.MuiCheckbox-root{padding: 6px !important;}
+
+.ReactCollapse--collapse {
+   transition: height 400ms;
+}
+
+.zoomProductSliderThumbs {height: 70vh; overflow: hidden;}
+
+.zoomProductSliderThumbs .swiper-slide{height: auto !important}
+
+
+.zoomProductSliderThumbs .swiper-button-next {
+    bottom: 10px !important;
+    right: 50% !important;
+    top: inherit !important;
+    transform: translateX(50%) !important;
+    width: 30px !important;
+    height: 30px !important;
+    background-color: white !important;
+    border-radius: 50% !important;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+.zoomProductSliderThumbs .swiper-button-next:after {
+    transform: rotate(90deg);
+    font-size: 14px !important;
+    color: #333 !important;
+    text-decoration: bold;
+}
+
+.zoomProductSliderThumbs .swiper-button-prev {
+    top: 30px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 30px !important;
+    height: 30px !important;
+    background-color: white !important;
+    border-radius: 50% !important;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+.zoomProductSliderThumbs .swiper-button-prev:after {
+    transform: rotate(90deg);
+    font-size: 14px !important;
+    color: #333 !important;
+}
+
+.swiper-button-prev, .swiper-button-next {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}

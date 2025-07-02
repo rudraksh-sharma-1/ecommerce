@@ -1,0 +1,92 @@
+/* Footer Styles */
+
+.footer-title {
+  position: relative;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  color: #fff;
+}
+
+.footer-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background-color: #3b82f6; /* blue-500 */
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 10px;
+}
+
+.footer-link {
+  color: #9ca3af; /* gray-400 */
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.footer-link:hover {
+  color: #fff;
+  transform: translateX(3px);
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: #9ca3af; /* gray-400 */
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background-color: #3b82f6; /* blue-500 */
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footer-column {
+    margin-bottom: 30px;
+  }
+  
+  .social-icons {
+    margin-bottom: 20px;
+  }
+  
+  .footer-title {
+    font-size: 15px;
+    margin-bottom: 15px;
+  }
+}
+
+/* Ensure proper touch targets for mobile */
+@media (max-width: 640px) {
+  .footer-link, 
+  .footer-contact a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .social-icon {
+    width: 40px;
+    height: 40px;
+  }
+}

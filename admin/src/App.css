@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.ReactCollapse--collapse {
+  transition: height 300ms;
+}

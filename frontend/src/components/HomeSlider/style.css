@@ -1,0 +1,218 @@
+/* HomeSlider Styles */
+.home-slider {
+  position: relative;
+  width: 100%;
+  margin-top: -2rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.main-slider {
+  width: 100%;
+  height: 450px;
+  max-height: 450px;
+}
+
+@media (max-width: 768px) {
+  .main-slider {
+    height: 200px;
+    max-height: 200px;
+  }
+}
+
+.slider-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.slider-image {
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+  min-height: 200px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .slider-image {
+    max-height: 200px;
+    min-height: 120px;
+  }
+}
+
+/* Banner Caption */
+.banner-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  color: white;
+  text-align: left;
+}
+
+.banner-caption h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.banner-caption p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  display: none;
+}
+
+.banner-btn {
+  background-color: white;
+  color: #333;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.banner-btn:hover {
+  background-color: #4A90E2;
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .banner-caption h2 {
+    font-size: 2rem;
+  }
+  
+  .banner-caption p {
+    display: block;
+  }
+  
+  .banner-btn {
+    padding: 10px 20px;
+  }
+}
+
+/* Loading and Error States */
+.loading-container, .error-container {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #4A90E2;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-container p {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+/* Custom swiper pagination styles */
+.home-slider .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: white;
+  opacity: 0.6;
+}
+
+.home-slider .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: white;
+}
+
+/* Navigation buttons */
+.home-slider .swiper-button-next,
+.home-slider .swiper-button-prev {
+  color: white;
+  background: rgba(0, 0, 0, 0.3);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.home-slider .swiper-button-next:hover,
+.home-slider .swiper-button-prev:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.home-slider .swiper-button-next:after,
+.home-slider .swiper-button-prev:after {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Ensure better touch targets on mobile */
+@media (max-width: 767px) {
+  .home-slider .swiper-pagination {
+    padding: 10px 0;
+  }
+  
+  .home-slider .swiper-button-next,
+  .home-slider .swiper-button-prev {
+    display: none;
+  }
+}
+
+/* Slide Count Button */
+.home-slider .slide-count-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  user-select: none;
+  z-index: 100;
+}
+
+/* Shop now button hover effect */
+.banner-slide button {
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-slide button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+}
+
+.banner-slide button:hover::after {
+  left: 100%;
+}

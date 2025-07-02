@@ -1,0 +1,96 @@
+/* ProductsSlider Styles */
+
+/* Custom swiper navigation styles */
+.products-slider .swiper-button-next,
+.products-slider .swiper-button-prev {
+  color: #333;
+  background: rgba(255, 255, 255, 0.8);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.products-slider .swiper-button-next:hover,
+.products-slider .swiper-button-prev:hover {
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.products-slider .swiper-button-next::after,
+.products-slider .swiper-button-prev::after {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.products-slider .swiper-button-next {
+  right: 5px;
+}
+
+.products-slider .swiper-button-prev {
+  left: 5px;
+}
+
+/* Custom swiper pagination styles */
+.products-slider .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background-color: #ccc;
+  opacity: 0.6;
+}
+
+.products-slider .swiper-pagination-bullet-active {
+  opacity: 1;
+  background-color: #3f51b5;
+}
+
+/* Ensure products have equal height within the slider */
+.products-slider .swiper-slide {
+  height: auto;
+}
+
+/* Better spacing for section headers */
+.products-slider .section-header {
+  position: relative;
+}
+
+/* Touch-friendly mobile styles */
+@media (max-width: 767px) {
+  .products-slider .swiper-pagination {
+    padding: 8px 0;
+  }
+  
+  .products-slider .swiper-pagination-bullet {
+    width: 6px;
+    height: 6px;
+  }
+  
+  /* Adjust spacing for mobile */
+  .products-swiper {
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-left: -8px;
+    margin-right: -8px;
+  }
+  
+  /* Hint for horizontal scrolling */
+  .products-swiper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 24px;
+    background: linear-gradient(to left, rgba(255,255,255,0.8), rgba(255,255,255,0));
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* Ensure equal height product cards */
+.products-slider .swiper-slide > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

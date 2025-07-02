@@ -1,0 +1,155 @@
+/* Navigation Component Styles */
+.navigation-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.navigation-menu {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow-x: visible;
+}
+
+.navigation-menu li {
+  height: 100%;
+  position: relative;
+}
+
+.nav-item {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+  min-height: 44px;
+}
+
+.nav-item:hover {
+  color: #3b82f6;
+}
+
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  background: white;
+  min-width: 200px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  display: block;
+  overflow: hidden;
+}
+
+.submenu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.submenu li {
+  width: 100%;
+  height: auto;
+}
+
+.submenu li a {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+}
+
+.submenu li a div {
+  padding: 10px 16px;
+  transition: background-color 0.2s;
+  font-size: 0.875rem;
+}
+
+.submenu li a div:hover {
+  background-color: #f3f4f6;
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+  .navigation-menu {
+    justify-content: space-between;
+  }
+  
+  .nav-item {
+    padding: 0 8px;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Fix for edge cases with long text */
+@media (max-width: 1200px) and (min-width: 768px) {
+  .navigation-menu {
+    flex-wrap: nowrap;
+    overflow-x: visible;
+  }
+}
+
+/* Category panel styles */
+.category-panel {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.category-panel button {
+  text-transform: none !important;
+  font-weight: 400 !important;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* Ensure proper touch targets */
+button, 
+.nav-button,
+.submenu button {
+  min-height: 44px !important;
+  min-width: 44px !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Prevent scroll when category panel is open */
+body.category-panel-open {
+  overflow: hidden;
+}
+
+/* Mobile and tablet adjustments */
+@media (max-width: 1023px) {
+  .navigation-menu {
+    display: none;
+  }
+  
+  .category-panel {
+    width: 280px;
+    max-width: 85vw;
+  }
+}
+
+/* Small device optimization */
+@media (max-width: 480px) {
+  .category-panel {
+    width: 260px;
+    max-width: 90vw;
+  }
+  
+  .nav-button {
+    font-size: 0.85rem !important;
+    padding: 8px 10px !important;
+  }
+}
