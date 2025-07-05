@@ -96,7 +96,7 @@ const HomeSlider = () => {
                     style={{ minHeight: '200px', maxHeight: '600px' }}
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = 'https://via.placeholder.com/1200x400?text=Banner+Image+Not+Available';
+                      e.target.src = 'https://placehold.co/1200x400?text=Banner+Image+Not+Available';
                     }}
                   />
                   {banner.description && (

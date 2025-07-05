@@ -10,6 +10,7 @@ import Signup from './Pages/Signup';
 import AboutUs from './Pages/AboutUs';
 import ContactUs from './Pages/ContactUs';
 import Cart from './Pages/Cart';
+import MobileAccountPage from './Pages/MobileAccountPage/MobileAccountPage.jsx'; // Import MobileAccountPage
 
 import CustomPrinting from './Pages/CustomPrinting/index.jsx';
 
@@ -72,6 +73,7 @@ function App() {
             <Route path={"/faq"} exact={true} element={<FAQ />} />
             <Route path={"/shipping-returns"} exact={true} element={<ShippingReturns />} />
             <Route path={"/account"} exact={true} element={<ProtectedRoute><Account /></ProtectedRoute>} />
+            <Route path={"/MobileAccount"} exact={true} element={<ProtectedRoute><MobileAccountPage /></ProtectedRoute>} />
             <Route path={"/wishlist"} exact={true} element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
             <Route path={"/enquiry-history"} exact={true} element={<ProtectedRoute><EnquiryHistory /></ProtectedRoute>} /> {/* Add protected route for EnquiryHistory */}
             <Route path={"/coming-soon"} exact={true} element={<ComingSoon />} /> {/* Add route for ComingSoon */}

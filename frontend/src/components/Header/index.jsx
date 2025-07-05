@@ -248,7 +248,7 @@ const Header = () => {
                                 </Link>
                                 {/* Account */}
                                 {currentUser ? (
-                                    <Link to="/account" className="p-2 text-gray-600 hover:text-blue-600">
+                                    <Link to="/MobileAccount" className="p-2 text-gray-600 hover:text-blue-600">
                                         <FaRegUser className="w-5 h-5" />
                                     </Link>
                                 ) : (
