@@ -6,6 +6,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import ProductsSlider from "../../components/ProductsSlider";
 import { Swiper, SwiperSlide } from "swiper/react";
+import WhatsAppWidget from "../../components/WhatsAppWidget/WhatsAppWidget.jsx";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -328,6 +329,7 @@ export const Home = () => {
           />
         </div>
       </section>
+       <WhatsAppWidget />
     </>
   );
 };

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { UserPen, Wallet, ClipboardList, Phone, ShoppingCart, LogOut } from "lucide-react";
 
 function MobileAccountPage() {
   const { logout } = useAuth();
@@ -22,53 +23,47 @@ function MobileAccountPage() {
 
   return (
     <div className="md:hidden max-w-sm mx-auto p-4 pt-0 space-y-4">
-      <div className="text-sm text-gray-600 mb-2">
-        <span>Profile</span>
-        <span className="mx-2">{">"}</span>
-        <span className="text-indigo-600 font-medium">My Account</span>
-      </div>
-
       {/* Each link as a wide vertical button */}
       <Link
         to="/account"
-        className="block w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
+        className="flex justify-center w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
       >
-        Profile
+        <UserPen  className="pr-2"/>Profile
       </Link>
 
       <Link
         to="/coming-soon?feature=orders"
-        className="!ml-0 block w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
+        className="!ml-0 flex justify-center w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
       >
         My Orders
       </Link>
 
       <Link
         to="/coming-soon?feature=wallet"
-        className="!ml-0 block w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
+        className="!ml-0 flex justify-center w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
       >
-        Wallet
+        <Wallet className="pr-2"/>Wallet
       </Link>
 
       <Link
         to="/enquiry-history"
-        className="!ml-0 block w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
+        className="!ml-0 flex justify-center w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
       >
-        Enquiries
+        <ClipboardList className="pr-2"/>Enquiries
       </Link>
 
       <Link
         to="/contact-us"
-        className="!ml-0 block w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
+        className="!ml-0 flex justify-center w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
       >
-        Contact Us
+        <Phone className="pr-2"/>Contact Us
       </Link>
 
       <Link
         to="/cart"
-        className="!ml-0 block w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
+        className="!ml-0 flex justify-center w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
       >
-        Cart
+        <ShoppingCart className="pr-2" />Cart
       </Link>
 
       <hr className="border-gray-400" />
@@ -78,9 +73,9 @@ function MobileAccountPage() {
           await logout();
           navigate("/");
         }}
-        className="block w-full text-center bg-red-500 text-white font-medium rounded-lg py-3 px-4 hover:bg-red-600 transition"
+        className="flex justify-center w-full text-center bg-red-500 text-white font-medium rounded-lg py-3 px-4 hover:bg-red-600 transition"
       >
-        Logout
+        <LogOut className="pr-2"/>Logout
       </button>
     </div>
   );
