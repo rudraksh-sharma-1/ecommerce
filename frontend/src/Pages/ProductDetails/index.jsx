@@ -13,6 +13,7 @@ import { IoGitCompareOutline } from "react-icons/io5";
 import { MdOutlineShoppingCart } from 'react-icons/md';
 import ProductItem from '../../components/Productitem';
 import { useAuth } from '../../contexts/AuthContext';
+import Search from '../../components/Search';
 import { addToCart, addToWishlist } from '../../utils/supabaseApi';
 
 function TabPanel(props) {
@@ -182,6 +183,11 @@ const ProductDetails = () => {
           </Breadcrumbs>
         </div>
       </div>
+
+      {/* Search Bar For mobile Screens */}
+          <div className="block md:hidden w-full p-5">
+            <Search />
+          </div>
 
       <section className="py-4 sm:py-8 bg-white">
         <div className="container px-4">

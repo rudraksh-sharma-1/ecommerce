@@ -10,6 +10,7 @@ import Signup from './Pages/Signup';
 import AboutUs from './Pages/AboutUs';
 import ContactUs from './Pages/ContactUs';
 import Cart from './Pages/Cart';
+import WhatsAppWidget from './components/WhatsAppWidget/WhatsAppWidget.jsx'; // Import WhatsAppWidget
 import MobileAccountPage from './Pages/MobileAccountPage/MobileAccountPage.jsx'; // Import MobileAccountPage
 
 import CustomPrinting from './Pages/CustomPrinting/index.jsx';
@@ -80,6 +81,7 @@ function App() {
             {/* Fallback 404 route */}
             <Route path="*" element={<div style={{padding:40, textAlign:'center'}}><h2>404 - Page Not Found</h2></div>} />
           </Routes>
+          <WhatsAppWidget />
           <Footer />
         </BrowserRouter>
         </PromotionalProvider>

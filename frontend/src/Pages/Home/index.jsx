@@ -329,7 +329,7 @@ export const Home = () => {
           />
         </div>
       </section>
-       <WhatsAppWidget />
+       
     </>
   );
 };

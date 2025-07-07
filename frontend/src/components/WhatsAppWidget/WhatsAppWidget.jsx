@@ -67,8 +67,8 @@ const WhatsAppWidget = () => {
     <motion.div
       drag={true}
       onDrag={(event, info) => setDragPosition({ x: info.point.x, y: info.point.y })}
-      dragConstraints={{ left: 0, right: window.innerWidth - 100, top: 0, bottom: 0 }}
-      className={`fixed z-50 ${isMobile ? "bottom-16 left-4" : "bottom-6 left-6"}`}
+      dragConstraints={{ left: 0, right: window.innerWidth - 100, top: -500, bottom: 0 }}
+      className={`fixed z-2000 ${isMobile ? "bottom-16 left-4" : "bottom-6 left-6"}`}
       style={{ touchAction: "none" }} // prevent page scrolling while dragging
     >
       {WidgetContent}
