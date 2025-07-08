@@ -766,6 +766,9 @@ const CategoriesBar = () => {
               </li>
               
               <li>
+                <Link to="/BusinessPartner" onClick={closeMobileMenu}>Business Partner</Link>
+              </li>
+              <li>
                 <Link to="/about-us" onClick={closeMobileMenu}>About Us</Link>
               </li>
               

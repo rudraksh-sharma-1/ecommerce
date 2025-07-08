@@ -203,10 +203,10 @@ const Header = () => {
     return (
         <header className={`bg-white header-container ${announcementBarVisible ? 'with-announcement-bar' : ''}`}>
             <div className="header-main border-b border-gray-200 shadow-sm">
-                <div className="container mx-auto px-4">
-                    <div className="flex items-center h-16">
+                <div className="container mx-auto">
+                    <div className="flex items-center h-16 justify-between">
                         {/* Logo section */}
-                        <div className="flex-shrink-0 mr-4 logo-container">
+                        <div className="flex-shrink-1 mr-4 logo-container">
                             <Link to={"/"} className="block logo">
                                 <img 
                                     src={getSetting('site_logo', '/logo.png')} 
@@ -221,9 +221,14 @@ const Header = () => {
                         </div>
 
                         {/* Navigation - desktop only */}
-                        <div className="hidden md:block flex-grow overflow-hidden">
+                        <div className="hidden md:block flex-shrink-1 ">
                             <Navigation />
                         </div>
+                        
+                        {/* Business Partner Button */}
+                        <Link to={'/BusinessPartner'} className='hidden md:block text-center rounded text-black hover:text-blue-700 transition-colors'>
+                            Business Partner
+                        </Link>
 
                         {/* Search Bar - desktop only */}
                         <div className="hidden md:block w-[250px] flex-shrink-0 ml-4">
@@ -231,7 +236,7 @@ const Header = () => {
                         </div>
 
                         {/* Action Icons */}
-                        <div className="flex items-center ml-auto md:ml-4 space-x-1">
+                        <div className="flex flex-shrink-3 items-center ml-auto md:ml-4 space-x-1">
                             {/* MOBILE ICONS: Only show wishlist, cart, and account icons on mobile */}
                             <div className="flex md:hidden items-center space-x-1">
                                 {/* Wishlist */}
@@ -260,18 +265,7 @@ const Header = () => {
 
                             {/* Desktop Elements */}
                             {/* Enquiry History Icon - Only show for logged in users */}
-                            {currentUser && (
-                                <div className="hidden md:flex">
-                                    <Link to="/enquiry-history" className="flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors group">
-                                        <div className="relative">
-                                            <StyledBadge badgeContent={enquiryCount} color="secondary">
-                                                <BiMessageRounded className="w-5 h-5 text-gray-600 group-hover:text-blue-600" />
-                                            </StyledBadge>
-                                        </div>
-                                        <span className="text-sm text-gray-700 group-hover:text-blue-600 transition-colors">Enquiry</span>
-                                    </Link>
-                                </div>
-                            )}
+                            
 
                             <div className="hidden md:flex">
                                 <Link to="/cart" className="flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors group">

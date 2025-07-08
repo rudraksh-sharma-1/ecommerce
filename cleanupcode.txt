@@ -1,0 +1,81 @@
+This code is for Home Page
+{/* Mobile Search Bar - only visible on mobile, positioned between categories bar and home slider */}
+      {/* <div className="mobile-search-bar-container md:hidden" style={{
+        position: 'fixed',
+        top: hasAnnouncementBar ? '136px' : '96px', // Adjust based on announcement bar presence
+        left: '0',
+        right: '0',
+        zIndex: 998,
+        background: '#fff',
+        borderBottom: '1px solid #e5e7eb',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }}>
+        <div style={{ padding: '8px 16px' }}>
+          <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ position: 'relative', flex: 1 }}>
+              <MdSearch 
+                size={20} 
+                style={{ 
+                  position: 'absolute', 
+                  left: '12px', 
+                  top: '50%', 
+                  transform: 'translateY(-50%)', 
+                  color: '#6b7280',
+                  pointerEvents: 'none'
+                }} 
+              />
+              <input
+                type="search"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearchSubmit(e);
+                  }
+                }}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px 8px 40px',
+                  fontSize: '16px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '8px',
+                  outline: 'none',
+                  backgroundColor: '#f9fafb',
+                  WebkitAppearance: 'none' // Remove iOS styling
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.backgroundColor = '#fff';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#d1d5db';
+                  e.target.style.backgroundColor = '#f9fafb';
+                }}
+              />
+            </div>
+            <button 
+              type="submit"
+              style={{
+                padding: '8px 16px',
+                fontSize: '14px',
+                fontWeight: '500',
+                backgroundColor: '#3b82f6',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                minWidth: '70px'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#2563eb';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#3b82f6';
+              }}
+            >
+              Search
+            </button>
+          </form>
+        </div>
+      </div> */}

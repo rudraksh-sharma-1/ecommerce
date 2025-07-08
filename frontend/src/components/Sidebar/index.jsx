@@ -43,16 +43,26 @@ export const Sidebar = ({
         getAllSubcategories(),
         getAllGroups(),
       ]);
-      
+
       // Filter to only show active items
-      setCategories(catRes.success ? catRes.categories.filter(cat => cat.active === true) : []);
-      setSubcategories(subcatRes.success ? subcatRes.subcategories.filter(sub => sub.active === true) : []);
-      setGroups(groupRes.success ? groupRes.groups.filter(group => group.active === true) : []);
+      setCategories(
+        catRes.success
+          ? catRes.categories.filter((cat) => cat.active === true)
+          : []
+      );
+      setSubcategories(
+        subcatRes.success
+          ? subcatRes.subcategories.filter((sub) => sub.active === true)
+          : []
+      );
+      setGroups(
+        groupRes.success
+          ? groupRes.groups.filter((group) => group.active === true)
+          : []
+      );
     }
     fetchAllHierarchy();
   }, []);
-
-
 
   // Handle navigation to category/subcategory pages
   const handleCategoryClick = (categoryName) => {
@@ -87,12 +97,14 @@ export const Sidebar = ({
     setMinRating(rating);
   };
 
-
-
   const getSubcategoriesForCategory = (categoryId) =>
-    subcategories.filter((sub) => sub.category_id === categoryId && sub.active === true);
+    subcategories.filter(
+      (sub) => sub.category_id === categoryId && sub.active === true
+    );
   const getGroupsForSubcategory = (subcategoryId) =>
-    groups.filter((group) => group.subcategory_id === subcategoryId && group.active === true);
+    groups.filter(
+      (group) => group.subcategory_id === subcategoryId && group.active === true
+    );
 
   // Expand/collapse logic
   const toggleExpandCategory = (categoryId) => {
@@ -114,7 +126,7 @@ export const Sidebar = ({
     <aside className="sidebar py-5">
       <div className="box">
         <h3 className="w-full mb-3 text-[16px] font-[600] flex items-center pr-5">
-          Shop by Category  
+          Shop by Category
           <Button
             className="!w-[30px] !h-[30px] !min-w-[30px] !rounded-full !ml-auto !text-[#000]"
             onClick={() => setIsOpenCategoryFilter(!isOpenCategoryFilter)}
@@ -270,7 +282,6 @@ export const Sidebar = ({
           </Button>
         </div>
       </div>
-
     </aside>
   );
 };

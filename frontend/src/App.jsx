@@ -8,6 +8,7 @@ import ProductDetails from './Pages/ProductDetails';
 import Login from './Pages/Login';
 import Signup from './Pages/Signup';
 import AboutUs from './Pages/AboutUs';
+import BusinessPartner from './Pages/BusinessPartner/BusinessPartner.jsx'
 import ContactUs from './Pages/ContactUs';
 import Cart from './Pages/Cart';
 import WhatsAppWidget from './components/WhatsAppWidget/WhatsAppWidget.jsx'; // Import WhatsAppWidget
@@ -72,6 +73,7 @@ function App() {
             <Route path={"/privacy-policy"} exact={true} element={<PrivacyPolicy />} />
             <Route path={"/terms-of-service"} exact={true} element={<TermsOfService />} />
             <Route path={"/faq"} exact={true} element={<FAQ />} />
+            <Route path={"/BusinessPartner"} exact={true} element={<BusinessPartner />} />
             <Route path={"/shipping-returns"} exact={true} element={<ShippingReturns />} />
             <Route path={"/account"} exact={true} element={<ProtectedRoute><Account /></ProtectedRoute>} />
             <Route path={"/MobileAccount"} exact={true} element={<ProtectedRoute><MobileAccountPage /></ProtectedRoute>} />

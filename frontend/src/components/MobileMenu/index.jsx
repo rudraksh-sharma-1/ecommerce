@@ -76,14 +76,17 @@ const MobileMenu = ({ isOpen, onClose, includeSearch = false }) => {
               </ul>
             </li>
             
-            <li>
+            {/* <li>
               <Link to="/custom-printing" onClick={onClose}>Custom Printing</Link>
             </li>
-            
+             */}
             {/* <li>
               <Link to="/blog" onClick={onClose}>Blog</Link>
+            </li>
+             */}
+            {/* <li>
+              <Link to="#" onClick={onClose}>Bussiness Partners</Link>
             </li> */}
-            
             <li>
               <Link to="/about-us" onClick={onClose}>About Us</Link>
             </li>
