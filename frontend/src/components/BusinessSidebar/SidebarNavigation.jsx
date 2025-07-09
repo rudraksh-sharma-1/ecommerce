@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-
+import VendorRegistrationForm from "../BusinessComponents/VendorRegistrationForm.jsx";
 // Dummy placeholders — replace with real forms
-const VendorRegistrationForm = () => <div>Vendor Registration Form</div>;
 const BulkOrderEnquiry = () => <div>Bulk Order Enquiry (WhatsApp)</div>;
 const FranchisePartnerForm = () => <div>Franchise/Distributor Partner Form</div>;
 const EPartnerForm = () => <div>E-Partner Form</div>;
