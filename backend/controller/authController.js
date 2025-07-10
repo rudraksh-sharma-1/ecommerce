@@ -39,6 +39,25 @@ export const login = async (req, res) => {
   res.json({ message: 'Logged in', user: { id: data.id, username: data.username, email: data.email } });
 };
 
+
+export const getAllBusinessUsers = async (req,res) => {
+  try {
+  const { data, error } = await supabase
+    .from('business_users')
+    .select('*');
+
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
+  return res.status(200).json(data);
+  } 
+  catch (err) {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 export const logout = (req, res) => {
   clearSessionCookie(res);
   res.json({ message: 'Logged out' });

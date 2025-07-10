@@ -1,9 +1,31 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const BusinessPartnerSignup = () => {
-
+  const notify = () =>
+    toast.success("Signup Successfull!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  const notify2 = () =>
+    toast.error("Signup Failed", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   const Navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -25,24 +47,24 @@ const BusinessPartnerSignup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    if (formData.business_type==="") {
-    alert("Please select a business type.");
-    return;
-  }
+    if (formData.business_type === "") {
+      alert("Please select a business type.");
+      return;
+    }
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/business/signup",
+        "https://ecommerce-kghp.onrender.com/api/business/signup",
         formData,
         {
           withCredentials: true,
         }
       );
-      alert("signup successful!");
+      notify(); // Show toast
       Navigate("/BusinessPartner");
-      console.log(response.data);
+      /* console.log(response.data); */
       // You can navigate to dashboard or store user in context here
     } catch (error) {
-      alert("Signup failed: " + error.response?.data?.error);
+      notify2(); // Show toast for error
     }
   };
 

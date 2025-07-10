@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const BusinessPartnerLogin = () => {
   const [formData, setFormData] = useState({
@@ -19,17 +20,35 @@ const BusinessPartnerLogin = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/business/login",
+        "https://ecommerce-kghp.onrender.com/api/business/login",
         formData,
         {
           withCredentials: true,
         }
       );
-      alert("Login successful!");
-      console.log(response.data);
+      toast.success("Login Successfull!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+      /* console.log(response.data); */
       // You can navigate to dashboard or store user in context here
     } catch (error) {
-      alert("Login failed: " + error.response?.data?.error);
+      toast.error("Error in Login!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
     }
   };
 

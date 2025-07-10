@@ -32,7 +32,7 @@ import Messages from "./Pages/Messages";
 import Settings from "./Pages/Settings";
 import PromotionalSettings from "./Pages/PromotionalSettings";
 import StorageDetailsPage from "./Pages/Storage";
-/* import BusinessData from "./Pages/BusinessWork/BusinessData.jsx"; */
+import BusinessUsersList from "./Pages/BusinessWork/BusinessData.jsx";
 import EnhancedStoragePage from "./Pages/Storage/enhanced";
 
 const MainLayout = () => {
@@ -174,7 +174,7 @@ function App() {
         },
         {
           path: "/business-data",
-          element: <BusinessData />,
+          element: <BusinessUsersList />,
         },
       ],
     },
