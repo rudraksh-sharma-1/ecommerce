@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: 'http://localhost:5173'|| 'https://ecommerce-umber-five-95.vercel.app/', // Your frontend URL
+  origin: 'http://localhost:5173'|| 'https://ecommerce-umber-five-95.vercel.app', // Your frontend URL
   credentials: true,
 }));
 app.use(express.json());
