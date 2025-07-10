@@ -132,6 +132,11 @@ const Sidebar = ({ isOpen = true }) => {
       badge: userCount,
       description: "Manage users, roles, add, delete, change role",
     },
+    /* {
+      title: "Business Partners",
+      icon: <FaList />,
+      path: "/business-data",
+    }, */
     {
       title: "Settings",
       icon: <RiSettings4Fill />,

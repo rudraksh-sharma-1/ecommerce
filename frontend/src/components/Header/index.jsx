@@ -254,15 +254,15 @@ const Header = () => {
 
             {/* Business Partner Button */}
             <Link
-              to={"/BusinessPartner"}
-              className="hidden md:block  items-center  text-center font-bold text-xs rounded text-black hover:text-blue-700 transition-colors bg-gray-200 hover:bg-gray-200 px-3"
+              to="/BusinessPartnerSignup"
+              className="hidden md:block items-center text-center font-bold text-xs rounded text-black hover:text-blue-700 transition-colors px-3"
             >
               <img
                 src="https://i.postimg.cc/nrsbjpQY/Whats-App-Image-2025-07-08-at-15-28-23-removebg-preview.png"
                 alt="Logo"
-                className="object-contain w-20 "
+                className="object-contain w-20 px-1"
               />
-              <span>BusinessPartner</span>
+              <span className="whitespace-nowrap">Business Partner</span>
             </Link>
 
             {/* Search Bar - desktop only */}

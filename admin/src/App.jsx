@@ -10,6 +10,7 @@ import { ModalsProvider } from '@mantine/modals';
 import { Spotlight, spotlight } from '@mantine/spotlight';
 import { FaSearch, FaHome, FaUsers, FaBoxOpen, FaQuestionCircle } from 'react-icons/fa';
 
+
 // Components
 import Sidebar from "./Components/Sidebar";
 import Header from "./Components/Header";
@@ -31,6 +32,7 @@ import Messages from "./Pages/Messages";
 import Settings from "./Pages/Settings";
 import PromotionalSettings from "./Pages/PromotionalSettings";
 import StorageDetailsPage from "./Pages/Storage";
+/* import BusinessData from "./Pages/BusinessWork/BusinessData.jsx"; */
 import EnhancedStoragePage from "./Pages/Storage/enhanced";
 
 const MainLayout = () => {
@@ -169,6 +171,10 @@ function App() {
         {
           path: "/storage/enhanced",
           element: <EnhancedStoragePage />,
+        },
+        {
+          path: "/business-data",
+          element: <BusinessData />,
         },
       ],
     },

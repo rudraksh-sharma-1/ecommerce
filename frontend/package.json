@@ -17,6 +17,7 @@
     "@mui/styled-engine-sc": "^6.4.0",
     "@supabase/supabase-js": "^2.49.4",
     "@tailwindcss/vite": "^4.0.0",
+    "axios": "^1.10.0",
     "bootstrap": "^5.3.5",
     "dotenv": "^17.1.0",
     "framer-motion": "^12.7.4",
