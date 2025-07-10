@@ -12,7 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://ecommerce-umber-five-95.vercel.app'
+  'https://ecommerce-umber-five-95.vercel.app',
+  'https://admin-eight-flax.vercel.app'
 ];
 
 app.use(cors({
