@@ -26,7 +26,7 @@ app.use(cors({
       return callback(new Error('Not allowed by CORS'));
     }
   }, */
-  origin: '*', // Temporarily allowing all origins for development
+  origin: 'https://ecommerce-umber-five-95.vercel.app', // Temporarily allowing all origins for development
   credentials: true,
 }));
 app.use(express.json());
