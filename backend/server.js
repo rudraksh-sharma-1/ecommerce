@@ -10,14 +10,14 @@ import authRoutes from './routes/authRoute.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const allowedOrigins = [
+/* const allowedOrigins = [
   'http://localhost:5173',
   'https://ecommerce-umber-five-95.vercel.app',
   'https://admin-eight-flax.vercel.app'
-];
+]; */
 
 app.use(cors({
-  origin: function (origin, callback) {
+  /* origin: function (origin, callback) {
     // allow requests with no origin like mobile apps or curl
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
@@ -25,7 +25,8 @@ app.use(cors({
     } else {
       return callback(new Error('Not allowed by CORS'));
     }
-  },
+  }, */
+  origin: '*', // Temporarily allowing all origins for development
   credentials: true,
 }));
 app.use(express.json());
