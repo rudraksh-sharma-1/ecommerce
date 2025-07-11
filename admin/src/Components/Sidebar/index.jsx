@@ -1,4 +1,4 @@
-/* import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../../contexts/AdminAuthContext";
 import { getAllUsers, getAllOrders } from "../../utils/supabaseApi";
 import supabase from "../../utils/supabase";
@@ -16,7 +16,7 @@ import { IoLogOut } from "react-icons/io5";
 import { HiArchive } from "react-icons/hi";
 import { MdCategory } from "react-icons/md";
 import { GiTargetPoster } from "react-icons/gi";
-import { Tooltip } from "@mantine/core"; */
+import { Tooltip } from "@mantine/core";
 
 const menuAnimation = {
   hidden: { opacity: 0, height: 0 },
