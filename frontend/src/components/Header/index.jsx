@@ -254,7 +254,7 @@ const Header = () => {
 
             {/* Business Partner Button */}
             <Link
-              to="/BusinessPartnerSignup"
+              to="/BusinessPartner"
               className="hidden md:block items-center text-center font-bold text-xs rounded text-black hover:text-blue-700 transition-colors px-3"
             >
               <img

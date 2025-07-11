@@ -12,7 +12,7 @@ import { FaSearch, FaHome, FaUsers, FaBoxOpen, FaQuestionCircle } from 'react-ic
 
 
 // Components
-import Sidebar from "./Components/Sidebar";
+/* import Sidebar from "./Components/Sidebar"; */
 import Header from "./Components/Header";
 import AuthenticationForm from "./Components/AuthenticationForm";
 
@@ -36,15 +36,15 @@ import BusinessUsersList from "./Pages/BusinessWork/BusinessData.jsx";
 import EnhancedStoragePage from "./Pages/Storage/enhanced";
 
 const MainLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+ /*  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-
+ */
   return (
     <div className="flex h-screen mantine-bg">
-      <Sidebar isOpen={sidebarOpen} />
+      {/* <Sidebar isOpen={sidebarOpen} /> */}
       <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarOpen ? 'ml-[240px]' : 'ml-[70px]'}`}>
         <Header toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
         <main className="flex-1 overflow-y-auto mantine-bg rounded-tl-xl shadow-inner p-4">

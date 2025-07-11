@@ -57,7 +57,7 @@ const Navigation = () => {
   // Navigation items with submenu data
   const navItems = [
     { text: "Home", link: "/", hasSubmenu: false },
-    {
+    /* {
       text: "Stationery",
       link: "/productListing",
       hasSubmenu: true,
@@ -65,11 +65,11 @@ const Navigation = () => {
         text: cat.name,
         link: `/productListing?category=${encodeURIComponent(cat.name)}`,
       })),
-    },
-    { text: "Custom Printing", link: "/custom-printing", hasSubmenu: false },
+    }, */
+    /* { text: "Custom Printing", link: "/custom-printing", hasSubmenu: false }, */
     // { text: "Blog", link: "/blog", hasSubmenu: false },
     { text: "About Us", link: "/about-us", hasSubmenu: false },
-    // { text: "Contact Us", link: "/contact-us", hasSubmenu: false },
+    { text: "Contact Us", link: "/contact-us", hasSubmenu: false },
   ];
 
   return (

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+/* import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MdClose } from 'react-icons/md';
 import { FaChevronDown } from 'react-icons/fa';
 import Search from '../Search';
-import './style.css';
+import './style.css'; */
 
 const MobileMenu = ({ isOpen, onClose, includeSearch = false }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);

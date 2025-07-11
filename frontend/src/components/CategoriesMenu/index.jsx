@@ -350,6 +350,17 @@ const CategoriesMenu = () => {
                   )}
                 </div>
 
+                {/* Buisness Partner */}
+                <div className="menu-section">
+                  <Link
+                    to="/BusinessPartner"
+                    className="menu-item main-nav-item"
+                    onClick={closeMenu}
+                  >
+                  <span className="nav-item-name">Buisness Partner</span>
+                  </Link>
+                </div>
+
                 {/* About Us */}
                 <div className="menu-section">
                   <Link

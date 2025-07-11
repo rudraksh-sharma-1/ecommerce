@@ -162,7 +162,7 @@ const BusinessPartnerSignup = () => {
 
           <div>
             <label className="block text-sm text-[#0B1841] font-semibold mb-1">
-              Business option:
+              Partner option:
             </label>
             <select
               name="business_type"
@@ -171,7 +171,7 @@ const BusinessPartnerSignup = () => {
               className="w-full border border-gray-300 px-4 py-2 rounded-md text-sm text-[#0B1841] bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             >
-              <option value="">Select Business Type</option>
+              <option value="">Select Partner Type</option>
               <option value="Supplier">Supplier</option>
               <option value="B2B">B2B</option>
               <option value="E-Partner">E-Partner</option>

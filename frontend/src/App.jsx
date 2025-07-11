@@ -172,7 +172,7 @@ function App() {
                 />
               </Routes>
               <WhatsAppWidget />
-              <Footer />
+              <Footer/>
             </BrowserRouter>
           </PromotionalProvider>
         </SettingsProvider>

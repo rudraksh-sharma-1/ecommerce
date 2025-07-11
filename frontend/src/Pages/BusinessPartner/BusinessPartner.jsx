@@ -27,28 +27,28 @@ const BusinessPartnerLogin = () => {
         }
       );
       toast.success("Login Successfull!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       /* console.log(response.data); */
       // You can navigate to dashboard or store user in context here
     } catch (error) {
       toast.error("Error in Login!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -66,7 +66,7 @@ const BusinessPartnerLogin = () => {
       </div>
 
       {/* Login Form */}
-      <div className="relative z-20 w-full max-w-md bg-white px-6 py-10 md:px-10 md:py-10 rounded-[30px] shadow-2xl mx-4 md:mx-16 md:my-15 md:mb-50 mb-10">
+      <div className="relative z-20 w-full max-w-md bg-white px-6 py-10 md:px-10 md:py-10 rounded-[30px] shadow-2xl mx-4 md:mx-16 md:my-10 md:mb-30 mb-10">
         <h5 className="text-2xl md:text-3xl font-bold text-center text-[#0B1841] mb-8 leading-tight">
           LOGIN TO YOUR <br /> ACCOUNT
         </h5>
@@ -78,7 +78,6 @@ const BusinessPartnerLogin = () => {
             <input
               type="text"
               name="first_name"
-              
               value={formData.first_name}
               onChange={handleChange}
               className="w-full rounded-full border border-gray-500 px-5 py-3 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -113,28 +112,23 @@ const BusinessPartnerLogin = () => {
 
           <div>
             <label className="block text-sm text-[#0B1841] font-semibold mb-1">
-              Business option :
+              Partner option:
             </label>
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-4">
-              {["Supplier", "B2B", "E-Partner", "Franchise/Distributor"].map(
-                (type, i) => (
-                  <label
-                    key={i}
-                    className="flex items-center space-x-2 text-sm text-[#0B1841] font-medium"
-                  >
-                    <input
-                      type="radio"
-                      name="business_type"
-                      value={type}
-                      checked={formData.business_type === type}
-                      onChange={handleChange}
-                      className="accent-blue-500"
-                    />
-                    <span>{type}</span>
-                  </label>
-                )
-              )}
-            </div>
+            <select
+              name="business_type"
+              value={formData.business_type}
+              onChange={handleChange}
+              className="w-full border border-gray-300 px-4 py-2 rounded-full text-sm text-[#0B1841] bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            >
+              <option value="">Select Partner Type</option>
+              <option value="Supplier">Supplier</option>
+              <option value="B2B">B2B</option>
+              <option value="E-Partner">E-Partner</option>
+              <option value="Franchise/Distributor">
+                Franchise/Distributor
+              </option>
+            </select>
           </div>
 
           <button
@@ -146,7 +140,10 @@ const BusinessPartnerLogin = () => {
         </form>
 
         <div className="mt-6 text-center text-sm text-black font-medium">
-          Don’t have an account? <span className="underline cursor-pointer" ><Link to={'/BusinessPartnerSignup'}>Sign Up now</Link></span>
+          Don’t have an account?{" "}
+          <span className="underline cursor-pointer">
+            <Link to={"/BusinessPartnerSignup"}>Sign Up now</Link>
+          </span>
         </div>
       </div>
     </div>
