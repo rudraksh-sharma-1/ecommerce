@@ -10,7 +10,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 0;
   padding: 0;
-  height: 48px;
+  height: 51px;
 }
 
 /* Add margin to push content below the bar */
@@ -43,13 +43,19 @@
 }
   .categories-bar {
     min-height: 36px;
-    height: 40px;
+    height: 43px;
   }
 
   .categories-bar-content {
     min-height: 36px;
     height: 40px;
     font-size: 13px;
+  }
+
+.category-item-new {
+        
+    width: 138px;
+        
   }
 
   .featured-categories {
@@ -60,17 +66,19 @@
   .category-item-container {
     min-height: 32px;
     height: 32px;
-    padding: 0 6px;
+    width: 138px;
+    padding: 0;
   }
 
-  .category-item-link,
-  .category-item-new,
+
   .category-name-container {
-    min-height: 32px;
-    height: 32px;
     display: flex;
+    flex-direction: row;
     align-items: center;
-    font-size: 13px;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
   }
 
   .category-name-text {
@@ -135,7 +143,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 0 16px;
+  padding: 5px 16px 5px;
   min-width: 120px;
   max-width: 160px;
   height: 48px;
@@ -231,7 +239,7 @@
   text-align: center;
   width: 100%;
   margin: 0;
-  gap: 6px;
+  gap: 4px;
   height: 100%;
 }
 
@@ -242,7 +250,7 @@
   text-align: center;
   max-width: 100%;
   transition: all 0.2s ease;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  /* text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -259,22 +267,31 @@
 }
 
 @media (max-width: 768px) {
-  .category-item-new {
-    min-width: 90px;
-    max-width: 120px;
-    height: 40px;
-    padding: 0 10px;
+  .category-name-container {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    gap: 4px;
+    padding-right: 0 20px;
+    justify-content: flex-start; /* so items stay in line instead of centered weirdly */
   }
+
   .category-name-text {
     font-size: 10px;
-    min-height: 2.2em;
+    line-height: 1.1;
+    min-height: auto;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
+
   .dropdown-indicator {
     font-size: 11px;
+    flex-shrink: 0;
   }
+
 }
 
-@media (max-width: 480px) {
+
+/* @media (max-width: 480px) {
   .category-item-new {
     min-width: 70px;
     max-width: 90px;
@@ -288,7 +305,7 @@
   .dropdown-indicator {
     font-size: 9px;
   }
-}
+} */
 
 /* Dropdown Indicator - positioned next to category text */
 .dropdown-indicator-container {

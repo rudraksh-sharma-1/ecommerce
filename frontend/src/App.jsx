@@ -15,6 +15,7 @@ import Cart from "./Pages/Cart";
 import WhatsAppWidget from "./components/WhatsAppWidget/WhatsAppWidget.jsx"; // Import WhatsAppWidget
 import MobileAccountPage from "./Pages/MobileAccountPage/MobileAccountPage.jsx";
 import BusinessPartnerSignup from "./Pages/BusinessPartner/BusinessPartnerSignup.jsx"; // Import MobileAccountPage
+import SubCategoryPage from './Pages/SubCategoryPage/SubCategoryPage.jsx'
 
 import CustomPrinting from "./Pages/CustomPrinting/index.jsx";
 
@@ -114,6 +115,10 @@ function App() {
                   element={<BusinessPartnerSignup />}
                 />
                 <Route
+                  path="/subcategories/:categoryName"
+                  element={<SubCategoryPage />}
+                />
+                <Route
                   path={"/shipping-returns"}
                   exact={true}
                   element={<ShippingReturns />}
@@ -172,7 +177,7 @@ function App() {
                 />
               </Routes>
               <WhatsAppWidget />
-              <Footer/>
+              <Footer />
             </BrowserRouter>
           </PromotionalProvider>
         </SettingsProvider>

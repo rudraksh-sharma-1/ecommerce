@@ -13,6 +13,7 @@ import { FaRegUser } from "react-icons/fa";
 import { FiLogOut, FiSearch } from "react-icons/fi";
 import { BiMessageRounded } from "react-icons/bi"; // Add enquiry icon
 import Tooltip from "@mui/material/Tooltip";
+import {MapPinned} from "lucide-react"; 
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useSettings } from "../../contexts/SettingsContext.jsx";
@@ -231,7 +232,7 @@ const Header = () => {
         <div className="container mx-auto">
           <div className="flex items-center h-16 justify-between">
             {/* Logo section */}
-            <div className="flex-shrink-1 mr-4 logo-container">
+            <div className="flex-shrink-1 logo-container">
               <Link to={"/"} className="block logo">
                 <img
                   src={getSetting("site_logo", "/logo.png")}
@@ -252,6 +253,16 @@ const Header = () => {
               <Navigation />
             </div>
 
+            <button className="border-0 rounded-lg items-center text-center font-bold text-xs text-black hover:text-blue-700 transition-colors md:px-2 px-1 bg-gray-100 hover:bg-gray-300  ">
+            {/* Location Selection Button */}
+              <Link
+                to="/account"
+                className=" flex items-center text-center font-bold rounded text-black hover:text-blue-700 transition-colors"
+              >
+                <MapPinned className="md:pr-1 size-7"/><span className="whitespace-nowrap">Current Location</span>
+              </Link>
+            </button>
+
             {/* Business Partner Button */}
             <Link
               to="/BusinessPartner"
@@ -266,7 +277,7 @@ const Header = () => {
             </Link>
 
             {/* Search Bar - desktop only */}
-            <div className="hidden md:block w-[250px] flex-shrink-0 ml-4">
+            <div className="hidden md:block w-[250px] flex-shrink-0 ">
               <Search />
             </div>
 
