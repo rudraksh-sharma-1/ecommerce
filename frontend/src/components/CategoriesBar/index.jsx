@@ -33,6 +33,7 @@ const CategoriesBar = () => {
   const { currentUser, logout } = useAuth();
   const categoryRefs = useRef({});
   const mobileMenuRef = useRef(null);
+  const scrollContainerRef = useRef(null);
   const navigate = useNavigate();
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -452,7 +453,10 @@ const CategoriesBar = () => {
             </div>
 
             {/* Featured Categories */}
-            <div className="featured-categories">
+            <div
+              className="featured-categories flex overflow-x-auto whitespace-nowrap scroll-smooth"
+              ref={scrollContainerRef}
+            >
               {loading ? (
                 <div className="loading-categories">
                   {[...Array(6)].map((_, i) => (
@@ -498,7 +502,7 @@ const CategoriesBar = () => {
                                 {category.name}
                               </span>
                               {hasSubcategories && (
-                                <span className="text-xs hidden md:block pr-1 pl-4">
+                                <span className="text-xs hidden md:block pr-1 pl-1">
                                   ▼
                                 </span>
                               )}
@@ -506,28 +510,28 @@ const CategoriesBar = () => {
                           </div>
                         </Link>
                       ) : (
-                         <Link
-                        to={`/subcategories/${encodeURIComponent(
-                          category.name
-                        )}`}
-                        className="block md:hidden"
-                      >
-                        <div className="category-item-new !p-0 md:m-3">
-                          <div className="category-name-container border-0 rounded-lg bg-[#fdf7f2] text-black">
-                            <img
-                              src={category.image_url}
-                              alt="Category Image"
-                              className="h-11 w-11 border-0 rounded-lg p-0"
-                            />
-                            <span className="category-name-text">
-                              {category.name}
-                            </span>
-                            {hasSubcategories && (
-                              <span className="text-xs">▼</span>
-                            )}
+                        <Link
+                          to={`/subcategories/${encodeURIComponent(
+                            category.name
+                          )}`}
+                          className="block md:hidden"
+                        >
+                          <div className="category-item-new !p-0 md:m-3">
+                            <div className="category-name-container border-0 rounded-lg bg-[#fdf7f2] text-black">
+                              <img
+                                src={category.image_url}
+                                alt="Category Image"
+                                className="h-11 w-11 border-0 rounded-lg p-0"
+                              />
+                              <span className="category-name-text">
+                                {category.name}
+                              </span>
+                              {hasSubcategories && (
+                                <span className="text-xs">▼</span>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      </Link>
+                        </Link>
                       )}
                       {/* Subcategories Dropdown - Show on hover with fixed positioning */}
                       {hasSubcategories &&
@@ -701,7 +705,22 @@ const CategoriesBar = () => {
                   );
                 })
               )}
+              <button
+                onClick={() =>
+                  scrollContainerRef.current.scrollBy({
+                    left: 200,
+                    behavior: "smooth",
+                  })
+                }
+                className="absolute lg:right-50 2xl:right-130 top-1/2 transform -translate-y-1/2 z-10 text-white shadow-md rounded-full hidden md:block"
+              >
+                ▶
+              </button>
             </div>
+              <button className="absolute bg-white text-black border-0 rounded-lg pr-1 my-2 right-18 flex w-30 items-center cursor-pointer hover:shadow-emerald-800 whitespace-nowrap">
+                <img src="https://i.postimg.cc/Z51W2bVM/Screenshot-2025-07-15-124657.png" alt="E-Haat" className="w-15 border-0 rounded-lg pr-1 "/>
+                E-Haat
+              </button>
           </div>
         </div>
       </div>
