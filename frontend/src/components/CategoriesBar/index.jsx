@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { BsShop } from "react-icons/bs";
 import { MapPinned } from "lucide-react";
 import {
   getAllCategories,
@@ -23,6 +24,7 @@ import "./style.css";
 
 const CategoriesBar = () => {
   const [categories, setCategories] = useState([]);
+  const [mobileCategories, setMobileCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -134,7 +136,8 @@ const CategoriesBar = () => {
           (cat) => cat.active && cat.featured
         );
         
-        setCategories(featuredCategories.slice(0, 5));
+        setCategories(featuredCategories.slice(0, 7));
+        setMobileCategories(featuredCategories);
 
         // Store all active categories for mobile menu
         const activeCategories = categoriesResult.categories.filter(
@@ -435,7 +438,7 @@ const CategoriesBar = () => {
         }`}
       >
         <div className="categories-bar-container">
-          <div className="categories-bar-content max-w-5xl">
+          <div className="categories-bar-content w-full">
             {/* Mobile ALL Menu Button - only visible on mobile */}
             <div className="md:hidden mobile-all-menu-wrapper ml-[-10px]">
               <button
@@ -491,7 +494,7 @@ const CategoriesBar = () => {
                           )}`}
                           className="category-item-link"
                         >
-                          <div className="category-item-new !p-0 m-3">
+                          <div className="category-item-new !p-0 m-0.5">
                             <div className="category-name-container flex justify-between p-0 border-0 rounded-lg bg-[#fdf7f2] text-black">
                               <img
                                 src={category.image_url}
@@ -502,7 +505,7 @@ const CategoriesBar = () => {
                                 {category.name}
                               </span>
                               {hasSubcategories && (
-                                <span className="text-xs hidden md:block pr-1 pl-4">
+                                <span className="text-xs hidden md:block pr-1 pl-2">
                                   ▼
                                 </span>
                               )}
@@ -717,7 +720,7 @@ const CategoriesBar = () => {
                 ▶
               </button> */}
             </div>
-              <button className="absolute hidden md:flex bg-white text-black border-0 rounded-lg pr-1 my-2 right-8 items-center cursor-pointer hover:shadow-emerald-800 whitespace-nowrap">
+              <button className="absolute hidden md:flex bg-white text-black border-0 rounded-lg pr-1 my-2 right-3 items-center cursor-pointer hover:shadow-emerald-800 whitespace-nowrap">
                 <img src="https://i.postimg.cc/Z51W2bVM/Screenshot-2025-07-15-124657.png" alt="E-Haat" className="w-15 border-0 rounded-lg pr-1"/>
                 E-Haat
                 <img src="https://i.postimg.cc/PqyrYm0j/Screenshot-2025-07-15-162637-removebg-preview.png" alt="E-Haat" className="w-12 border-0 rounded-lg pr-1 pl-1 " />
@@ -1073,6 +1076,11 @@ const CategoriesBar = () => {
 
               <li>
                 <Link to="/BusinessPartner" onClick={closeMobileMenu}>
+                  E-Haat
+                </Link>
+              </li>
+              <li>
+                <Link to="/BusinessPartner" onClick={closeMobileMenu}>
                   Business Partner
                 </Link>
               </li>
@@ -1261,8 +1269,8 @@ const CategoriesBar = () => {
             padding: 0,
           }}
         >
-          <MdMenu size={22} />
-          <span style={{ fontSize: "11px" }}>Menu</span>
+          <BsShop size={22}/>
+          <span style={{ fontSize: "11px" }}>E-Haat</span>
         </button>
       </div>
 

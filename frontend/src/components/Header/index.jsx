@@ -13,7 +13,7 @@ import { FaRegUser } from "react-icons/fa";
 import { FiLogOut, FiSearch } from "react-icons/fi";
 import { BiMessageRounded } from "react-icons/bi"; // Add enquiry icon
 import Tooltip from "@mui/material/Tooltip";
-import { MapPinned } from "lucide-react";
+import { MapPinned, Space } from "lucide-react";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useSettings } from "../../contexts/SettingsContext.jsx";
@@ -24,6 +24,8 @@ import {
   getUnreadEnquiryCount,
 } from "../../utils/supabaseApi";
 import "./header.css";
+
+
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -64,6 +66,19 @@ const Header = () => {
   const { getPromoSetting } = usePromotional();
   const navigate = useNavigate();
   const userDropdownRef = useRef(null);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth <= 320);
+
+
+  useEffect(() => {
+      const handleResize = () => {
+        setIsDesktop(window.innerWidth <= 320);
+      };
+  
+      window.addEventListener("resize", handleResize);
+  
+      // Cleanup the event listener when the component unmounts
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
   // Close user dropdown when clicking outside
   useEffect(() => {
@@ -255,12 +270,17 @@ const Header = () => {
 
             <button
               className="border-0 rounded-lg flex items-center text-xs text-black hover:text-blue-700 transition-colors bg-gray-100 hover:bg-gray-300 
-             px-2 mr-4 md:mx-0 md:px-4 w-auto max-w-[160px] overflow-hidden whitespace-nowrap"
+             px-2  md:mx-0 md:px-4 w-auto max-w-[160px] overflow-hidden whitespace-nowrap"
             >
               <Link to="/account" className="flex items-center space-x-1">
-                <MapPinned className="size-5 md:size-5" />
-                <span className="truncate text-sm md:text-xs">
-                  Current Location
+                <MapPinned className="size-5 md:size-4" />
+                <span className="truncate text-xs flex">
+                  {isDesktop?(
+                    <span className="">Location</span>
+                  ):(<>
+                  <span className="hidden md:block pr-1">Delivery Location</span>
+                    <span className="block md:hidden ">Drop Location</span></>
+                  )}
                 </span>
               </Link>
             </button>

@@ -26,8 +26,7 @@ const CategoriesMenu = () => {
   // Add state for expanded categories and subcategories
   const [expandedCategories, setExpandedCategories] = useState([]);
   const [expandedSubcategories, setExpandedSubcategories] = useState([]);
-  const [isShopByCategoryExpanded, setIsShopByCategoryExpanded] =
-    useState(false);
+  const [isShopByCategoryExpanded, setIsShopByCategoryExpanded] = useState(false);
 
   useEffect(() => {
     fetchCategoriesAndSubcategories();
@@ -448,6 +447,16 @@ const CategoriesMenu = () => {
                         })}
                       </div>
                     )}
+                  </div>
+                    {/* Buisness Partner */}
+                  <div className="menu-section">
+                    <Link
+                      to="/BusinessPartner"
+                      className="menu-item main-nav-item"
+                      onClick={closeMenu}
+                    >
+                      <span className="nav-item-name">E-Haat </span>
+                    </Link>
                   </div>
 
                   {/* Buisness Partner */}
