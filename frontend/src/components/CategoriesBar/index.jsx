@@ -51,6 +51,19 @@ const CategoriesBar = () => {
     position: { top: 0, left: 0 },
   });
 
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth > 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup the event listener when the component unmounts
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const location = useLocation();
 
   useEffect(() => {
@@ -116,9 +129,10 @@ const CategoriesBar = () => {
 
       if (categoriesResult.success && categoriesResult.categories) {
         // Show only featured and active categories in the top bar, limit to 8
-        const featuredCategories = categoriesResult.categories
-          .filter((cat) => cat.active && cat.featured)
-          .slice(0, 8);
+        const featuredCategories = categoriesResult.categories.filter(
+          (cat) => cat.active && cat.featured
+        );
+        /* .slice(0, 8); */
         setCategories(featuredCategories);
 
         // Store all active categories for mobile menu
@@ -420,7 +434,7 @@ const CategoriesBar = () => {
         }`}
       >
         <div className="categories-bar-container">
-          <div className="categories-bar-content">
+          <div className="categories-bar-content max-w-5xl">
             {/* Mobile ALL Menu Button - only visible on mobile */}
             <div className="md:hidden mobile-all-menu-wrapper ml-[-10px]">
               <button
@@ -460,33 +474,61 @@ const CategoriesBar = () => {
                         isSelected ? " selected" : ""
                       }`}
                       ref={(el) => (categoryRefs.current[category.id] = el)}
-                      /* onMouseEnter={(e) =>
+                      onMouseEnter={(e) =>
                         handleCategoryMouseEnter(category.id, e)
-                      } */
+                      }
                       onMouseLeave={handleCategoryMouseLeave}
                     >
-                      <Link
-                        to={`/subcategories/${encodeURIComponent(category.name)}`}
-                        className="category-item-link"
+                      {isDesktop ? (
+                        // Desktop Link (visible only on larger screens)
+                        <Link
+                          to={`/productListing?group=${encodeURIComponent(
+                            category.name
+                          )}`}
+                          className="category-item-link"
+                        >
+                          <div className="category-item-new !p-0 m-3">
+                            <div className="category-name-container flex justify-between p-0 border-0 rounded-lg bg-[#fdf7f2] text-black">
+                              <img
+                                src={category.image_url}
+                                alt="Category Image"
+                                className="h-15 w-15 border-0 rounded-lg p-0"
+                              />
+                              <span className="category-name-text">
+                                {category.name}
+                              </span>
+                              {hasSubcategories && (
+                                <span className="text-xs hidden md:block pr-1 pl-4">
+                                  ▼
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </Link>
+                      ) : (
+                         <Link
+                        to={`/subcategories/${encodeURIComponent(
+                          category.name
+                        )}`}
+                        className="block md:hidden"
                       >
-                        <div className="category-item-new">
-                          <div className="category-name-container  border-0 rounded-lg bg-[#fdf7f2] text-black">
+                        <div className="category-item-new !p-0 md:m-3">
+                          <div className="category-name-container border-0 rounded-lg bg-[#fdf7f2] text-black">
                             <img
                               src={category.image_url}
                               alt="Category Image"
-                              className="h-15 w-10 border-0 rounded-lg p-1"
+                              className="h-11 w-11 border-0 rounded-lg p-0"
                             />
                             <span className="category-name-text">
                               {category.name}
                             </span>
                             {hasSubcategories && (
-                              
-                                <span className="text-xs hidden md:block pr-1">▼</span>
-                              
+                              <span className="text-xs">▼</span>
                             )}
                           </div>
                         </div>
                       </Link>
+                      )}
                       {/* Subcategories Dropdown - Show on hover with fixed positioning */}
                       {hasSubcategories &&
                         dropdownRender.categoryId === category.id && (
@@ -629,7 +671,7 @@ const CategoriesBar = () => {
                                           )}`}
                                           className="subcategory-item"
                                         >
-                                          {subcategory.image_url ? (
+                                          {/* {subcategory.image_url ? (
                                             <img
                                               src={subcategory.image_url}
                                               alt={subcategory.name}
@@ -638,7 +680,7 @@ const CategoriesBar = () => {
                                                 e.target.style.display = "none";
                                               }}
                                             />
-                                          ) : null}
+                                          ) : null} */}
                                           <span className="subcategory-name">
                                             {subcategory.name}
                                           </span>
@@ -700,7 +742,7 @@ const CategoriesBar = () => {
                   )}&category=${encodeURIComponent(category?.name || "")}`}
                   className="group-item"
                 >
-                  {group.image_url ? (
+                  {/* {group.image_url ? (
                     <img
                       src={group.image_url}
                       alt={group.name}
@@ -709,7 +751,7 @@ const CategoriesBar = () => {
                         e.target.style.display = "none";
                       }}
                     />
-                  ) : null}
+                  ) : null} */}
                   <span className="group-name">{group.name}</span>
                 </Link>
               ));
@@ -1103,7 +1145,7 @@ const CategoriesBar = () => {
             </div>
             <div className="pb-13 w-full">
               {/* Location Selection Button */}
-              <button className="w-full border-0  items-center text-center font-bold text-xs text-black-800 transition-colors md:px-2 px-1 bg-blue-500 hover:bg-blue-700  ">
+              <button className="w-full border-0  items-center text-center font-bold text-xs text-black-800 transition-colors md:px-2 px-1 border-t  ">
                 <Link
                   to="/account"
                   className=" flex items-center align-middle justify-center text-center font-bold rounded transition-colors"

@@ -104,7 +104,7 @@ const SubCategoryPage = () => {
       <div className="flex-1 p-4">
         <h1 className="text-2xl font-bold mb-6 text-gray-700">
           {selectedSubcategory
-            ? `Groups in ${selectedSubcategory.name}`
+            ? `${selectedSubcategory.name}`
             : "Select a Subcategory"}
         </h1>
 
@@ -122,11 +122,11 @@ const SubCategoryPage = () => {
                 )}`}
               >
                 {/* Mobile version: flat design, no border or box */}
-                <div className="flex flex-col items-center justify-center space-y-2 sm:border sm:rounded-lg sm:h-37 sm:shadow p-2">
+                <div className="flex flex-col items-center justify-center space-y-2 hover:shadow-xl sm:border sm:rounded-lg sm:h-37 sm:shadow p-2">
                   <img
                     src={group.image_url}
                     alt='group image'
-                    className="aspect-square sm:w-15 sm:h-15 rounded-full object-cover border  mb-1"
+                    className="aspect-square sm:w-15 sm:h-15 rounded-full object-cover border mb-1"
                   />
                   <p className="text-xs sm:text-sm text-center font-medium">
                     {group.name}

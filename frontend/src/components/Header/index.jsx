@@ -13,7 +13,7 @@ import { FaRegUser } from "react-icons/fa";
 import { FiLogOut, FiSearch } from "react-icons/fi";
 import { BiMessageRounded } from "react-icons/bi"; // Add enquiry icon
 import Tooltip from "@mui/material/Tooltip";
-import {MapPinned} from "lucide-react"; 
+import { MapPinned } from "lucide-react";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useSettings } from "../../contexts/SettingsContext.jsx";
@@ -230,14 +230,14 @@ const Header = () => {
     >
       <div className="header-main border-b border-gray-200 shadow-sm">
         <div className="container mx-auto">
-          <div className="flex items-center h-16 justify-between">
+          <div className="flex items-center align-middle h-16 justify-evenly">
             {/* Logo section */}
             <div className="flex-shrink-1 logo-container">
               <Link to={"/"} className="block logo">
                 <img
                   src={getSetting("site_logo", "/logo.png")}
                   alt={`${getSetting("company_name", "BBMart")} Logo`}
-                  className="h-8 w-auto"
+                  className="h-8 md:w-auto w-15"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src =
@@ -253,13 +253,15 @@ const Header = () => {
               <Navigation />
             </div>
 
-            <button className="border-0 rounded-lg items-center text-center font-bold text-xs text-black hover:text-blue-700 transition-colors md:px-2 px-1 bg-gray-100 hover:bg-gray-300  ">
-            {/* Location Selection Button */}
-              <Link
-                to="/account"
-                className=" flex items-center text-center font-bold rounded text-black hover:text-blue-700 transition-colors"
-              >
-                <MapPinned className="md:pr-1 size-7"/><span className="whitespace-nowrap">Current Location</span>
+            <button
+              className="border-0 rounded-lg flex items-center text-xs text-black hover:text-blue-700 transition-colors bg-gray-100 hover:bg-gray-300 
+             px-2 mr-4 md:mx-0 w-auto max-w-[160px] overflow-hidden whitespace-nowrap"
+            >
+              <Link to="/account" className="flex items-center space-x-1">
+                <MapPinned className="size-5 md:size-5" />
+                <span className="truncate text-sm md:text-xs">
+                  Current Location
+                </span>
               </Link>
             </button>
 
@@ -284,7 +286,7 @@ const Header = () => {
             {/* Action Icons */}
             <div className="flex flex-shrink-3 items-center ml-auto md:ml-4 space-x-1">
               {/* MOBILE ICONS: Only show wishlist, cart, and account icons on mobile */}
-              <div className="flex md:hidden items-center space-x-1">
+              <div className="flex md:hidden items-center w-30 justify-center space-x-1">
                 {/* Wishlist */}
                 <Link
                   to="/wishlist"

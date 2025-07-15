@@ -494,7 +494,7 @@ const CategoriesMenu = () => {
                     </Link>
                   </div>
                 </div>
-                <button className="border-0  items-center text-center font-bold text-xs text-black-800 transition-colors md:px-2 px-1 bg-blue-500 hover:bg-blue-700  ">
+                <button className="border-0  items-center text-center font-bold text-xs text-black-800 transition-colors md:px-2 px-1 border-t">
                   {/* Location Selection Button */}
                   <Link
                     to="/account"

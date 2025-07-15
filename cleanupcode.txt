@@ -79,3 +79,174 @@ This code is for Home Page
           </form>
         </div>
       </div> */}
+
+
+
+code from categoriesbar for subcategory dropdoen on hover
+      {hasSubcategories &&
+                        dropdownRender.categoryId === category.id && (
+                          <div
+                            className="hidden md:block subcategories-dropdown"
+                            style={{
+                              position: "fixed",
+                              top: `${dropdownRender.position.top}px`,
+                              left: `${dropdownRender.position.left}px`,
+                              width: dropdownRender.position.width || "420px",
+                              minWidth:
+                                dropdownRender.position.width || "340px",
+                              maxWidth: "700px",
+                              transform: "none",
+                              // Increase dropdown width for both columns
+                              // width: '520px', // was 300px or similar, now much wider
+                              // minWidth: '520px',
+                              // maxWidth: '700px',
+                            }}
+                            onMouseEnter={handleDropdownMouseEnter}
+                            onMouseLeave={handleDropdownMouseLeave}
+                          >
+                            <div
+                              className="subcategories-dropdown-content"
+                              style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                width: "100%",
+                              }}
+                            >
+                              <div
+                                className="subcategory-column"
+                                style={{
+                                  flex: 1,
+                                  minWidth: "0",
+                                  maxWidth: "50%",
+                                  paddingRight: "16px",
+                                }}
+                              >
+                                {categorySubcategories
+                                  .slice(
+                                    0,
+                                    Math.ceil(categorySubcategories.length / 2)
+                                  )
+                                  .map((subcategory) => {
+                                    const subcategoryGroups =
+                                      getGroupsForSubcategory(subcategory.id);
+                                    const hasGroups =
+                                      subcategoryGroups.length > 0;
+                                    return (
+                                      <div
+                                        key={subcategory.id}
+                                        className="subcategory-item-container"
+                                        onMouseEnter={(e) => {
+                                          if (hasGroups) {
+                                            handleSubcategoryMouseEnter(
+                                              subcategory.id,
+                                              e
+                                            );
+                                          }
+                                        }}
+                                        onMouseLeave={() => {
+                                          if (hasGroups) {
+                                            handleSubcategoryMouseLeave();
+                                          }
+                                        }}
+                                      >
+                                        <Link
+                                          to={`/productListing?subcategory=${encodeURIComponent(
+                                            subcategory.name
+                                          )}&category=${encodeURIComponent(
+                                            category.name
+                                          )}`}
+                                          className="subcategory-item"
+                                        >
+                                          {subcategory.image_url ? (
+                                            <img
+                                              src={subcategory.image_url}
+                                              alt={subcategory.name}
+                                              className="subcategory-image"
+                                              onError={(e) => {
+                                                e.target.style.display = "none";
+                                              }}
+                                            />
+                                          ) : null}
+                                          <span className="subcategory-name">
+                                            {subcategory.name}
+                                          </span>
+                                          {hasGroups && (
+                                            <span className="subcategory-arrow">
+                                              →
+                                            </span>
+                                          )}
+                                        </Link>
+                                      </div>
+                                    );
+                                  })}
+                              </div>
+                              <div
+                                className="subcategory-column"
+                                style={{
+                                  flex: 1,
+                                  minWidth: "0",
+                                  maxWidth: "50%",
+                                  paddingLeft: "16px",
+                                }}
+                              >
+                                {categorySubcategories
+                                  .slice(
+                                    Math.ceil(categorySubcategories.length / 2)
+                                  )
+                                  .map((subcategory) => {
+                                    const subcategoryGroups =
+                                      getGroupsForSubcategory(subcategory.id);
+                                    const hasGroups =
+                                      subcategoryGroups.length > 0;
+                                    return (
+                                      <div
+                                        key={subcategory.id}
+                                        className="subcategory-item-container"
+                                        onMouseEnter={(e) => {
+                                          if (hasGroups) {
+                                            handleSubcategoryMouseEnter(
+                                              subcategory.id,
+                                              e
+                                            );
+                                          }
+                                        }}
+                                        onMouseLeave={() => {
+                                          if (hasGroups) {
+                                            handleSubcategoryMouseLeave();
+                                          }
+                                        }}
+                                      >
+                                        <Link
+                                          to={`/productListing?subcategory=${encodeURIComponent(
+                                            subcategory.name
+                                          )}&category=${encodeURIComponent(
+                                            category.name
+                                          )}`}
+                                          className="subcategory-item"
+                                        >
+                                          {subcategory.image_url ? (
+                                            <img
+                                              src={subcategory.image_url}
+                                              alt={subcategory.name}
+                                              className="subcategory-image"
+                                              onError={(e) => {
+                                                e.target.style.display = "none";
+                                              }}
+                                            />
+                                          ) : null}
+                                          <span className="subcategory-name">
+                                            {subcategory.name}
+                                          </span>
+                                          {hasGroups && (
+                                            <span className="subcategory-arrow">
+                                              →
+                                            </span>
+                                          )}
+                                        </Link>
+                                      </div>
+                                    );
+                                  })}
+                              </div>
+                            </div>
+                          </div>
+                        )}

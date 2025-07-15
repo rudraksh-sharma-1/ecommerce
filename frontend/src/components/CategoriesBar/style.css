@@ -52,10 +52,8 @@
     font-size: 13px;
   }
 
-.category-item-new {
-        
+.category-item-new {        
     width: 138px;
-        
   }
 
   .featured-categories {
@@ -74,8 +72,8 @@
   .category-name-container {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    align-items:start;
+    justify-content: space-between;
     text-align: center;
     width: 100%;
     height: 100%;
