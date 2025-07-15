@@ -255,7 +255,7 @@ const Header = () => {
 
             <button
               className="border-0 rounded-lg flex items-center text-xs text-black hover:text-blue-700 transition-colors bg-gray-100 hover:bg-gray-300 
-             px-2 mr-4 md:mx-0 w-auto max-w-[160px] overflow-hidden whitespace-nowrap"
+             px-2 mr-4 md:mx-0 md:px-4 w-auto max-w-[160px] overflow-hidden whitespace-nowrap"
             >
               <Link to="/account" className="flex items-center space-x-1">
                 <MapPinned className="size-5 md:size-5" />
