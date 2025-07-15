@@ -133,8 +133,8 @@ const CategoriesBar = () => {
         const featuredCategories = categoriesResult.categories.filter(
           (cat) => cat.active && cat.featured
         );
-        /* .slice(0, 8); */
-        setCategories(featuredCategories);
+        
+        setCategories(featuredCategories.slice(0, 5));
 
         // Store all active categories for mobile menu
         const activeCategories = categoriesResult.categories.filter(
@@ -502,7 +502,7 @@ const CategoriesBar = () => {
                                 {category.name}
                               </span>
                               {hasSubcategories && (
-                                <span className="text-xs hidden md:block pr-1 pl-1">
+                                <span className="text-xs hidden md:block pr-1 pl-4">
                                   ▼
                                 </span>
                               )}
@@ -705,7 +705,7 @@ const CategoriesBar = () => {
                   );
                 })
               )}
-              <button
+             {/*  <button
                 onClick={() =>
                   scrollContainerRef.current.scrollBy({
                     left: 200,
@@ -715,11 +715,12 @@ const CategoriesBar = () => {
                 className="absolute lg:right-50 2xl:right-130 top-1/2 transform -translate-y-1/2 z-10 text-white shadow-md rounded-full hidden md:block"
               >
                 ▶
-              </button>
+              </button> */}
             </div>
-              <button className="absolute bg-white text-black border-0 rounded-lg pr-1 my-2 right-18 flex w-30 items-center cursor-pointer hover:shadow-emerald-800 whitespace-nowrap">
-                <img src="https://i.postimg.cc/Z51W2bVM/Screenshot-2025-07-15-124657.png" alt="E-Haat" className="w-15 border-0 rounded-lg pr-1 "/>
+              <button className="absolute hidden md:flex bg-white text-black border-0 rounded-lg pr-1 my-2 right-8 items-center cursor-pointer hover:shadow-emerald-800 whitespace-nowrap">
+                <img src="https://i.postimg.cc/Z51W2bVM/Screenshot-2025-07-15-124657.png" alt="E-Haat" className="w-15 border-0 rounded-lg pr-1"/>
                 E-Haat
+                <img src="https://i.postimg.cc/PqyrYm0j/Screenshot-2025-07-15-162637-removebg-preview.png" alt="E-Haat" className="w-12 border-0 rounded-lg pr-1 pl-1 " />
               </button>
           </div>
         </div>
