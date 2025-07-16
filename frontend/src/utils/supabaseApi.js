@@ -590,6 +590,7 @@ export async function getProductsByGroupName(groupName) {
   return { success: true, products: filtered };
 }
 
+/* Add Products to Supabase */
 export async function addProduct(product, imageFile) {
   let imageUrl = product.image;
   if (imageFile && imageFile instanceof File) {
@@ -615,6 +616,8 @@ export async function addProduct(product, imageFile) {
   return { success: true, product: data };
 }
 
+
+/* Update Product in Supabase */
 export async function updateProduct(id, product, imageFile) {
   let imageUrl = product.image;
   if (imageFile && imageFile instanceof File) {
@@ -641,6 +644,7 @@ export async function updateProduct(id, product, imageFile) {
   return { success: true, product: data };
 }
 
+/* Delete Product In Supabase */
 export async function deleteProduct(id) {
   const { error } = await supabase.from("products").delete().eq("id", id);
   if (error) return { success: false, error: error.message };
@@ -1438,15 +1442,7 @@ export async function createUserProfileWithAddress(userProfile) {
  * @param {string} postalCode - The postal code to search for
  * @returns {Promise<{success: boolean, users?: array, error?: string}>}
  */
-export async function getUsersByPostalCode(postalCode) {
-  const { data, error } = await supabase
-    .from("users")
-    .select("id, name, email, city, state, postal_code")
-    .eq("postal_code", postalCode);
 
-  if (error) return { success: false, error: error.message };
-  return { success: true, users: data };
-}
 
 /**
  * Search users by city and state

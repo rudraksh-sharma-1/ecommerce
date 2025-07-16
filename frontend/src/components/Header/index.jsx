@@ -14,6 +14,10 @@ import { FiLogOut, FiSearch } from "react-icons/fi";
 import { BiMessageRounded } from "react-icons/bi"; // Add enquiry icon
 import Tooltip from "@mui/material/Tooltip";
 import { MapPinned, Space } from "lucide-react";
+import { FaBusinessTime } from "react-icons/fa";
+import { FaListCheck } from "react-icons/fa6";
+import {ArrowRightLeft} from 'lucide-react'
+
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useSettings } from "../../contexts/SettingsContext.jsx";
@@ -244,10 +248,10 @@ const Header = () => {
       }`}
     >
       <div className="header-main border-b border-gray-200 shadow-sm">
-        <div className="container mx-auto">
-          <div className="flex items-center align-middle h-16 justify-evenly">
+        <div className=" w-full px-5 ">
+          <div className="flex items-center w-full p-0 align-middle h-16 justify-between">
             {/* Logo section */}
-            <div className="flex-shrink-1 logo-container">
+            <div className="flex-shrink-1 logo-container w-25 left-0">
               <Link to={"/"} className="block logo">
                 <img
                   src={getSetting("site_logo", "/logo.png")}
@@ -263,13 +267,14 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Navigation - desktop only */}
-            <div className="hidden md:block flex-shrink-1 ">
-              <Navigation />
-            </div>
+            <div className="w-auto flex ">
+              {/* Navigation - desktop only */}
+           
+              <Navigation className='hidden md:block flex-shrink-1'/>
+           
 
             <button
-              className="border-0 rounded-lg flex items-center text-xs text-black hover:text-blue-700 transition-colors bg-gray-100 hover:bg-gray-300 
+              className="border-0 rounded-lg flex items-center text-xs text-black hover:text-blue-700 transition-colors  
              px-2  md:mx-0 md:px-4 w-auto max-w-[160px] overflow-hidden whitespace-nowrap"
             >
               <Link to="/account" className="flex items-center space-x-1">
@@ -288,18 +293,15 @@ const Header = () => {
             {/* Business Partner Button */}
             <Link
               to="/BusinessPartner"
-              className="hidden md:block items-center text-center font-bold text-xs rounded text-black hover:text-blue-700 transition-colors px-3"
+              className="hidden md:flex items-center text-center border-0 py-3   text-xs rounded-lg text-black-200 hover:text-blue-700 transition-colors px-3"
             >
-              <img
-                src="https://i.postimg.cc/nrsbjpQY/Whats-App-Image-2025-07-08-at-15-28-23-removebg-preview.png"
-                alt="Logo"
-                className="object-contain w-20 px-1"
-              />
+              <FaBusinessTime size={20} className="mr-1" />
               <span className="whitespace-nowrap">Business Partner</span>
             </Link>
+            </div>
 
             {/* Search Bar - desktop only */}
-            <div className="hidden md:block w-[250px] flex-shrink-0 ">
+            <div className="hidden md:block w-[250px] flex-shrink-0">
               <Search />
             </div>
 
@@ -346,6 +348,22 @@ const Header = () => {
               {/* Desktop Elements */}
               {/* Enquiry History Icon - Only show for logged in users */}
 
+               {/* Dekstop Refund */} 
+              <div className="hidden md:flex">
+                <Link
+                  to="/coming-soon?feature=orders"
+                  className="flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors group"
+                >
+                  <div className="relative">
+                    <ArrowRightLeft />
+                  </div>
+                  <span className="text-sm text-gray-700 group-hover:text-blue-600 transition-colors flex">
+                    Refund & Order
+                  </span>
+                </Link>
+              </div>
+
+              {/* Dekstop Cart */}
               <div className="hidden md:flex">
                 <Link
                   to="/cart"
@@ -362,18 +380,17 @@ const Header = () => {
                 </Link>
               </div>
 
+               {/* Dekstop Enquiry */} 
               <div className="hidden md:block">
                 <Link
-                  to="/wishlist"
+                  to="/enquiry-history"
                   className="flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors group"
                 >
                   <div className="relative">
-                    <StyledBadge badgeContent={wishlistCount} color="secondary">
-                      <FaRegHeart className="w-5 h-5 text-gray-600 group-hover:text-blue-600" />
-                    </StyledBadge>
+                    <FaListCheck />
                   </div>
                   <span className="text-sm text-gray-700 group-hover:text-blue-600 transition-colors">
-                    Wishlist
+                    Enquiry
                   </span>
                 </Link>
               </div>
@@ -422,6 +439,13 @@ const Header = () => {
                           onClick={() => setUserDropdownOpen(false)}
                         >
                           Wallet
+                        </Link>
+                        <Link
+                          to="/wishlist"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setUserDropdownOpen(false)}
+                        >
+                          Wishlist
                         </Link>
                         <Link
                           to="/enquiry-history"

@@ -4,6 +4,7 @@ import { LiaAngleDownSolid } from "react-icons/lia";
 import CategoryPanel from "./CategoryPanel";
 import "./style.css";
 import { getAllCategories } from "../../utils/supabaseApi";
+import { FaHome } from "react-icons/fa";
 
 const Navigation = () => {
   const [isOpenCatPanel, setIsOpenCatPanel] = useState(false);
@@ -56,7 +57,7 @@ const Navigation = () => {
 
   // Navigation items with submenu data
   const navItems = [
-    { text: "Home", link: "/", hasSubmenu: false },
+    { icon: <FaHome size={20} className="mr-1" />, text: "Home", link: "/", hasSubmenu: false },
     /* {
       text: "Stationery",
       link: "/productListing",
@@ -68,8 +69,7 @@ const Navigation = () => {
     }, */
     /* { text: "Custom Printing", link: "/custom-printing", hasSubmenu: false }, */
     // { text: "Blog", link: "/blog", hasSubmenu: false },
-    { text: "About Us", link: "/about-us", hasSubmenu: false },
-    { text: "Contact Us", link: "/contact-us", hasSubmenu: false },
+    
   ];
 
   return (
@@ -84,6 +84,7 @@ const Navigation = () => {
           >
             <Link to={item.link} className="block">
               <div className="nav-item text-gray-800 hover:text-blue-600 transition-colors text-sm px-3 h-full flex items-center whitespace-nowrap">
+                {item.icon}
                 {item.text}
                 {/* Only show dropdown icon if not Stationery main link */}
                 {item.hasSubmenu && item.text !== 'Stationery' && (

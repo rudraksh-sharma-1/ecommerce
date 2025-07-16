@@ -35,7 +35,7 @@ function MobileAccountPage() {
         to="/coming-soon?feature=orders"
         className="!ml-0 flex justify-center w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
       >
-        My Orders
+        Refund & Orders
       </Link>
 
       <Link
