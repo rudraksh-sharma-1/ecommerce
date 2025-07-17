@@ -9,7 +9,8 @@ dotenv.config();
 import authRoutes from './routes/authRoute.js';
 import geoAddressRoute from './routes/geoAddressRoute.js'
 import warehouseRoute from './routes/warehouseRoute.js'
-import  productWarehouseRoute  from './routes/productWarehouseRoutes.js';
+import productWarehouseRoute  from './routes/productWarehouseRoutes.js';
+import productsRoute from './routes/productRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,5 +40,6 @@ app.use('/api/business', authRoutes);
 app.use('/api/geo-address', geoAddressRoute);
 app.use('/api/warehouse', warehouseRoute);
 app.use('/api/productwarehouse', productWarehouseRoute);
+app.use('/api/productsroute', productsRoute);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

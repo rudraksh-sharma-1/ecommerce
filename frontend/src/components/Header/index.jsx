@@ -309,7 +309,7 @@ const Header = () => {
             <div className="flex flex-shrink-3 items-center ml-auto md:ml-4 space-x-1">
               {/* MOBILE ICONS: Only show wishlist, cart, and account icons on mobile */}
               <div className="flex md:hidden items-center w-30 justify-center space-x-1">
-                {/* Wishlist */}
+                {/* Enquiry */}
                 <Link
                   to="/enquiry-history"
                   className="p-2 text-gray-600 hover:text-blue-600"

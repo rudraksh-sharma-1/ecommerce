@@ -35,6 +35,7 @@ import StorageDetailsPage from "./Pages/Storage";
 import BusinessUsersList from "./Pages/BusinessWork/BusinessData.jsx";
 import EnhancedStoragePage from "./Pages/Storage/enhanced";
 import WarehouseList from "./Pages/WarehousePages/WarehouseList.jsx";
+import WarehouseProducts from './Pages/WarehousePages/WarehouseProducts.jsx'
 
 const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -180,6 +181,10 @@ function App() {
         {
           path: "/warehouselist",
           element: <WarehouseList />,
+        },
+        {
+          path: "/warehouseproducts/:id/products",
+          element: <WarehouseProducts />,
         },
       ],
     },

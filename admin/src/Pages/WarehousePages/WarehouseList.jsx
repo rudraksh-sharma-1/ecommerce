@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const WarehouseList = () => {
+  const navigate = useNavigate()
   const [editingWarehouse, setEditingWarehouse] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
@@ -14,22 +16,27 @@ const WarehouseList = () => {
   const [loading, setLoading] = useState(true);
 
   const deleteWarehouse = async (id) => {
-  const confirmDelete = window.confirm("Are you sure you want to delete this warehouse?");
-  if (!confirmDelete) return;
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this warehouse?"
+    );
+    if (!confirmDelete) return;
 
-  try {
-    await axios.delete(`https://ecommerce-kghp.onrender.com/api/warehouse/delete/${id}`);
-    await fetchWarehouses();
-  } catch (err) {
-    alert("Failed to delete warehouse");
-    console.error(err);
-  }
-};
-
+    try {
+      await axios.delete(
+        `https://ecommerce-kghp.onrender.com/api/warehouse/delete/${id}`
+      );
+      await fetchWarehouses();
+    } catch (err) {
+      alert("Failed to delete warehouse");
+      console.error(err);
+    }
+  };
 
   const fetchWarehouses = async () => {
     try {
-      const res = await axios.get("https://ecommerce-kghp.onrender.com/api/warehouse/list"); // make sure this route exists
+      const res = await axios.get(
+        "https://ecommerce-kghp.onrender.com/api/warehouse/list"
+      ); // make sure this route exists
       setWarehouses(res.data);
     } catch (err) {
       console.error("Failed to fetch warehouses:", err);
@@ -97,6 +104,15 @@ const WarehouseList = () => {
                       onClick={() => deleteWarehouse(w.id)}
                     >
                       🗑️
+                    </button>
+
+                    <button
+                      className="bg-green-600 text-white px-3 py-1 rounded"
+                      onClick={() =>
+                        navigate(`/warehouseproducts/${w.id}/products`)
+                      }
+                    >
+                      📦 Products
                     </button>
                   </td>
                 </tr>
@@ -174,7 +190,7 @@ const WarehouseList = () => {
                 disabled={submitting}
                 className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
               >
-                {submitting ? "Saving..." : editingWarehouse ? "Edit": "Add"}
+                {submitting ? "Saving..." : editingWarehouse ? "Edit" : "Add"}
               </button>
             </div>
           </div>
