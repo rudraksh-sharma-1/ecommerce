@@ -29,7 +29,7 @@ app.use(cors({
       return callback(new Error('Not allowed by CORS'));
     }
   }, */
-  origin: 'https://ecommerce-umber-five-95.vercel.app', //https://ecommerce-umber-five-95.vercel.app http://localhost:5173 Temporarily allowing all origins for development
+  origin: 'https://admin-eight-flax.vercel.app', //https://ecommerce-umber-five-95.vercel.app http://localhost:5173 Temporarily allowing all origins for development
   credentials: true,
 }));
 app.use(express.json());
