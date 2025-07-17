@@ -311,12 +311,10 @@ const Header = () => {
               <div className="flex md:hidden items-center w-30 justify-center space-x-1">
                 {/* Wishlist */}
                 <Link
-                  to="/wishlist"
+                  to="/enquiry-history"
                   className="p-2 text-gray-600 hover:text-blue-600"
                 >
-                  <StyledBadge badgeContent={wishlistCount} color="secondary">
-                    <FaRegHeart className="w-5 h-5" />
-                  </StyledBadge>
+                  <FaListCheck />
                 </Link>
                 {/* Cart */}
                 <Link
@@ -358,7 +356,7 @@ const Header = () => {
                     <ArrowRightLeft />
                   </div>
                   <span className="text-sm text-gray-700 group-hover:text-blue-600 transition-colors flex">
-                    Refund & Order
+                    Refund
                   </span>
                 </Link>
               </div>
@@ -425,6 +423,13 @@ const Header = () => {
                           onClick={() => setUserDropdownOpen(false)}
                         >
                           Profile
+                        </Link>
+                        <Link
+                          to="/coming-soon?feature=orders"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setUserDropdownOpen(false)}
+                        >
+                          Refund
                         </Link>
                         <Link
                           to="/coming-soon?feature=orders"

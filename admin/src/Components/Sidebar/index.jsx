@@ -138,6 +138,11 @@ const Sidebar = ({ isOpen = true }) => {
       path: "/business-data",
     },
     {
+      title: "Warehouses",
+      icon: <FaList />,
+      path: "/warehouselist",
+    },
+    {
       title: "Settings",
       icon: <RiSettings4Fill />,
       path: "/settings",

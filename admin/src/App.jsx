@@ -34,6 +34,7 @@ import PromotionalSettings from "./Pages/PromotionalSettings";
 import StorageDetailsPage from "./Pages/Storage";
 import BusinessUsersList from "./Pages/BusinessWork/BusinessData.jsx";
 import EnhancedStoragePage from "./Pages/Storage/enhanced";
+import WarehouseList from "./Pages/WarehousePages/WarehouseList.jsx";
 
 const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -175,6 +176,10 @@ function App() {
         {
           path: "/business-data",
           element: <BusinessUsersList />,
+        },
+        {
+          path: "/warehouselist",
+          element: <WarehouseList />,
         },
       ],
     },
