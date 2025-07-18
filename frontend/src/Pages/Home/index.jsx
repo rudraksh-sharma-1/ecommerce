@@ -4,25 +4,25 @@ import Search from "../../components/Search";
 import { FaShippingFast } from "react-icons/fa";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { useAuth } from "../../contexts/AuthContext";
 import ProductsSlider from "../../components/ProductsSlider";
-import { Swiper, SwiperSlide } from "swiper/react";
-import WhatsAppWidget from "../../components/WhatsAppWidget/WhatsAppWidget.jsx";
+
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 // import required modules
-import { Navigation, Pagination } from "swiper/modules";
-import { Box, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom"; // Import Link from react-router-dom
+import { Box } from "@mui/material";
+import { useNavigate } from "react-router-dom"; // Import Link from react-router-dom
 import {
+  getDefaultUserAddress,
+  getNearbyProducts,
   getAllProducts,
   getAllCategories,
   getAllBanners,
 } from "../../utils/supabaseApi";
 import { usePromotional } from "../../contexts/PromotionalContext.jsx";
 import FlashSale from "../../components/FlashSale";
-import { MdSearch } from "react-icons/md";
 import "./home.css";
 
 function ProductTabs({ categories }) {
@@ -89,30 +89,66 @@ export const Home = () => {
   const [categories, setCategories] = useState([]);
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
+  /* const [defaultAddress, setDefaultAddress] = useState(null); */
 
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
   const [hasAnnouncementBar, setHasAnnouncementBar] = useState(false);
 
+  const { currentUser } = useAuth(); // 👈 Get from context
   useEffect(() => {
     async function fetchAllData() {
       setLoading(true);
+
+      let productFetchFn;
+
+      try {
+        const userId = currentUser?.id;
+
+        if (userId) {
+          const defaultAddress = await getDefaultUserAddress(userId);
+          /* setDefaultAddress(defaultAddressChange); */
+
+          
+          /* console.log(defaultAddress) */
+
+          if (defaultAddress?.latitude && defaultAddress?.longitude) {
+            productFetchFn = () =>
+              getNearbyProducts(
+                defaultAddress.latitude,
+                defaultAddress.longitude
+              );
+          } else {
+            productFetchFn = getAllProducts;
+          }
+        } else {
+          productFetchFn = getAllProducts;
+        }
+      } catch (err) {
+        console.error("Error fetching user or address:", err);
+        productFetchFn = getAllProducts;
+      }
+      console.log(productFetchFn) 
+
       const [
         { success: prodSuccess, products: prodData },
         { success: catSuccess, categories: catData },
         { success: banSuccess, banners: banData },
       ] = await Promise.all([
-        getAllProducts(),
+        productFetchFn(),
         getAllCategories(),
         getAllBanners(),
       ]);
+
       setProducts(prodSuccess && prodData ? prodData : []);
       setCategories(catSuccess && catData ? catData : []);
       setBanners(banSuccess && banData ? banData : []);
       setLoading(false);
     }
+    console.log(products)
+
     fetchAllData();
-  }, []);
+  }, [currentUser]); // 👈 Add dependency
 
   const getProductsByCategory = (category) => {
     return products
@@ -122,6 +158,8 @@ export const Home = () => {
       )
       .slice(0, 8);
   };
+
+ 
 
   const popularProducts = products
     .filter((product) => product.popular)

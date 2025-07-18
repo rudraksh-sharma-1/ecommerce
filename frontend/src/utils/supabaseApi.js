@@ -452,6 +452,24 @@ export async function getAllGroups() {
 }
 
 // PRODUCTS
+/* getNearbyProducts(user_lat, user_lon) */
+export async function getNearbyProducts(user_lat, user_lon) {
+  const { data, error } = await supabase.rpc("get_products_within_15km", {
+    user_lat,
+    user_lon,
+  });
+
+  if (error) return { success: false, error: error.message };
+
+  // Optionally: filter out products with inactive categories
+  const filtered = (data || []).filter(product => {
+    return product.active !== false;
+  });
+
+  return { success: true, products: filtered };
+}
+
+
 // Fetch all products from Supabase
 export async function getAllProducts() {
   const { data, error } = await supabase
@@ -1469,6 +1487,23 @@ export async function getUsersByLocation(city, state) {
 }
 
 // USER ADDRESSES
+/* Get Default Address */
+export async function getDefaultUserAddress(userId) {
+  const { data, error } = await supabase
+    .from("user_addresses")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("is_default", true)
+    .single();
+
+  if (error) {
+    console.error("Failed to get default address:", error.message);
+    return null;
+  }
+
+  return data;
+}
+
 /**
  * Get all addresses for a user
  * @param {string} userId - The user ID
@@ -1490,7 +1525,7 @@ export async function getUserAddresses(userId) {
  * @param {string} userId - The user ID
  * @returns {Promise<{success: boolean, address?: Object, error?: string}>}
  */
-export async function getDefaultUserAddress(userId) {
+/* export async function getDefaultUserAddress(userId) {
   const { data, error } = await supabase
     .from("user_addresses")
     .select()
@@ -1518,7 +1553,7 @@ export async function getDefaultUserAddress(userId) {
   }
   
   return { success: true, address: data };
-}
+} */
 
 /**
  * Add a new address for a user
@@ -1526,20 +1561,25 @@ export async function getDefaultUserAddress(userId) {
  * @param {Object} address - The address data
  * @returns {Promise<{success: boolean, address?: Object, error?: string}>}
  */
+import axios from "axios";
+
 export async function addUserAddress(userId, address) {
-  const addressData = {
-    ...address,
-    user_id: userId
-  };
-  
-  const { data, error } = await supabase
-    .from("user_addresses")
-    .insert([addressData])
-    .select()
-    .single();
-  
-  if (error) return { success: false, error: error.message };
-  return { success: true, address: data };
+  try {
+    const response = await axios.post("http://localhost:8000/api/geo-address/createAddress", {
+      ...address,
+      user_id: userId,
+    });
+
+    return {
+      success: true,
+      address: response.data.data, // your backend returns it in .data.data
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.response?.data?.error || "Something went wrong",
+    };
+  }
 }
 
 /**
@@ -1548,16 +1588,24 @@ export async function addUserAddress(userId, address) {
  * @param {Object} address - The updated address data
  * @returns {Promise<{success: boolean, address?: Object, error?: string}>}
  */
+
 export async function updateUserAddress(addressId, address) {
-  const { data, error } = await supabase
-    .from("user_addresses")
-    .update(address)
-    .eq("id", addressId)
-    .select()
-    .single();
-  
-  if (error) return { success: false, error: error.message };
-  return { success: true, address: data };
+  try {
+    const res = await axios.put(
+      `http://localhost:8000/api/geo-address/update/${addressId}`,
+      address
+    );
+
+    return {
+      success: true,
+      address: res.data.data,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      error: err.response?.data?.error || "Failed to update address",
+    };
+  }
 }
 
 /**
@@ -1565,15 +1613,20 @@ export async function updateUserAddress(addressId, address) {
  * @param {string} addressId - The address ID
  * @returns {Promise<{success: boolean, error?: string}>}
  */
+
 export async function deleteUserAddress(addressId) {
-  const { error } = await supabase
-    .from("user_addresses")
-    .delete()
-    .eq("id", addressId);
-  
-  if (error) return { success: false, error: error.message };
-  return { success: true };
+  try {
+    await axios.delete(`http://localhost:8000/api/geo-address/delete/${addressId}`);
+
+    return { success: true };
+  } catch (err) {
+    return {
+      success: false,
+      error: err.response?.data?.error || "Failed to delete address",
+    };
+  }
 }
+
 
 /**
  * Set an address as the default address

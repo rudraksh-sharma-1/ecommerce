@@ -226,12 +226,13 @@ const AddressForm = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Postal Code
+                Postal Code <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={formData.postal_code}
                 onChange={handleChange("postal_code")}
+                required
                 placeholder="Postal/ZIP Code"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
@@ -249,7 +250,7 @@ const AddressForm = ({
                 value={formData.country}
                 onChange={handleChange("country")}
                 placeholder="Country"
-                defaultValue="India"
+                /* defaultValue="India" */
                 className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
             </div>
