@@ -14,14 +14,25 @@ import productsRoute from './routes/productRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-/* const allowedOrigins = [
+const allowedOrigins = [
   'http://localhost:5173',
   'https://ecommerce-umber-five-95.vercel.app',
   'https://admin-eight-flax.vercel.app'
-]; */
+];
 
-app.use(cors({
-  /* origin: function (origin, callback) {
+
+const corsOptions = {
+      origin: function (origin, callback) {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) { // Allow requests with no origin (like curl, etc.)
+          callback(null, true)
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
+      },
+      credentials: true,
+    }
+/* app.use(cors({
+   origin: function (origin, callback) {
     // allow requests with no origin like mobile apps or curl
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
@@ -29,10 +40,13 @@ app.use(cors({
     } else {
       return callback(new Error('Not allowed by CORS'));
     }
-  }, */
+  }, 
   origin: 'http://localhost:5173', //https://ecommerce-umber-five-95.vercel.app http://localhost:5173 Temporarily allowing all origins for development
   credentials: true,
-}));
+})); */
+
+app.use(cors(corsOptions))
+
 app.use(express.json());
 app.use(cookieParser());
 

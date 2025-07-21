@@ -1557,7 +1557,7 @@ import axios from "axios";
 
 export async function addUserAddress(userId, address) {
   try {
-    const response = await axios.post("http://localhost:8000/api/geo-address/createAddress", {
+    const response = await axios.post("https://ecommerce-kghp.onrender.com/api/geo-address/createAddress", {
       ...address,
       user_id: userId,
     });
@@ -1584,7 +1584,7 @@ export async function addUserAddress(userId, address) {
 export async function updateUserAddress(addressId, address) {
   try {
     const res = await axios.put(
-      `http://localhost:8000/api/geo-address/update/${addressId}`,
+      `https://ecommerce-kghp.onrender.com/api/geo-address/update/${addressId}`,
       address
     );
 
@@ -1608,7 +1608,7 @@ export async function updateUserAddress(addressId, address) {
 
 export async function deleteUserAddress(addressId) {
   try {
-    await axios.delete(`http://localhost:8000/api/geo-address/delete/${addressId}`);
+    await axios.delete(`https://ecommerce-kghp.onrender.com/api/geo-address/delete/${addressId}`);
 
     return { success: true };
   } catch (err) {
