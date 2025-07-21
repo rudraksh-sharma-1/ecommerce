@@ -13,7 +13,7 @@ import productWarehouseRoute  from './routes/productWarehouseRoutes.js';
 import productsRoute from './routes/productRoutes.js'
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 const allowedOrigins = [
   'http://localhost:5173',
   'https://ecommerce-umber-five-95.vercel.app',
