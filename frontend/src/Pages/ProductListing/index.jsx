@@ -17,11 +17,14 @@ import { FaFilter } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { MdSort } from "react-icons/md";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 import {
   getAllProducts,
   getProductsByCategoryName,
   getProductsBySubcategoryName,
   getProductsByGroupName,
+  getNearbyProducts,
+  getDefaultUserAddress,
 } from "../../utils/supabaseApi";
 
 const ProductListing = () => {
@@ -36,6 +39,7 @@ const ProductListing = () => {
   const itemsPerPage = 12;
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [minRating, setMinRating] = useState(0);
+  const { currentUser } = useAuth();
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -54,22 +58,77 @@ const ProductListing = () => {
       let productsResult;
       if (group) {
         // If group is specified, get products by group name
-        productsResult = await getProductsByGroupName(group);
+        if (currentUser) {
+        const address = await getDefaultUserAddress(currentUser.id);
+        
+        if (address?.latitude && address?.longitude) {
+          productsResult = await getProductsByGroupName(
+            group,
+            address.latitude,
+            address.longitude
+          );
+        } else {
+          productsResult = await getAllProducts();
+        }
+      } else {
+        productsResult = await getAllProducts();
+      }
       } else if (subcategory) {
         // If subcategory is specified, get products by subcategory name
-        productsResult = await getProductsBySubcategoryName(subcategory);
+        if (currentUser) {
+        const address = await getDefaultUserAddress(currentUser.id);
+        
+        if (address?.latitude && address?.longitude) {
+          productsResult = await getProductsBySubcategoryName(
+            subcategory,
+            address.latitude,
+            address.longitude
+          );
+        } else {
+          productsResult = await getAllProducts();
+        }
+      } else {
+        productsResult = await getAllProducts();
+      }
       } else if (category) {
         // If only category is specified, get products by category name
-        productsResult = await getProductsByCategoryName(category);
+        if (currentUser) {
+        const address = await getDefaultUserAddress(currentUser.id);
+        
+        if (address?.latitude && address?.longitude) {
+          productsResult = await getProductsByCategoryName(
+            category,
+            address.latitude,
+            address.longitude
+          );
+        } else {
+          productsResult = await getAllProducts();
+        }
+      } else {
+        productsResult = await getAllProducts();
+      }
       } else {
         // Get all products
+        if (currentUser) {
+        const address = await getDefaultUserAddress(currentUser.id);
+        if (address?.latitude && address?.longitude) {
+          productsResult = await getNearbyProducts(
+            address.latitude,
+            address.longitude
+          );
+        } else {
+          productsResult = await getAllProducts();
+        }
+      } else {
         productsResult = await getAllProducts();
+      }
       }
       const { success, products } = productsResult;
       let filteredProducts = [];
       if (success && products) {
         filteredProducts = products.map((p) => ({
           ...p,
+          id: p.id || p.product_id,
           rating: p.rating ?? 0,
           reviewCount: p.review_count ?? 0,
           discount: p.discount ?? 0,
@@ -128,7 +187,7 @@ const ProductListing = () => {
       setLoading(false);
     }
     fetchProducts();
-  }, [category, subcategory, group, sortOption, priceRange, minRating, search]);
+  }, [category, subcategory, group, sortOption, priceRange, minRating, search, currentUser]);
 
   const handleSortClick = (event) => {
     setSortAnchorEl(event.currentTarget);
@@ -184,11 +243,11 @@ const ProductListing = () => {
   return (
     <div className="product-listing-page-wrapper">
       {/* Search Bar For mobile Screens */}
-          <div className="mobile-search-bar-container block md:hidden w-full mt-3 px-5 py-3">
-            <Search />
-          </div>
-          {/* this div is only for spacing between search bar and product list */}
-         <div className="mt-5 h-12 md:hidden"></div>
+      <div className="mobile-search-bar-container block md:hidden w-full mt-3 px-5 py-3">
+        <Search />
+      </div>
+      {/* this div is only for spacing between search bar and product list */}
+      <div className="mt-5 h-12 md:hidden"></div>
       <section className="py-3 pb-0 bg-gray-50 product-section ">
         <div className="w-full px-4">
           <Breadcrumbs aria-label="breadcrumb" className="text-sm flex-wrap">
@@ -252,7 +311,7 @@ const ProductListing = () => {
             {getCategoryTitle()}
           </h1>
         </div>
-          
+
         <div className="bg-white mt-4 shadow-sm product-listing-bg-white">
           <div className="w-full product-listing-main-wrapper">
             {/* Mobile filter button - visible only on small screens */}

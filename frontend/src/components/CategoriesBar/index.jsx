@@ -489,7 +489,7 @@ const CategoriesBar = () => {
                       {isDesktop ? (
                         // Desktop Link (visible only on larger screens)
                         <Link
-                          to={`/productListing?group=${encodeURIComponent(
+                          to={`/productListing?category=${encodeURIComponent(
                             category.name
                           )}`}
                           className="category-item-link"

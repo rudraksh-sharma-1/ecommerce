@@ -26,8 +26,8 @@ export const AuthProvider = ({ children }) => {
         // Always merge user_metadata into user and ensure email is preserved
         const user = data.session.user;
         const name = user?.user_metadata?.name;
-        console.log('Initial session user data:', user);
-        console.log('User email from session:', user.email);
+        /* console.log('Initial session user data:', user);
+        console.log('User email from session:', user.email); */
         setCurrentUser({ 
           ...user, 
           name,
@@ -44,8 +44,8 @@ export const AuthProvider = ({ children }) => {
       if (session?.user) {
         const user = session.user;
         const name = user?.user_metadata?.name;
-        console.log('Auth state change user data:', user);
-        console.log('User email from auth state change:', user.email);
+        /* console.log('Auth state change user data:', user);
+        console.log('User email from auth state change:', user.email); */
         setCurrentUser({ 
           ...user, 
           name,

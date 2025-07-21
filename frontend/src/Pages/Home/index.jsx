@@ -109,9 +109,14 @@ export const Home = () => {
           const defaultAddress = await getDefaultUserAddress(userId);
           /* setDefaultAddress(defaultAddressChange); */
 
-          
           /* console.log(defaultAddress) */
-
+          /* console.log(
+            "Latitude:",
+            defaultAddress.latitude,
+            "Longitude:",
+            defaultAddress.longitude
+          );
+ */
           if (defaultAddress?.latitude && defaultAddress?.longitude) {
             productFetchFn = () =>
               getNearbyProducts(
@@ -128,7 +133,7 @@ export const Home = () => {
         console.error("Error fetching user or address:", err);
         productFetchFn = getAllProducts;
       }
-      console.log(productFetchFn) 
+      /* console.log(productFetchFn); */
 
       const [
         { success: prodSuccess, products: prodData },
@@ -140,15 +145,20 @@ export const Home = () => {
         getAllBanners(),
       ]);
 
-      setProducts(prodSuccess && prodData ? prodData : []);
+      setProducts(
+        prodSuccess && prodData
+          ? prodData.map((p) => ({ ...p, id: p.product_id }))
+          : []
+      );
       setCategories(catSuccess && catData ? catData : []);
       setBanners(banSuccess && banData ? banData : []);
       setLoading(false);
     }
-    console.log(products)
 
     fetchAllData();
   }, [currentUser]); // 👈 Add dependency
+
+  /* console.log("All Products Fetched:", products); */
 
   const getProductsByCategory = (category) => {
     return products
@@ -158,8 +168,6 @@ export const Home = () => {
       )
       .slice(0, 8);
   };
-
- 
 
   const popularProducts = products
     .filter((product) => product.popular)

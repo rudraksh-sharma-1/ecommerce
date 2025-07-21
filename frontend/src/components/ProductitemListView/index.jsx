@@ -86,12 +86,12 @@ const ProductItem = ({ product }) => {
   return (
     <div className="flex flex-col sm:flex-row bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
       {/* Image section */}
-      <div className="relative w-full sm:w-1/4 h-64 sm:h-auto overflow-hidden">
-        {discount && (
+      <div className="relative w-full sm:w-1/4 h-64 sm:h-auto ">
+        {/* {discount && (
           <div className="absolute top-3 left-3 z-10">
             <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">-{discount}%</span>
           </div>
-        )}
+        )} */}
         
         <Link to={`/product/${id}`} className="block h-full">
           <img

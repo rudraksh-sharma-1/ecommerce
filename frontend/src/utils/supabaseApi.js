@@ -521,25 +521,22 @@ export async function getProductsBySubcategory(subcategoryId) {
 }
 
 // Fetch products by subcategory name from Supabase
-export async function getProductsBySubcategoryName(subcategoryName) {
-  const { data, error } = await supabase
-    .from("products")
-    .select(
-      `
-      *, 
-      subcategories!inner(id, name, categories(id, name, active))
-    `
-    )
-    .eq("subcategories.name", subcategoryName)
-    .order("created_at", { ascending: false });
-  if (error) return { success: false, error: error.message };
-  const filtered = (data || []).filter(product => {
-    if (product.subcategories && product.subcategories.categories) {
-      return product.subcategories.categories.active !== false;
+export async function getProductsBySubcategoryName(subcategoryName, lat, lon) {
+  const { data, error } = await supabase.rpc(
+    "get_products_by_subcategory_within_15km",
+    {
+      subcategory_name: subcategoryName,
+      user_lat: lat,
+      user_lon: lon,
     }
-    return true;
-  });
-  return { success: true, products: filtered };
+  );
+
+  if (error) {
+    console.error("Error fetching products by subcategory:", error.message);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, products: data || [] };
 }
 
 // Fetch products by category from Supabase (using subcategories)
@@ -565,48 +562,43 @@ export async function getProductsByCategory(categoryId) {
 }
 
 // Fetch products by category name from Supabase (using subcategories)
-export async function getProductsByCategoryName(categoryName) {
+export async function getProductsByCategoryName(categoryName, lat, lon) {
   const { data, error } = await supabase
-    .from("products")
-    .select(
-      `
-      *, 
-      subcategories!inner(id, name, categories!inner(id, name, active))
-    `
-    )
-    .eq("subcategories.categories.name", categoryName)
-    .order("created_at", { ascending: false });
-  if (error) return { success: false, error: error.message };
-  const filtered = (data || []).filter(product => {
-    if (product.subcategories && product.subcategories.categories) {
-      return product.subcategories.categories.active !== false;
-    }
-    return true;
-  });
-  return { success: true, products: filtered };
+    .rpc("get_products_by_category_within_15km", {
+      category_name: categoryName,
+      user_lat: lat,
+      user_lon: lon
+    });
+
+  if (error) {
+    console.error("Error fetching products by category:", error.message);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, products: data || [] };
 }
 
+
+
 // Fetch products by group name from Supabase
-export async function getProductsByGroupName(groupName) {
-  const { data, error } = await supabase
-    .from("products")
-    .select(
-      `
-      *, 
-      groups!inner(id, name, subcategories(id, name, categories(id, name, active)))
-    `
-    )
-    .eq("groups.name", groupName)
-    .order("created_at", { ascending: false });
-  if (error) return { success: false, error: error.message };
-  const filtered = (data || []).filter(product => {
-    if (product.groups && product.groups.subcategories && product.groups.subcategories.categories) {
-      return product.groups.subcategories.categories.active !== false;
+export async function getProductsByGroupName(groupName, lat, lon) {
+  const { data, error } = await supabase.rpc(
+    "get_products_by_group_within_15km",
+    {
+      group_name: groupName,
+      user_lat: lat,
+      user_lon: lon,
     }
-    return true;
-  });
-  return { success: true, products: filtered };
+  );
+
+  if (error) {
+    console.error("Error fetching products by group:", error.message);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, products: data || [] };
 }
+
 
 /* Add Products to Supabase */
 export async function addProduct(product, imageFile) {
