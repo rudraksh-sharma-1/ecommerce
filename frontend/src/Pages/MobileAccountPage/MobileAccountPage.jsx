@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { UserPen, Wallet, ClipboardList, Phone, ShoppingCart, LogOut } from "lucide-react";
+import { UserPen, Wallet, ClipboardList, Phone, ShoppingCart, LogOut, List, Package } from "lucide-react";
 
 function MobileAccountPage() {
   const { logout } = useAuth();
@@ -35,7 +35,13 @@ function MobileAccountPage() {
         to="/coming-soon?feature=orders"
         className="!ml-0 flex justify-center w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
       >
-        Refund & Orders
+        <List className="pr-2"/>Refund 
+      </Link>
+      <Link
+        to="/coming-soon?feature=orders"
+        className="!ml-0 flex justify-center w-full text-center bg-white rounded-lg py-3 px-4 shadow text-gray-800 font-medium hover:bg-indigo-50 transition"
+      >
+        <Package className='pr-2'/>Orders
       </Link>
 
       <Link

@@ -35,6 +35,8 @@ import { PromotionalProvider } from "./contexts/PromotionalContext.jsx";
 import DynamicHead from "./components/DynamicHead";
 import AnnouncementBar from "./components/AnnouncementBar";
 import CategoriesBar from "./components/CategoriesBar";
+import { LocationProvider } from "./contexts/LocationContext.jsx";
+import LocationModal from "./components/LocationModal/LocationModal.jsx";
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -55,12 +57,14 @@ function App() {
   return (
     <>
       <AuthProvider>
+        <LocationProvider>
         <SettingsProvider>
           <PromotionalProvider>
             <DynamicHead />
             <BrowserRouter>
               <AnnouncementBar />
               <Header />
+              <LocationModal/>
               <CategoriesBar />
               <Routes>
                 <Route path={"/"} exact={true} element={<Home />} />
@@ -181,6 +185,7 @@ function App() {
             </BrowserRouter>
           </PromotionalProvider>
         </SettingsProvider>
+        </LocationProvider>
       </AuthProvider>
       <ToastContainer
         position="top-right"

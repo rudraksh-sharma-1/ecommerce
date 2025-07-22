@@ -18,6 +18,8 @@ import { IoClose } from "react-icons/io5";
 import { MdSort } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext.jsx";
+import { useLocationContext } from "../../contexts/LocationContext.jsx";
+
 import {
   getAllProducts,
   getProductsByCategoryName,
@@ -48,146 +50,109 @@ const ProductListing = () => {
   const group = queryParams.get("group");
   const search = queryParams.get("search")?.toLowerCase() || "";
 
+  const { selectedAddress } = useLocationContext();
+
   const sortMenuOpen = Boolean(sortAnchorEl);
   const filterMenuOpen = Boolean(filterAnchorEl);
 
   useEffect(() => {
-    // Fetch products from Supabase
-    async function fetchProducts() {
-      setLoading(true);
-      let productsResult;
-      if (group) {
-        // If group is specified, get products by group name
-        if (currentUser) {
-        const address = await getDefaultUserAddress(currentUser.id);
-        
-        if (address?.latitude && address?.longitude) {
-          productsResult = await getProductsByGroupName(
-            group,
-            address.latitude,
-            address.longitude
-          );
-        } else {
-          productsResult = await getAllProducts();
-        }
-      } else {
-        productsResult = await getAllProducts();
-      }
-      } else if (subcategory) {
-        // If subcategory is specified, get products by subcategory name
-        if (currentUser) {
-        const address = await getDefaultUserAddress(currentUser.id);
-        
-        if (address?.latitude && address?.longitude) {
-          productsResult = await getProductsBySubcategoryName(
-            subcategory,
-            address.latitude,
-            address.longitude
-          );
-        } else {
-          productsResult = await getAllProducts();
-        }
-      } else {
-        productsResult = await getAllProducts();
-      }
-      } else if (category) {
-        // If only category is specified, get products by category name
-        if (currentUser) {
-        const address = await getDefaultUserAddress(currentUser.id);
-        
-        if (address?.latitude && address?.longitude) {
-          productsResult = await getProductsByCategoryName(
-            category,
-            address.latitude,
-            address.longitude
-          );
-        } else {
-          productsResult = await getAllProducts();
-        }
-      } else {
-        productsResult = await getAllProducts();
-      }
-      } else {
-        // Get all products
-        if (currentUser) {
-        const address = await getDefaultUserAddress(currentUser.id);
-        if (address?.latitude && address?.longitude) {
-          productsResult = await getNearbyProducts(
-            address.latitude,
-            address.longitude
-          );
-        } else {
-          productsResult = await getAllProducts();
-        }
-      } else {
-        productsResult = await getAllProducts();
-      }
-      }
-      const { success, products } = productsResult;
-      let filteredProducts = [];
-      if (success && products) {
-        filteredProducts = products.map((p) => ({
-          ...p,
-          id: p.id || p.product_id,
-          rating: p.rating ?? 0,
-          reviewCount: p.review_count ?? 0,
-          discount: p.discount ?? 0,
-          image: p.image ?? "https://placehold.co/300x300?text=Product",
-        }));
-        // Apply search filter
-        if (search) {
-          filteredProducts = filteredProducts.filter(
-            (p) =>
-              (p.name && p.name.toLowerCase().includes(search)) ||
-              (p.description && p.description.toLowerCase().includes(search))
-          );
-        }
-        // Apply price filter
-        filteredProducts = filteredProducts.filter(
-          (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
-        );
-        // Apply rating filter
-        filteredProducts = filteredProducts.filter(
-          (p) => p.rating >= minRating
-        );
-        // Sort products based on selected option
-        switch (sortOption) {
-          case "price-low":
-            filteredProducts = [...filteredProducts].sort(
-              (a, b) => a.price - b.price
-            );
-            break;
-          case "price-high":
-            filteredProducts = [...filteredProducts].sort(
-              (a, b) => b.price - a.price
-            );
-            break;
-          case "name-asc":
-            filteredProducts = [...filteredProducts].sort((a, b) =>
-              a.name.localeCompare(b.name)
-            );
-            break;
-          case "name-desc":
-            filteredProducts = [...filteredProducts].sort((a, b) =>
-              b.name.localeCompare(a.name)
-            );
-            break;
-          case "rating":
-            filteredProducts = [...filteredProducts].sort(
-              (a, b) => b.rating - a.rating
-            );
-            break;
-          default:
-            filteredProducts = [...filteredProducts].sort(
-              (a, b) => b.reviewCount - a.reviewCount
-            );
-        }
-      }
-      setProductList(filteredProducts);
-      setLoading(false);
+  async function fetchProducts() {
+    setLoading(true);
+    let productsResult;
+
+    const address = selectedAddress;
+    const lat = address?.latitude;
+    const lon = address?.longitude;
+    const hasCoords = lat && lon;
+
+    if (group) {
+      productsResult = currentUser && hasCoords
+        ? await getProductsByGroupName(group, lat, lon)
+        : await getAllProducts();
+    } else if (subcategory) {
+      productsResult = currentUser && hasCoords
+        ? await getProductsBySubcategoryName(subcategory, lat, lon)
+        : await getAllProducts();
+    } else if (category) {
+      productsResult = currentUser && hasCoords
+        ? await getProductsByCategoryName(category, lat, lon)
+        : await getAllProducts();
+    } else {
+      productsResult = currentUser && hasCoords
+        ? await getNearbyProducts(lat, lon)
+        : await getAllProducts();
     }
-    fetchProducts();
-  }, [category, subcategory, group, sortOption, priceRange, minRating, search, currentUser]);
+
+    const { success, products } = productsResult;
+    let filteredProducts = [];
+
+    if (success && products) {
+      filteredProducts = products.map((p) => ({
+        ...p,
+        id: p.id || p.product_id,
+        rating: p.rating ?? 0,
+        reviewCount: p.review_count ?? 0,
+        discount: p.discount ?? 0,
+        image: p.image ?? "https://placehold.co/300x300?text=Product",
+      }));
+
+      // Apply search filter
+      if (search) {
+        const lowerSearch = search.toLowerCase();
+        filteredProducts = filteredProducts.filter(
+          (p) =>
+            (p.name && p.name.toLowerCase().includes(lowerSearch)) ||
+            (p.description && p.description.toLowerCase().includes(lowerSearch))
+        );
+      }
+
+      // Apply price filter
+      filteredProducts = filteredProducts.filter(
+        (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
+      );
+
+      // Apply rating filter
+      filteredProducts = filteredProducts.filter((p) => p.rating >= minRating);
+
+      // Sort products
+      switch (sortOption) {
+        case "price-low":
+          filteredProducts.sort((a, b) => a.price - b.price);
+          break;
+        case "price-high":
+          filteredProducts.sort((a, b) => b.price - a.price);
+          break;
+        case "name-asc":
+          filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case "name-desc":
+          filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case "rating":
+          filteredProducts.sort((a, b) => b.rating - a.rating);
+          break;
+        default:
+          filteredProducts.sort((a, b) => b.reviewCount - a.reviewCount);
+      }
+    }
+
+    setProductList(filteredProducts);
+    setLoading(false);
+  }
+
+  fetchProducts();
+}, [
+  category,
+  subcategory,
+  group,
+  sortOption,
+  priceRange,
+  minRating,
+  search,
+  currentUser,
+  selectedAddress, // Include this in dependency
+]);
+
 
   const handleSortClick = (event) => {
     setSortAnchorEl(event.currentTarget);

@@ -17,6 +17,7 @@ import { MapPinned, Space } from "lucide-react";
 import { FaBusinessTime } from "react-icons/fa";
 import { FaListCheck } from "react-icons/fa6";
 import {ArrowRightLeft} from 'lucide-react'
+import { useLocationContext } from "../../contexts/LocationContext.jsx";
 
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -72,6 +73,7 @@ const Header = () => {
   const userDropdownRef = useRef(null);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth <= 320);
 
+    const { showModal, setShowModal, selectedAddress } = useLocationContext();
 
   useEffect(() => {
       const handleResize = () => {
@@ -276,8 +278,9 @@ const Header = () => {
             <button
               className="border-0 rounded-lg flex items-center text-xs text-black hover:text-blue-700 transition-colors  
              px-2  md:mx-0 md:px-4 w-auto max-w-[160px] overflow-hidden whitespace-nowrap"
+             onClick={() => setShowModal(true)}
             >
-              <Link to="/account" className="flex items-center space-x-1">
+              <Link to="/" className="flex items-center space-x-1">
                 <MapPinned className="size-5 md:size-4" />
                 <span className="truncate text-xs flex">
                   {isDesktop?(

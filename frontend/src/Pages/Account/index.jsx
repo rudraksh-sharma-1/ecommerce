@@ -18,11 +18,14 @@ import {
 } from "react-icons/fa";
 import AddressManager from "../../components/AddressManager";
 import ComingSoonPlaceholder from "../../components/ComingSoonPlaceholder";
+import { useLocation } from "react-router-dom";
 
 const AccountPage = () => {
   const { currentUser, logout, resetPassword, updatePassword, setCurrentUser } =
     useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state || {};
 
   // Tab configuration
   const TAB_CONFIG = {
@@ -39,7 +42,11 @@ const AccountPage = () => {
           label: "Delivery Address",
           icon: <FaMapMarkerAlt />,
         },
-        { key: "contact", label: "Contact No", icon: <FaPhone className="transform rotate-90"/> },
+        {
+          key: "contact",
+          label: "Contact No",
+          icon: <FaPhone className="transform rotate-90" />,
+        },
         { key: "email", label: "Email Id", icon: <FaEnvelope /> },
       ],
       account: [
@@ -54,8 +61,12 @@ const AccountPage = () => {
   };
 
   // State management
-  const [activeHorizontalTab, setActiveHorizontalTab] = useState("personal");
-  const [activeVerticalTab, setActiveVerticalTab] = useState("profile");
+  const [activeHorizontalTab, setActiveHorizontalTab] = useState(
+    state.horizontalTab || "personal"
+  );
+  const [activeVerticalTab, setActiveVerticalTab] = useState(
+    state.verticalTab || "profile"
+  );
   const [notification, setNotification] = useState({
     show: false,
     message: "",
@@ -126,11 +137,15 @@ const AccountPage = () => {
 
   // Update vertical tab when horizontal tab changes
   useEffect(() => {
-    const firstVerticalTab = TAB_CONFIG.vertical[activeHorizontalTab]?.[0]?.key;
-    if (firstVerticalTab) {
-      setActiveVerticalTab(firstVerticalTab);
+    // only override vertical tab if it wasn't passed via navigation state
+    if (!state.verticalTab) {
+      const firstVerticalTab =
+        TAB_CONFIG.vertical[activeHorizontalTab]?.[0]?.key;
+      if (firstVerticalTab) {
+        setActiveVerticalTab(firstVerticalTab);
+      }
     }
-  }, [activeHorizontalTab]);
+  }, [activeHorizontalTab, state.verticalTab]);
 
   // Event handlers
   const handleProfileUpdate = async (e) => {

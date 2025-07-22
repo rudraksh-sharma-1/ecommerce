@@ -11,13 +11,15 @@ import geoAddressRoute from './routes/geoAddressRoute.js'
 import warehouseRoute from './routes/warehouseRoute.js'
 import productWarehouseRoute  from './routes/productWarehouseRoutes.js';
 import productsRoute from './routes/productRoutes.js'
+import locationRoute from './routes/locationRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 const allowedOrigins = [
   'http://localhost:5173',
   'https://ecommerce-umber-five-95.vercel.app',
-  'https://admin-eight-flax.vercel.app'
+  'https://admin-eight-flax.vercel.app',
+  'http://192.168.1.2:5173'
 ];
 
 
@@ -55,5 +57,6 @@ app.use('/api/geo-address', geoAddressRoute);
 app.use('/api/warehouse', warehouseRoute);
 app.use('/api/productwarehouse', productWarehouseRoute);
 app.use('/api/productsroute', productsRoute);
+app.use('/api/locationsroute', locationRoute);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

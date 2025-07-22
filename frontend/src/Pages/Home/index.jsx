@@ -6,6 +6,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useAuth } from "../../contexts/AuthContext";
 import ProductsSlider from "../../components/ProductsSlider";
+import { useLocationContext } from "../../contexts/LocationContext.jsx";
 
 // Import Swiper styles
 import "swiper/css";
@@ -94,69 +95,52 @@ export const Home = () => {
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
   const [hasAnnouncementBar, setHasAnnouncementBar] = useState(false);
+  const { selectedAddress } = useLocationContext();
 
-  const { currentUser } = useAuth(); // 👈 Get from context
+  /* const { currentUser } = useAuth(); */ // 👈 Get from context
   useEffect(() => {
-    async function fetchAllData() {
-      setLoading(true);
+  async function fetchAllData() {
+    setLoading(true);
 
-      let productFetchFn;
+    let productFetchFn;
 
-      try {
-        const userId = currentUser?.id;
-
-        if (userId) {
-          const defaultAddress = await getDefaultUserAddress(userId);
-          /* setDefaultAddress(defaultAddressChange); */
-
-          /* console.log(defaultAddress) */
-          /* console.log(
-            "Latitude:",
-            defaultAddress.latitude,
-            "Longitude:",
-            defaultAddress.longitude
+    try {
+      if (selectedAddress?.latitude && selectedAddress?.longitude) {
+        productFetchFn = () =>
+          getNearbyProducts(
+            selectedAddress.latitude,
+            selectedAddress.longitude
           );
- */
-          if (defaultAddress?.latitude && defaultAddress?.longitude) {
-            productFetchFn = () =>
-              getNearbyProducts(
-                defaultAddress.latitude,
-                defaultAddress.longitude
-              );
-          } else {
-            productFetchFn = getAllProducts;
-          }
-        } else {
-          productFetchFn = getAllProducts;
-        }
-      } catch (err) {
-        console.error("Error fetching user or address:", err);
+      } else {
         productFetchFn = getAllProducts;
       }
-      /* console.log(productFetchFn); */
-
-      const [
-        { success: prodSuccess, products: prodData },
-        { success: catSuccess, categories: catData },
-        { success: banSuccess, banners: banData },
-      ] = await Promise.all([
-        productFetchFn(),
-        getAllCategories(),
-        getAllBanners(),
-      ]);
-
-      setProducts(
-        prodSuccess && prodData
-          ? prodData.map((p) => ({ ...p, id: p.product_id }))
-          : []
-      );
-      setCategories(catSuccess && catData ? catData : []);
-      setBanners(banSuccess && banData ? banData : []);
-      setLoading(false);
+    } catch (err) {
+      console.error("Error determining product fetch method:", err);
+      productFetchFn = getAllProducts;
     }
 
-    fetchAllData();
-  }, [currentUser]); // 👈 Add dependency
+    const [
+      { success: prodSuccess, products: prodData },
+      { success: catSuccess, categories: catData },
+      { success: banSuccess, banners: banData },
+    ] = await Promise.all([
+      productFetchFn(),
+      getAllCategories(),
+      getAllBanners(),
+    ]);
+
+    setProducts(
+      prodSuccess && prodData
+        ? prodData.map((p) => ({ ...p, id: p.product_id }))
+        : []
+    );
+    setCategories(catSuccess && catData ? catData : []);
+    setBanners(banSuccess && banData ? banData : []);
+    setLoading(false);
+  }
+
+  fetchAllData();
+}, [selectedAddress]); 
 
   /* console.log("All Products Fetched:", products); */
 
