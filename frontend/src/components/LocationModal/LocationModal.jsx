@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocationContext } from "../../contexts/LocationContext.jsx";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { LocateFixed } from "lucide-react";
 
 const LocationModal = () => {
   const {
@@ -11,56 +12,28 @@ const LocationModal = () => {
     addresses,
     selectedAddress,
     setSelectedAddress,
+    currentLocationAddress,
+    setCurrentLocationAddress,
+    useCurrentLocation,
   } = useLocationContext();
+
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   const [pincode, setPincode] = useState("");
   const [loading, setLoading] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
 
   const handleUseCurrentLocation = async () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
-      return;
+    try {
+      setLocationLoading(true);
+      const result = await useCurrentLocation();
+      alert("Location updated successfully!");
+    } catch (err) {
+      console.error("Failed to fetch current location:", err);
+    } finally {
+      setLocationLoading(false);
     }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-
-        try {
-          const response = await fetch(
-            `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=f4a8c8f1a4c541f89f742dbc40672aea`
-          );
-
-          const data = await response.json();
-          const result = data?.results?.[0];
-          const address = result?.formatted;
-
-          if (address) {
-            const locationData = {
-              address,
-              latitude,
-              longitude,
-            };
-
-            // Save as JSON string
-            setSelectedAddress(locationData);
-
-            alert("Location updated successfully!");
-            setShowModal(false);
-          } else {
-            alert("Could not retrieve address.");
-          }
-        } catch (error) {
-          console.error("Reverse geocoding failed", error);
-          alert("Failed to get address. Try again.");
-        }
-      },
-      (error) => {
-        alert("Permission denied or location unavailable.");
-      }
-    );
   };
 
   const handleApplyPincode = async () => {
@@ -88,6 +61,7 @@ const LocationModal = () => {
       };
 
       setSelectedAddress(newSelected);
+      setCurrentLocationAddress(null);
       localStorage.setItem("selectedAddress", JSON.stringify(newSelected));
       setShowModal(false);
     } catch (err) {
@@ -102,7 +76,7 @@ const LocationModal = () => {
 
   return (
     <div className="fixed inset-0 bg-black/20 z-20000 flex justify-center items-end md:items-center">
-      <div className="bg-white p-6 rounded-t-xl md:rounded-md w-full md:w-[400px] md:mb-0 mb-0 relative max-h-[90vh] overflow-y-auto transition-all duration-300">
+      <div className="bg-white p-6 rounded-t-xl md:rounded-md w-full md:w-[400px] md:mb-0 mb-0 relative transition-all duration-300 max-h-full md:max-h-[90vh] md:overflow-y-auto">
         <button
           className="absolute top-2 right-4 text-gray-500 text-lg"
           onClick={() => setShowModal(false)}
@@ -141,6 +115,7 @@ const LocationModal = () => {
                     key={idx}
                     onClick={() => {
                       setSelectedAddress(addr);
+                      setCurrentLocationAddress(null);
                       setShowModal(false);
                     }}
                     className={`border p-3 rounded-md mb-2 cursor-pointer hover:bg-gray-100 transition ${
@@ -199,12 +174,22 @@ const LocationModal = () => {
             {loading ? "Applying..." : "Apply"}
           </button>
         </div>
+
         <button
-          className="text-blue-600 text-sm underline block mt-4"
+          className="flex align-middle justify-evenly w-43 no-underline text-blue-600 text-sm mt-4 disabled:opacity-60"
           onClick={handleUseCurrentLocation}
+          disabled={locationLoading}
         >
-          Use my current location
+          <LocateFixed size={18} className="pt-1" />
+          {locationLoading ? "Fetching..." : "Use my current location"}
         </button>
+
+        {currentLocationAddress && (
+          <div className="mt-4 p-2 bg-gray-100 rounded text-sm text-center">
+            📍 <span className="font-medium">Current Location:</span>{" "}
+            {currentLocationAddress}
+          </div>
+        )}
       </div>
     </div>
   );

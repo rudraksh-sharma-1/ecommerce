@@ -21,6 +21,7 @@ import {
   MdSearch,
 } from "react-icons/md";
 import "./style.css";
+import { useLocationContext } from "../../contexts/LocationContext.jsx";
 
 const CategoriesBar = () => {
   const [categories, setCategories] = useState([]);
@@ -55,6 +56,18 @@ const CategoriesBar = () => {
   });
 
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
+  const handleSidebarLocationClick = async () => {
+    try {
+      await useCurrentLocation();
+      alert("Location updated successfully!");
+    } catch (error) {
+      console.error("Sidebar location error:", error);
+      alert("Failed to get your current location.");
+    }
+  };
+
+  const { useCurrentLocation, currentLocationAddress } = useLocationContext();
 
   useEffect(() => {
     const handleResize = () => {
@@ -1173,15 +1186,20 @@ const CategoriesBar = () => {
             </div>
             <div className="pb-13 w-full">
               {/* Location Selection Button */}
-              <button className="w-full border-0  items-center text-center font-bold text-xs text-black-800 transition-colors md:px-2 px-1 border-t  ">
+              <button className="w-full border-0  items-center text-center font-bold text-xs text-black-800 transition-colors md:px-2 px-1 border-t" onClick={handleSidebarLocationClick}>
                 <Link
-                  to="/account"
                   className=" flex items-center align-middle justify-center text-center font-bold rounded transition-colors"
                 >
                   <MapPinned className="pr-1 size-8" />
                   <span className="whitespace-nowrap">Current Location</span>
                 </Link>
               </button>
+               {currentLocationAddress && (
+                  <div className="mt-4 p-2 bg-gray-100 rounded text-sm text-center">
+                    <span className="flex font-bold">Current Location:</span>{" "}
+                    <span className="flex flex-wrap ">{currentLocationAddress}</span>
+                  </div>
+                )}
             </div>
           </div>
         </div>

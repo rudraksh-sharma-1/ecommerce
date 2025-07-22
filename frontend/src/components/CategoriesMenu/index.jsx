@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { MdSearch } from "react-icons/md";
 import { MapPinned } from "lucide-react";
+import { useLocationContext } from "../../contexts/LocationContext.jsx";
 import {
   getAllCategories,
   getAllSubcategories,
@@ -23,10 +24,13 @@ const CategoriesMenu = () => {
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const { useCurrentLocation, currentLocationAddress } = useLocationContext();
+
   // Add state for expanded categories and subcategories
   const [expandedCategories, setExpandedCategories] = useState([]);
   const [expandedSubcategories, setExpandedSubcategories] = useState([]);
-  const [isShopByCategoryExpanded, setIsShopByCategoryExpanded] = useState(false);
+  const [isShopByCategoryExpanded, setIsShopByCategoryExpanded] =
+    useState(false);
 
   useEffect(() => {
     fetchCategoriesAndSubcategories();
@@ -51,6 +55,16 @@ const CategoriesMenu = () => {
       window.removeEventListener("resize", checkAnnouncementBar);
     };
   }, []);
+
+  const handleSidebarLocationClick = async () => {
+    try {
+      await useCurrentLocation();
+      alert("Location updated successfully!");
+    } catch (error) {
+      console.error("Sidebar location error:", error);
+      alert("Failed to get your current location.");
+    }
+  };
 
   const fetchCategoriesAndSubcategories = async () => {
     setLoading(true);
@@ -448,7 +462,7 @@ const CategoriesMenu = () => {
                       </div>
                     )}
                   </div>
-                    {/* Buisness Partner */}
+                  {/* Buisness Partner */}
                   <div className="menu-section">
                     <Link
                       to="/BusinessPartner"
@@ -503,16 +517,24 @@ const CategoriesMenu = () => {
                     </Link>
                   </div>
                 </div>
-                <button className="border-0  items-center text-center font-bold text-xs text-black-800 transition-colors md:px-2 px-1 border-t">
+                <button
+                  className="border-0  items-center text-center font-bold text-xs text-black-800 transition-colors md:px-2 px-1 border-t"
+                  onClick={handleSidebarLocationClick}
+                >
                   {/* Location Selection Button */}
                   <Link
-                    to="/account"
                     className=" flex items-center align-middle justify-center text-center font-bold rounded transition-colors"
                   >
                     <MapPinned className="pr-1 size-8" />
                     <span className="whitespace-nowrap">Current Location</span>
                   </Link>
                 </button>
+                {currentLocationAddress && (
+                  <div className="mt-4 p-2 bg-gray-100 rounded text-sm text-center">
+                    <span className="flex font-bold">Current Location:</span>{" "}
+                    <span className="flex flex-wrap ">{currentLocationAddress}</span>
+                  </div>
+                )}
               </div>
             </div>
           </>,
