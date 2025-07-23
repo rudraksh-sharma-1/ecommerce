@@ -99,48 +99,48 @@ export const Home = () => {
 
   /* const { currentUser } = useAuth(); */ // 👈 Get from context
   useEffect(() => {
-  async function fetchAllData() {
-    setLoading(true);
+    async function fetchAllData() {
+      setLoading(true);
 
-    let productFetchFn;
+      let productFetchFn;
 
-    try {
-      if (selectedAddress?.latitude && selectedAddress?.longitude) {
-        productFetchFn = () =>
-          getNearbyProducts(
-            selectedAddress.latitude,
-            selectedAddress.longitude
-          );
-      } else {
+      try {
+        if (selectedAddress?.latitude && selectedAddress?.longitude) {
+          productFetchFn = () =>
+            getNearbyProducts(
+              selectedAddress.latitude,
+              selectedAddress.longitude
+            );
+        } else {
+          productFetchFn = getAllProducts;
+        }
+      } catch (err) {
+        console.error("Error determining product fetch method:", err);
         productFetchFn = getAllProducts;
       }
-    } catch (err) {
-      console.error("Error determining product fetch method:", err);
-      productFetchFn = getAllProducts;
+
+      const [
+        { success: prodSuccess, products: prodData },
+        { success: catSuccess, categories: catData },
+        { success: banSuccess, banners: banData },
+      ] = await Promise.all([
+        productFetchFn(),
+        getAllCategories(),
+        getAllBanners(),
+      ]);
+
+      setProducts(
+        prodSuccess && prodData
+          ? prodData.map((p) => ({ ...p, id: p.id || p.product_id }))
+          : []
+      );
+      setCategories(catSuccess && catData ? catData : []);
+      setBanners(banSuccess && banData ? banData : []);
+      setLoading(false);
     }
 
-    const [
-      { success: prodSuccess, products: prodData },
-      { success: catSuccess, categories: catData },
-      { success: banSuccess, banners: banData },
-    ] = await Promise.all([
-      productFetchFn(),
-      getAllCategories(),
-      getAllBanners(),
-    ]);
-
-    setProducts(
-      prodSuccess && prodData
-        ? prodData.map((p) => ({ ...p, id: p.product_id }))
-        : []
-    );
-    setCategories(catSuccess && catData ? catData : []);
-    setBanners(banSuccess && banData ? banData : []);
-    setLoading(false);
-  }
-
-  fetchAllData();
-}, [selectedAddress]); 
+    fetchAllData();
+  }, [selectedAddress]);
 
   /* console.log("All Products Fetched:", products); */
 
@@ -160,6 +160,50 @@ export const Home = () => {
   const featuredProducts = products
     .filter((product) => product.featured)
     .slice(0, 10);
+
+  const topSaleProducts = products
+    .filter((product) => product.top_sale)
+    .slice(0, 10);
+  const mostOrderedProducts = products
+    .filter((product) => product.most_orders)
+    .slice(0, 10);
+  const topRatedProducts = products
+    .filter((product) => product.top_rating)
+    .slice(0, 10);
+  const limitedProducts = products
+    .filter((product) => product.limited_product)
+    .slice(0, 10);
+  const seasonalProducts = products
+    .filter((product) => product.seasonal_product)
+    .slice(0, 10);
+  const internationalProducts = products
+    .filter((product) => product.international_product)
+    .slice(0, 10);
+
+  const dynamicSections = [
+    { key: "top_sale", label: "Top Sale", products: topSaleProducts },
+    {
+      key: "most_orders",
+      label: "Most Ordered",
+      products: mostOrderedProducts,
+    },
+    { key: "top_rating", label: "Top Rated", products: topRatedProducts },
+    {
+      key: "limited_product",
+      label: "Limited Stock",
+      products: limitedProducts,
+    },
+    {
+      key: "seasonal_product",
+      label: "Seasonal Picks",
+      products: seasonalProducts,
+    },
+    {
+      key: "international_product",
+      label: "International Products",
+      products: internationalProducts,
+    },
+  ];
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -322,6 +366,69 @@ export const Home = () => {
           />
         </div>
       </section>
+
+      {dynamicSections.map(
+        ({ key, label, products }, index) =>
+          products.length > 0 && (
+            <React.Fragment key={key}>
+              <section className="py-4 bg-white">
+                <div className="container px-4">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl sm:text-2xl font-semibold">
+                      {label}
+                    </h2>
+                    <a
+                      href="/productListing"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      View All
+                    </a>
+                  </div>
+
+                  <ProductsSlider
+                    products={products}
+                    slidesPerViewMobile={1.2}
+                    slidesPerViewTablet={2.5}
+                    slidesPerViewDesktop={4}
+                    slidesPerViewLarge={5}
+                  />
+                </div>
+              </section>
+
+              {/* Insert PromoBanner every 2 sections */}
+
+              <section className="py-4 bg-white">
+        <div className="container px-4">
+          <div className="shipping-banner w-full lg:w-[90%] mx-auto py-4 px-4 sm:px-6 border-2 border-red-200 rounded-lg shadow-sm bg-gradient-to-r from-red-50 to-white">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <FaShippingFast className="text-3xl sm:text-4xl text-red-500" />
+                <span className="text-base sm:text-lg font-semibold uppercase">
+                  {getPromoSetting("promo_shipping_title", "Free Shipping")}
+                </span>
+              </div>
+
+              <div className="text-center sm:text-left">
+                <p className="font-medium text-sm sm:text-base">
+                  {getPromoSetting(
+                    "promo_shipping_description",
+                    "Free delivery on your first order and over ₹500"
+                  )}
+                </p>
+              </div>
+
+              <p className="font-bold text-lg sm:text-xl text-red-600">
+                {getPromoSetting("promo_shipping_amount", "Only ₹500/-")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+              
+              {/* {(index + 1) % 2 === 0 && <PromoBanner />} */}
+            </React.Fragment>
+          )
+      )}
     </>
   );
 };

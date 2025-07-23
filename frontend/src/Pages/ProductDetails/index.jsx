@@ -116,8 +116,16 @@ const ProductDetails = () => {
       setLoading(true);
       const { success, products } = await getAllProducts();
       let product = null;
+
       if (success && products) {
         product = products.find((p) => String(p.id) === String(id));
+      }
+
+      if (!product) {
+        setProductData(null);
+        setRelatedProducts([]);
+        setLoading(false);
+        return;
       }
 
       const mediaList = [
@@ -128,30 +136,20 @@ const ProductDetails = () => {
         ...(product.video ? [{ type: "video", src: product.video }] : []),
       ];
 
-      setProductData(
-        product
-          ? {
-              ...product,
-              rating: product.rating ?? 0,
-              reviewCount: product.review_count ?? 0,
-              oldPrice: product.old_price ?? null,
-              inStock: product.in_stock ?? true,
-              /* images: product.images
-                ? product.images
-                : [
-                    product.image ??
-                      "https://placehold.co/300x300?text=Product",
-                  ], */
-              media: mediaList,
-              description: product.description ?? "",
-              features: product.features ?? [],
-              specifications: product.specifications ?? {},
-            }
-          : null
-      );
-      setLoading(false);
-      // Fetch related products (same category, exclude current)
-      if (product && product.category) {
+      setProductData({
+        ...product,
+        rating: product.rating ?? 0,
+        reviewCount: product.review_count ?? 0,
+        oldPrice: product.old_price ?? null,
+        inStock: product.in_stock ?? true,
+        media: mediaList,
+        description: product.description ?? "",
+        features: product.features ?? [],
+        specifications: product.specifications ?? {},
+      });
+
+      // Fetch related products
+      if (product.category) {
         const { success: relSuccess, products: relProducts } =
           await getProductsByCategory(product.category);
         if (relSuccess && relProducts) {
@@ -166,7 +164,10 @@ const ProductDetails = () => {
       } else {
         setRelatedProducts([]);
       }
+
+      setLoading(false);
     }
+
     fetchProduct();
   }, [id]);
 
@@ -265,7 +266,7 @@ const ProductDetails = () => {
                 <span className="text-lg sm:text-xl font-bold text-blue-600">
                   ₹{productData.price.toFixed(2)}
                 </span>
-                {productData.oldPrice!=0 && (
+                {productData.oldPrice != 0 && (
                   <span className="ml-3 text-sm sm:text-base text-gray-500 line-through">
                     ₹{productData.oldPrice.toFixed(2)}
                   </span>
