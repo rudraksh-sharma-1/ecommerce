@@ -119,6 +119,15 @@ const ProductDetails = () => {
       if (success && products) {
         product = products.find((p) => String(p.id) === String(id));
       }
+
+      const mediaList = [
+        ...(product.image ? [{ type: "image", src: product.image }] : []),
+        ...(Array.isArray(product.images)
+          ? product.images.map((img) => ({ type: "image", src: img }))
+          : []),
+        ...(product.video ? [{ type: "video", src: product.video }] : []),
+      ];
+
       setProductData(
         product
           ? {
@@ -127,12 +136,13 @@ const ProductDetails = () => {
               reviewCount: product.review_count ?? 0,
               oldPrice: product.old_price ?? null,
               inStock: product.in_stock ?? true,
-              images: product.images
+              /* images: product.images
                 ? product.images
                 : [
                     product.image ??
                       "https://placehold.co/300x300?text=Product",
-                  ],
+                  ], */
+              media: mediaList,
               description: product.description ?? "",
               features: product.features ?? [],
               specifications: product.specifications ?? {},
@@ -230,7 +240,7 @@ const ProductDetails = () => {
           <div className="flex flex-col md:flex-row gap-6 md:gap-10">
             {/* Product Images */}
             <div className="w-full md:w-[45%] lg:w-[40%]">
-              <ProductZoom images={productData.images} />
+              <ProductZoom media={productData.media} />
             </div>
 
             {/* Product Info */}
@@ -255,7 +265,7 @@ const ProductDetails = () => {
                 <span className="text-lg sm:text-xl font-bold text-blue-600">
                   ₹{productData.price.toFixed(2)}
                 </span>
-                {productData.oldPrice && (
+                {productData.oldPrice!=0 && (
                   <span className="ml-3 text-sm sm:text-base text-gray-500 line-through">
                     ₹{productData.oldPrice.toFixed(2)}
                   </span>

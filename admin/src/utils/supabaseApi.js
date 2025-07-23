@@ -152,7 +152,10 @@ export async function updateAdsBanner(id, banner, imageFile) {
 }
 
 export async function deleteAdsBanner(id) {
-  const { error } = await supabaseAdmin.from("ads_banners").delete().eq("id", id);
+  const { error } = await supabaseAdmin
+    .from("ads_banners")
+    .delete()
+    .eq("id", id);
   if (error) return { success: false, error: error.message };
   return { success: true };
 }
@@ -171,7 +174,7 @@ export async function getAllCategories() {
   const { data, error } = await supabase
     .from("categories")
     .select("*")
-    .order('id', { ascending: false });
+    .order("id", { ascending: false });
   if (error) return { success: false, error: error.message };
   return { success: true, categories: data };
 }
@@ -180,7 +183,9 @@ export async function addCategory(category, imageFile) {
   let imageUrl = null;
   if (imageFile && imageFile instanceof File) {
     const fileExt = imageFile.name.split(".").pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${fileExt}`;
     const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
       .from("categories")
       .upload(fileName, imageFile);
@@ -206,7 +211,9 @@ export async function updateCategory(id, category, imageFile) {
   let imageUrl = category.image_url;
   if (imageFile && imageFile instanceof File) {
     const fileExt = imageFile.name.split(".").pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${fileExt}`;
     const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
       .from("categories")
       .upload(fileName, imageFile);
@@ -243,7 +250,7 @@ export async function getProductsByCategory(categoryId) {
 export async function getProductCountByCategory(categoryId) {
   const { count, error } = await supabase
     .from("products")
-    .select("*", { count: 'exact', head: true })
+    .select("*", { count: "exact", head: true })
     .eq("category_id", categoryId);
   if (error) return { success: false, error: error.message };
   return { success: true, count: count || 0 };
@@ -261,7 +268,10 @@ export async function checkCategoryHasProducts(categoryId) {
 }
 
 // Delete category with proper handling
-export async function deleteCategory(id, options = { forceDelete: false, reassignProductsTo: null }) {
+export async function deleteCategory(
+  id,
+  options = { forceDelete: false, reassignProductsTo: null }
+) {
   try {
     // First check if category has products
     const productCheck = await checkCategoryHasProducts(id);
@@ -273,12 +283,14 @@ export async function deleteCategory(id, options = { forceDelete: false, reassig
       if (!options.forceDelete && !options.reassignProductsTo) {
         // Get products to show in the error message
         const productsResult = await getProductsByCategory(id);
-        const productCount = productsResult.success ? productsResult.products.length : 0;
-        return { 
-          success: false, 
+        const productCount = productsResult.success
+          ? productsResult.products.length
+          : 0;
+        return {
+          success: false,
           error: `Cannot delete category because it contains ${productCount} product(s). Please either reassign the products to another category or choose to delete them.`,
           hasProducts: true,
-          productCount
+          productCount,
         };
       }
 
@@ -288,9 +300,12 @@ export async function deleteCategory(id, options = { forceDelete: false, reassig
           .from("products")
           .update({ category_id: options.reassignProductsTo })
           .eq("category_id", id);
-        
+
         if (reassignError) {
-          return { success: false, error: `Failed to reassign products: ${reassignError.message}` };
+          return {
+            success: false,
+            error: `Failed to reassign products: ${reassignError.message}`,
+          };
         }
       } else if (options.forceDelete) {
         // Delete all products in this category first
@@ -298,9 +313,12 @@ export async function deleteCategory(id, options = { forceDelete: false, reassig
           .from("products")
           .delete()
           .eq("category_id", id);
-        
+
         if (deleteProductsError) {
-          return { success: false, error: `Failed to delete products: ${deleteProductsError.message}` };
+          return {
+            success: false,
+            error: `Failed to delete products: ${deleteProductsError.message}`,
+          };
         }
       }
     }
@@ -321,14 +339,20 @@ export async function deleteCategory(id, options = { forceDelete: false, reassig
         .from("subcategories")
         .delete()
         .eq("category_id", id);
-      
+
       if (deleteSubError) {
-        return { success: false, error: `Failed to delete subcategories: ${deleteSubError.message}` };
+        return {
+          success: false,
+          error: `Failed to delete subcategories: ${deleteSubError.message}`,
+        };
       }
     }
 
     // Finally delete the category
-    const { error } = await supabaseAdmin.from("categories").delete().eq("id", id);
+    const { error } = await supabaseAdmin
+      .from("categories")
+      .delete()
+      .eq("id", id);
     if (error) return { success: false, error: error.message };
     return { success: true };
   } catch (error) {
@@ -352,7 +376,7 @@ export async function getAllSubcategories() {
   const { data, error } = await supabase
     .from("subcategories")
     .select("*")
-    .order('id', { ascending: false });
+    .order("id", { ascending: false });
   if (error) return { success: false, error: error.message };
   return { success: true, subcategories: data };
 }
@@ -362,7 +386,7 @@ export async function getSubcategoriesByCategory(categoryId) {
     .from("subcategories")
     .select("*")
     .eq("category_id", categoryId)
-    .order('name');
+    .order("name");
   if (error) return { success: false, error: error.message };
   return { success: true, subcategories: data };
 }
@@ -371,7 +395,9 @@ export async function addSubcategory(subcategory, imageFile) {
   let imageUrl = null;
   if (imageFile && imageFile instanceof File) {
     const fileExt = imageFile.name.split(".").pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${fileExt}`;
     const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
       .from("subcategories")
       .upload(fileName, imageFile);
@@ -397,7 +423,9 @@ export async function updateSubcategory(id, subcategory, imageFile) {
   let imageUrl = subcategory.image_url;
   if (imageFile && imageFile instanceof File) {
     const fileExt = imageFile.name.split(".").pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${fileExt}`;
     const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
       .from("subcategories")
       .upload(fileName, imageFile);
@@ -421,7 +449,10 @@ export async function updateSubcategory(id, subcategory, imageFile) {
 }
 
 export async function deleteSubcategory(id) {
-  const { error } = await supabaseAdmin.from("subcategories").delete().eq("id", id);
+  const { error } = await supabaseAdmin
+    .from("subcategories")
+    .delete()
+    .eq("id", id);
   if (error) return { success: false, error: error.message };
   return { success: true };
 }
@@ -431,7 +462,7 @@ export async function getAllGroups() {
   const { data, error } = await supabase
     .from("groups")
     .select("*")
-    .order('id', { ascending: false });
+    .order("id", { ascending: false });
   if (error) return { success: false, error: error.message };
   return { success: true, groups: data };
 }
@@ -441,7 +472,7 @@ export async function getGroupsBySubcategory(subcategoryId) {
     .from("groups")
     .select("*")
     .eq("subcategory_id", subcategoryId)
-    .order('name');
+    .order("name");
   if (error) return { success: false, error: error.message };
   return { success: true, groups: data };
 }
@@ -450,7 +481,9 @@ export async function addGroup(group, imageFile) {
   let imageUrl = null;
   if (imageFile && imageFile instanceof File) {
     const fileExt = imageFile.name.split(".").pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${fileExt}`;
     const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
       .from("groups")
       .upload(fileName, imageFile);
@@ -476,7 +509,9 @@ export async function updateGroup(id, group, imageFile) {
   let imageUrl = group.image_url;
   if (imageFile && imageFile instanceof File) {
     const fileExt = imageFile.name.split(".").pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${fileExt}`;
     const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
       .from("groups")
       .upload(fileName, imageFile);
@@ -509,67 +544,177 @@ export async function deleteGroup(id) {
 export async function getAllProducts() {
   const { data, error } = await supabase
     .from("products")
-    .select(`
+    .select(
+      `
       *, 
       groups(id, name, subcategories(id, name, categories(id, name))),
       subcategories(id, name, categories(id, name))
-    `)
-    .order('id', { ascending: false });
+    `
+    )
+    .order("id", { ascending: false });
   if (error) return { success: false, error: error.message };
   return { success: true, products: data };
 }
 
-export async function addProduct(product, imageFile) {
-  let imageUrl = null;
-  if (imageFile && imageFile instanceof File) {
-    const fileExt = imageFile.name.split(".").pop();
-    const fileName = `${Date.now()}_${Math.random()
+export async function addProduct(
+  product,
+  imageFiles = [],
+  videoFile = null,
+  displayImageFile = null
+) {
+  const imageUrls = [];
+  let videoUrl = null;
+  let displayImageUrl = product.image || null;
+
+  // Upload display image (main image)
+  if (displayImageFile && displayImageFile instanceof File) {
+    const ext = displayImageFile.name.split(".").pop();
+    const fileName = `display/${Date.now()}_${Math.random()
       .toString(36)
-      .substr(2, 9)}.${fileExt}`;
-    const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+      .substr(2, 9)}.${ext}`;
+    const { error: uploadError } = await supabaseAdmin.storage
       .from("products")
-      .upload(fileName, imageFile);
-    if (uploadError) {
-      return { success: false, error: uploadError.message };
-    }
+      .upload(fileName, displayImageFile);
+    if (uploadError) return { success: false, error: uploadError.message };
+
     const { data: urlData } = supabase.storage
       .from("products")
       .getPublicUrl(fileName);
-    imageUrl = urlData.publicUrl;
+    displayImageUrl = urlData.publicUrl;
   }
-  
+
+  // Upload all images
+  for (const file of imageFiles) {
+    const ext = file.name.split(".").pop();
+    const fileName = `images/${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${ext}`;
+    const { error: uploadError } = await supabaseAdmin.storage
+      .from("products")
+      .upload(fileName, file);
+    if (uploadError) return { success: false, error: uploadError.message };
+
+    const { data: urlData } = supabase.storage
+      .from("products")
+      .getPublicUrl(fileName);
+    imageUrls.push(urlData.publicUrl);
+  }
+
+  // Upload video (if present)
+  if (videoFile) {
+    const ext = videoFile.name.split(".").pop();
+    const videoName = `videos/${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${ext}`;
+    const { error: videoError } = await supabaseAdmin.storage
+      .from("products")
+      .upload(videoName, videoFile);
+    if (videoError) return { success: false, error: videoError.message };
+
+    const { data: videoUrlData } = supabase.storage
+      .from("products")
+      .getPublicUrl(videoName);
+    videoUrl = videoUrlData.publicUrl;
+  }
+
+  // Only send valid DB fields
   const { data, error } = await supabase
     .from("products")
-    .insert([{ ...product, image: imageUrl }])
+    .insert([
+      {
+        ...product,
+        image: displayImageUrl,
+        images: imageUrls,
+        video: videoUrl,
+      },
+    ])
     .select();
+
   if (error) return { success: false, error: error.message };
   return { success: true, product: data[0] };
 }
 
-export async function updateProduct(id, product, imageFile) {
+export async function updateProduct(
+  id,
+  product,
+  displayImageFile = null,
+  imageFiles = [],
+  videoFile = null
+) {
   let imageUrl = product.image;
-  if (imageFile && imageFile instanceof File) {
-    const fileExt = imageFile.name.split(".").pop();
-    const fileName = `${Date.now()}_${Math.random()
+  let imageUrls = product.images || [];
+  let videoUrl = product.video || null;
+
+  // Upload display image (main image) if provided
+  if (displayImageFile && displayImageFile instanceof File) {
+    const ext = displayImageFile.name.split(".").pop();
+    const fileName = `display/${Date.now()}_${Math.random()
       .toString(36)
-      .substr(2, 9)}.${fileExt}`;
-    const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+      .substr(2, 9)}.${ext}`;
+    const { error: uploadError } = await supabaseAdmin.storage
       .from("products")
-      .upload(fileName, imageFile);
-    if (uploadError) {
-      return { success: false, error: uploadError.message };
-    }
+      .upload(fileName, displayImageFile);
+    if (uploadError) return { success: false, error: uploadError.message };
     const { data: urlData } = supabase.storage
       .from("products")
       .getPublicUrl(fileName);
     imageUrl = urlData.publicUrl;
   }
-  
+
+  // Upload new images if provided
+  if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
+    imageUrls = [];
+    for (const file of imageFiles) {
+      const ext = file.name.split(".").pop();
+      const fileName = `images/${Date.now()}_${Math.random()
+        .toString(36)
+        .substr(2, 9)}.${ext}`;
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from("products")
+        .upload(fileName, file);
+      if (uploadError) return { success: false, error: uploadError.message };
+      const { data: urlData } = supabase.storage
+        .from("products")
+        .getPublicUrl(fileName);
+      imageUrls.push(urlData.publicUrl);
+    }
+  }
+
+  // Upload new video if provided
+  if (videoFile && videoFile instanceof File) {
+    const ext = videoFile.name.split(".").pop();
+    const videoName = `videos/${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${ext}`;
+    const { error: videoError } = await supabaseAdmin.storage
+      .from("products")
+      .upload(videoName, videoFile);
+    if (videoError) return { success: false, error: videoError.message };
+    const { data: videoUrlData } = supabase.storage
+      .from("products")
+      .getPublicUrl(videoName);
+    videoUrl = videoUrlData.publicUrl;
+  }
+
+  const dbProduct = { ...product };
+
+  // Remove any invalid fields
+  delete dbProduct.groups;
+  delete dbProduct.subcategories;
+  delete dbProduct.categories;
+
+  // Continue with the update
   const { data, error } = await supabase
     .from("products")
-    .update({ ...product, image: imageUrl })
+    .update({
+      ...dbProduct,
+      image: imageUrl,
+      images: imageUrls,
+      video: videoUrl,
+    })
     .eq("id", id)
     .select();
+
   if (error) return { success: false, error: error.message };
   return { success: true, product: data[0] };
 }
@@ -596,30 +741,30 @@ export async function getAllUsers() {
 export async function getUserAddresses(userId) {
   try {
     // Import the admin client that bypasses RLS
-    const { supabaseAdmin } = await import('./supabase.js');
-    
+    const { supabaseAdmin } = await import("./supabase.js");
+
     // First try with admin client
     const { data: adminData, error: adminError } = await supabaseAdmin
       .from("user_addresses")
       .select("*")
       .eq("user_id", userId)
       .order("is_default", { ascending: false });
-    
+
     if (!adminError && adminData) {
       return { success: true, addresses: adminData || [] };
     }
-    
+
     // Fallback to regular client
     const { data, error } = await supabase
       .from("user_addresses")
       .select("*")
       .eq("user_id", userId)
       .order("is_default", { ascending: false });
-    
+
     if (error) {
       return { success: false, error: error.message };
     }
-    
+
     return { success: true, addresses: data || [] };
   } catch (error) {
     return { success: false, error: error.message };
@@ -630,38 +775,43 @@ export async function migrateUserAddresses(userId) {
   try {
     // Get user details from the users table
     const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', userId)
+      .from("users")
+      .select("*")
+      .eq("id", userId)
       .single();
-    
+
     if (userError) {
       return { success: false, error: userError.message };
     }
 
     // Check if user has address information
-    if (!userData.street_address || !userData.city || !userData.state || !userData.country) {
-      return { success: false, error: 'No address information to migrate' };
+    if (
+      !userData.street_address ||
+      !userData.city ||
+      !userData.state ||
+      !userData.country
+    ) {
+      return { success: false, error: "No address information to migrate" };
     }
 
     // Check if user already has addresses in user_addresses table
     const { data: existingAddresses, error: addressError } = await supabase
-      .from('user_addresses')
-      .select('id')
-      .eq('user_id', userId);
+      .from("user_addresses")
+      .select("id")
+      .eq("user_id", userId);
 
     if (addressError) {
       return { success: false, error: addressError.message };
     }
 
     if (existingAddresses && existingAddresses.length > 0) {
-      return { success: false, error: 'User already has migrated addresses' };
+      return { success: false, error: "User already has migrated addresses" };
     }
 
     // Create a new address entry from user profile data
     const addressData = {
       user_id: userId,
-      address_name: 'Primary Address',
+      address_name: "Primary Address",
       is_default: true,
       street_address: userData.street_address,
       suite_unit_floor: userData.suite_unit_floor,
@@ -672,11 +822,11 @@ export async function migrateUserAddresses(userId) {
       state: userData.state,
       postal_code: userData.postal_code,
       country: userData.country,
-      landmark: userData.landmark
+      landmark: userData.landmark,
     };
 
     const { error: insertError } = await supabase
-      .from('user_addresses')
+      .from("user_addresses")
       .insert([addressData]);
 
     if (insertError) {
@@ -693,34 +843,34 @@ export async function addUserAddress(userId, address) {
   try {
     const addressData = {
       ...address,
-      user_id: userId
+      user_id: userId,
     };
-    
+
     // Import the admin client that bypasses RLS
-    const { supabaseAdmin } = await import('./supabase.js');
-    
+    const { supabaseAdmin } = await import("./supabase.js");
+
     // Try with admin client first
     const { data: adminData, error: adminError } = await supabaseAdmin
       .from("user_addresses")
       .insert([addressData])
       .select()
       .single();
-    
+
     if (!adminError && adminData) {
       return { success: true, address: adminData };
     }
-    
+
     // Fallback to regular client
     const { data, error } = await supabase
       .from("user_addresses")
       .insert([addressData])
       .select()
       .single();
-    
+
     if (error) {
       return { success: false, error: error.message };
     }
-    
+
     return { success: true, address: data };
   } catch (error) {
     return { success: false, error: error.message };
@@ -730,8 +880,8 @@ export async function addUserAddress(userId, address) {
 export async function updateUserAddress(addressId, address) {
   try {
     // Import the admin client that bypasses RLS
-    const { supabaseAdmin } = await import('./supabase.js');
-    
+    const { supabaseAdmin } = await import("./supabase.js");
+
     // Try with admin client first
     const { data: adminData, error: adminError } = await supabaseAdmin
       .from("user_addresses")
@@ -739,11 +889,11 @@ export async function updateUserAddress(addressId, address) {
       .eq("id", addressId)
       .select()
       .single();
-    
+
     if (!adminError && adminData) {
       return { success: true, address: adminData };
     }
-    
+
     // Fallback to regular client
     const { data, error } = await supabase
       .from("user_addresses")
@@ -751,11 +901,11 @@ export async function updateUserAddress(addressId, address) {
       .eq("id", addressId)
       .select()
       .single();
-    
+
     if (error) {
       return { success: false, error: error.message };
     }
-    
+
     return { success: true, address: data };
   } catch (error) {
     return { success: false, error: error.message };
@@ -765,28 +915,28 @@ export async function updateUserAddress(addressId, address) {
 export async function deleteUserAddress(addressId) {
   try {
     // Import the admin client that bypasses RLS
-    const { supabaseAdmin } = await import('./supabase.js');
-    
+    const { supabaseAdmin } = await import("./supabase.js");
+
     // Try with admin client first
     const { error: adminError } = await supabaseAdmin
       .from("user_addresses")
       .delete()
       .eq("id", addressId);
-    
+
     if (!adminError) {
       return { success: true };
     }
-    
+
     // Fallback to regular client
     const { error } = await supabase
       .from("user_addresses")
       .delete()
       .eq("id", addressId);
-    
+
     if (error) {
       return { success: false, error: error.message };
     }
-    
+
     return { success: true };
   } catch (error) {
     return { success: false, error: error.message };
@@ -796,30 +946,30 @@ export async function deleteUserAddress(addressId) {
 export async function setAddressAsDefault(userId, addressId) {
   try {
     // Import the admin client that bypasses RLS
-    const { supabaseAdmin } = await import('./supabase.js');
-    
+    const { supabaseAdmin } = await import("./supabase.js");
+
     // Try with admin client first
     const { error: adminError } = await supabaseAdmin
       .from("user_addresses")
       .update({ is_default: true })
       .eq("id", addressId)
       .eq("user_id", userId);
-    
+
     if (!adminError) {
       return { success: true };
     }
-    
+
     // Fallback to regular client
     const { error } = await supabase
       .from("user_addresses")
       .update({ is_default: true })
       .eq("id", addressId)
       .eq("user_id", userId);
-    
+
     if (error) {
       return { success: false, error: error.message };
     }
-    
+
     return { success: true };
   } catch (error) {
     return { success: false, error: error.message };
@@ -869,7 +1019,10 @@ export async function updateUser(id, user) {
 
 export async function deleteUser(id) {
   // 1. Delete from users table
-  const { error: dbError } = await supabaseAdmin.from("users").delete().eq("id", id);
+  const { error: dbError } = await supabaseAdmin
+    .from("users")
+    .delete()
+    .eq("id", id);
   if (dbError) return { success: false, error: dbError.message };
 
   // 2. Delete from Supabase Auth (admin)
@@ -882,7 +1035,12 @@ export async function deleteUser(id) {
     authError = e;
   }
   if (authError) {
-    return { success: false, error: `User deleted from DB but failed to delete from Auth: ${authError.message || authError}` };
+    return {
+      success: false,
+      error: `User deleted from DB but failed to delete from Auth: ${
+        authError.message || authError
+      }`,
+    };
   }
   return { success: true };
 }
@@ -902,16 +1060,25 @@ export async function toggleUserStatus(id, isActive) {
   try {
     if (!isActive) {
       // Ban user (prevent login) for 100 years
-      const { error: banError } = await supabaseAdmin.auth.admin.updateUserById(id, { ban_duration: '876000h' });
+      const { error: banError } = await supabaseAdmin.auth.admin.updateUserById(
+        id,
+        { ban_duration: "876000h" }
+      );
       if (banError) authError = banError;
     } else {
       // Unban user - use the dedicated unban method or update with ban_duration: "none"
       try {
         // Try the unban method first
-        const { error: unbanError } = await supabaseAdmin.auth.admin.updateUserById(id, { ban_duration: "none" });
+        const { error: unbanError } =
+          await supabaseAdmin.auth.admin.updateUserById(id, {
+            ban_duration: "none",
+          });
         if (unbanError) {
           // If that fails, try setting ban_duration to "0s"
-          const { error: unbanError2 } = await supabaseAdmin.auth.admin.updateUserById(id, { ban_duration: "0s" });
+          const { error: unbanError2 } =
+            await supabaseAdmin.auth.admin.updateUserById(id, {
+              ban_duration: "0s",
+            });
           if (unbanError2) authError = unbanError2;
         }
       } catch (e) {
@@ -922,7 +1089,12 @@ export async function toggleUserStatus(id, isActive) {
     authError = e;
   }
   if (authError) {
-    return { success: false, error: `User status updated in DB but failed to update in Auth: ${authError.message || authError}` };
+    return {
+      success: false,
+      error: `User status updated in DB but failed to update in Auth: ${
+        authError.message || authError
+      }`,
+    };
   }
   return { success: true };
 }
@@ -1091,10 +1263,16 @@ export async function updateEnquiryStatus(
 export async function deleteEnquiry(enquiryId) {
   try {
     // Delete enquiry replies first
-    await supabaseAdmin.from("enquiry_replies").delete().eq("enquiry_id", enquiryId);
+    await supabaseAdmin
+      .from("enquiry_replies")
+      .delete()
+      .eq("enquiry_id", enquiryId);
 
     // Delete enquiry items
-    await supabaseAdmin.from("enquiry_items").delete().eq("enquiry_id", enquiryId);
+    await supabaseAdmin
+      .from("enquiry_items")
+      .delete()
+      .eq("enquiry_id", enquiryId);
 
     // Delete enquiry
     const { error } = await supabase
@@ -1309,10 +1487,12 @@ export const updateMultiplePromotionalSettings = async (settings) => {
       updated_at: new Date().toISOString(),
     }));
 
-    const { error } = await supabaseAdmin.from("promotional_settings").upsert(updates, {
-      onConflict: "setting_key",
-      ignoreDuplicates: false,
-    });
+    const { error } = await supabaseAdmin
+      .from("promotional_settings")
+      .upsert(updates, {
+        onConflict: "setting_key",
+        ignoreDuplicates: false,
+      });
 
     if (error) throw error;
     return { success: true };
@@ -1540,11 +1720,11 @@ export async function addUserWithDetailedAddress(user, password) {
     city: user.city || null,
     state: user.state || null,
     postal_code: user.postalCode || null,
-    country: user.country || 'India',
+    country: user.country || "India",
     landmark: user.landmark || null,
     // Map active to is_active for database compatibility
     is_active: user.active !== undefined ? user.active : true,
-    created_at: new Date().toISOString()
+    created_at: new Date().toISOString(),
   };
 
   // Remove frontend-only fields that don't exist in database
@@ -1562,7 +1742,7 @@ export async function addUserWithDetailedAddress(user, password) {
     .single();
 
   if (error) return { success: false, error: error.message };
-  
+
   // Construct full address in JavaScript
   const addressParts = [
     data.house_number,
@@ -1574,11 +1754,12 @@ export async function addUserWithDetailedAddress(user, password) {
     data.state,
     data.postal_code,
     data.country,
-    data.landmark
-  ].filter(part => part && part.trim() !== '');
-  
-  const fullAddress = addressParts.length > 0 ? addressParts.join(', ') : 'No address provided';
-  
+    data.landmark,
+  ].filter((part) => part && part.trim() !== "");
+
+  const fullAddress =
+    addressParts.length > 0 ? addressParts.join(", ") : "No address provided";
+
   // Transform database fields to frontend-friendly names
   const transformedUser = {
     ...data,
@@ -1587,7 +1768,7 @@ export async function addUserWithDetailedAddress(user, password) {
     suiteUnitFloor: data.suite_unit_floor,
     postalCode: data.postal_code,
     active: data.is_active,
-    fullAddress: fullAddress
+    fullAddress: fullAddress,
   };
 
   return { success: true, user: transformedUser };
@@ -1602,10 +1783,13 @@ export async function addUserWithDetailedAddress(user, password) {
 export async function updateUserWithDetailedAddress(id, user) {
   // Convert frontend address fields to database fields if they exist
   const updateData = { ...user };
-  
-  if (user.houseNumber !== undefined) updateData.house_number = user.houseNumber;
-  if (user.streetAddress !== undefined) updateData.street_address = user.streetAddress;
-  if (user.suiteUnitFloor !== undefined) updateData.suite_unit_floor = user.suiteUnitFloor;
+
+  if (user.houseNumber !== undefined)
+    updateData.house_number = user.houseNumber;
+  if (user.streetAddress !== undefined)
+    updateData.street_address = user.streetAddress;
+  if (user.suiteUnitFloor !== undefined)
+    updateData.suite_unit_floor = user.suiteUnitFloor;
   if (user.locality !== undefined) updateData.locality = user.locality;
   if (user.area !== undefined) updateData.area = user.area;
   if (user.city !== undefined) updateData.city = user.city;
@@ -1613,10 +1797,10 @@ export async function updateUserWithDetailedAddress(id, user) {
   if (user.postalCode !== undefined) updateData.postal_code = user.postalCode;
   if (user.country !== undefined) updateData.country = user.country;
   if (user.landmark !== undefined) updateData.landmark = user.landmark;
-  
+
   // Map active to is_active for database compatibility
   if (user.active !== undefined) updateData.is_active = user.active;
-  
+
   // Remove frontend-only fields that don't exist in database
   delete updateData.houseNumber;
   delete updateData.streetAddress;
@@ -1633,7 +1817,7 @@ export async function updateUserWithDetailedAddress(id, user) {
     .single();
 
   if (error) return { success: false, error: error.message };
-  
+
   // Construct full address in JavaScript
   const addressParts = [
     data.house_number,
@@ -1645,11 +1829,12 @@ export async function updateUserWithDetailedAddress(id, user) {
     data.state,
     data.postal_code,
     data.country,
-    data.landmark
-  ].filter(part => part && part.trim() !== '');
-  
-  const fullAddress = addressParts.length > 0 ? addressParts.join(', ') : 'No address provided';
-  
+    data.landmark,
+  ].filter((part) => part && part.trim() !== "");
+
+  const fullAddress =
+    addressParts.length > 0 ? addressParts.join(", ") : "No address provided";
+
   // Transform database fields to frontend-friendly names
   const transformedUser = {
     ...data,
@@ -1658,7 +1843,7 @@ export async function updateUserWithDetailedAddress(id, user) {
     suiteUnitFloor: data.suite_unit_floor,
     postalCode: data.postal_code,
     active: data.is_active,
-    fullAddress: fullAddress
+    fullAddress: fullAddress,
   };
 
   return { success: true, user: transformedUser };
@@ -1675,9 +1860,9 @@ export async function getAllUsersWithDetailedAddress() {
     .order("created_at", { ascending: false });
 
   if (error) return { success: false, error: error.message };
-  
+
   // Transform each user's database fields to frontend-friendly names and construct full address
-  const transformedUsers = data.map(u => {
+  const transformedUsers = data.map((u) => {
     // Construct full address from individual fields
     const addressParts = [
       u.house_number,
@@ -1689,11 +1874,12 @@ export async function getAllUsersWithDetailedAddress() {
       u.state,
       u.postal_code,
       u.country,
-      u.landmark
-    ].filter(part => part && part.trim() !== '');
-    
-    const fullAddress = addressParts.length > 0 ? addressParts.join(', ') : 'No address provided';
-    
+      u.landmark,
+    ].filter((part) => part && part.trim() !== "");
+
+    const fullAddress =
+      addressParts.length > 0 ? addressParts.join(", ") : "No address provided";
+
     return {
       ...u,
       houseNumber: u.house_number,
@@ -1713,12 +1899,13 @@ export async function getAllUsersWithDetailedAddress() {
 // STORAGE MANAGEMENT
 export async function getStorageUsage() {
   try {
-    const { data: buckets, error: bucketsError } = await supabaseAdmin.storage.listBuckets();
+    const { data: buckets, error: bucketsError } =
+      await supabaseAdmin.storage.listBuckets();
     if (bucketsError) {
       return { success: false, error: bucketsError.message };
     }
     if (!buckets || buckets.length === 0) {
-      return { success: false, error: 'No buckets found' };
+      return { success: false, error: "No buckets found" };
     }
     let totalUsage = 0;
     const bucketUsage = {};
@@ -1726,13 +1913,13 @@ export async function getStorageUsage() {
       try {
         let bucketSize = 0;
         let fileCount = 0;
-        const getAllFiles = async (path = '') => {
+        const getAllFiles = async (path = "") => {
           const { data: items, error } = await supabaseAdmin.storage
             .from(bucket.name)
             .list(path, {
               limit: 1000,
               offset: 0,
-              sortBy: { column: 'name', order: 'asc' }
+              sortBy: { column: "name", order: "asc" },
             });
           if (error) {
             throw new Error(`[${bucket.name}/${path}] ${error.message}`);
@@ -1746,7 +1933,11 @@ export async function getStorageUsage() {
               const size = item.metadata.size;
               bucketSize += size;
               fileCount++;
-            } else if (item.metadata === null && item.name && !item.name.includes('.')) {
+            } else if (
+              item.metadata === null &&
+              item.name &&
+              !item.name.includes(".")
+            ) {
               await getAllFiles(itemPath);
             }
           }
@@ -1756,7 +1947,7 @@ export async function getStorageUsage() {
           size: bucketSize,
           files: fileCount,
           name: bucket.name,
-          public: bucket.public || false
+          public: bucket.public || false,
         };
         totalUsage += bucketSize;
       } catch (err) {
@@ -1764,7 +1955,8 @@ export async function getStorageUsage() {
       }
     }
     const freeStorageLimit = 1 * 1024 * 1024 * 1024;
-    const usagePercentage = totalUsage > 0 ? (totalUsage / freeStorageLimit) * 100 : 0;
+    const usagePercentage =
+      totalUsage > 0 ? (totalUsage / freeStorageLimit) * 100 : 0;
     const result = {
       success: true,
       data: {
@@ -1774,8 +1966,8 @@ export async function getStorageUsage() {
         freeStorageLimitFormatted: formatBytes(freeStorageLimit),
         usagePercentage: Math.min(usagePercentage, 100),
         buckets: bucketUsage,
-        bucketCount: buckets.length
-      }
+        bucketCount: buckets.length,
+      },
     };
     return result;
   } catch (error) {
@@ -1784,25 +1976,25 @@ export async function getStorageUsage() {
 }
 
 function formatBytes(bytes, decimals = 2) {
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) return "0 Bytes";
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
-export async function listBucketFiles(bucketName, folder = '') {
+export async function listBucketFiles(bucketName, folder = "") {
   try {
     const files = [];
-    
-    const getAllFiles = async (path = '') => {
+
+    const getAllFiles = async (path = "") => {
       const { data: items, error } = await supabaseAdmin.storage
         .from(bucketName)
         .list(path, {
           limit: 1000,
           offset: 0,
-          sortBy: { column: 'updated_at', order: 'desc' }
+          sortBy: { column: "updated_at", order: "desc" },
         });
 
       if (error) {
@@ -1813,25 +2005,29 @@ export async function listBucketFiles(bucketName, folder = '') {
       if (items) {
         for (const item of items) {
           const itemPath = path ? `${path}/${item.name}` : item.name;
-          
+
           if (item.metadata && item.metadata.size) {
             // It's a file
             const { data: urlData } = supabase.storage
               .from(bucketName)
               .getPublicUrl(itemPath);
-            
+
             files.push({
               name: item.name,
               path: itemPath,
               size: item.metadata.size,
               sizeFormatted: formatBytes(item.metadata.size),
               lastModified: item.updated_at,
-              contentType: item.metadata.mimetype || 'unknown',
-              isImage: (item.metadata.mimetype || '').startsWith('image/'),
+              contentType: item.metadata.mimetype || "unknown",
+              isImage: (item.metadata.mimetype || "").startsWith("image/"),
               url: urlData.publicUrl,
-              folder: path
+              folder: path,
             });
-          } else if (item.metadata === null && item.name && !item.name.includes('.')) {
+          } else if (
+            item.metadata === null &&
+            item.name &&
+            !item.name.includes(".")
+          ) {
             // It's a folder, recurse if we want all files
             if (!folder || itemPath.startsWith(folder)) {
               await getAllFiles(itemPath);
@@ -1842,7 +2038,7 @@ export async function listBucketFiles(bucketName, folder = '') {
     };
 
     await getAllFiles(folder);
-    
+
     // Sort files by size (largest first) and then by name
     files.sort((a, b) => {
       if (b.size !== a.size) return b.size - a.size;
@@ -1876,8 +2072,8 @@ export async function getFileInfo(bucketName, filePath) {
   try {
     const { data: file, error } = await supabaseAdmin.storage
       .from(bucketName)
-      .list(filePath.split('/').slice(0, -1).join('/') || '', {
-        search: filePath.split('/').pop()
+      .list(filePath.split("/").slice(0, -1).join("/") || "", {
+        search: filePath.split("/").pop(),
       });
 
     if (error) {
@@ -1885,11 +2081,11 @@ export async function getFileInfo(bucketName, filePath) {
     }
 
     if (!file || file.length === 0) {
-      return { success: false, error: 'File not found' };
+      return { success: false, error: "File not found" };
     }
 
     const fileInfo = file[0];
-    
+
     // Get public URL
     const { data: urlData } = supabase.storage
       .from(bucketName)
@@ -1901,9 +2097,9 @@ export async function getFileInfo(bucketName, filePath) {
       size: fileInfo.metadata?.size || 0,
       sizeFormatted: formatBytes(fileInfo.metadata?.size || 0),
       lastModified: fileInfo.updated_at,
-      contentType: fileInfo.metadata?.mimetype || 'unknown',
-      isImage: (fileInfo.metadata?.mimetype || '').startsWith('image/'),
-      url: urlData.publicUrl
+      contentType: fileInfo.metadata?.mimetype || "unknown",
+      isImage: (fileInfo.metadata?.mimetype || "").startsWith("image/"),
+      url: urlData.publicUrl,
     };
 
     return { success: true, data: result };
@@ -1914,7 +2110,6 @@ export async function getFileInfo(bucketName, filePath) {
 
 export async function getStorageAnalytics() {
   try {
-    
     // Get basic storage usage
     const storageResult = await getStorageUsage();
     if (!storageResult.success) {
@@ -1922,13 +2117,13 @@ export async function getStorageAnalytics() {
     }
 
     const analytics = { ...storageResult.data };
-    
+
     // Add additional insights
     analytics.insights = {
       largestFiles: [],
       oldestFiles: [],
       fileTypeBreakdown: {},
-      recommendations: []
+      recommendations: [],
     };
 
     // Get largest files across all buckets
@@ -1936,23 +2131,23 @@ export async function getStorageAnalytics() {
       const filesResult = await listBucketFiles(bucketName);
       if (filesResult.success) {
         const bucketFiles = filesResult.data;
-        
+
         // Add to largest files (top 10)
         analytics.insights.largestFiles.push(
-          ...bucketFiles.slice(0, 10).map(file => ({
+          ...bucketFiles.slice(0, 10).map((file) => ({
             ...file,
-            bucket: bucketName
+            bucket: bucketName,
           }))
         );
 
         // File type breakdown
-        bucketFiles.forEach(file => {
-          const ext = file.name.split('.').pop()?.toLowerCase() || 'unknown';
+        bucketFiles.forEach((file) => {
+          const ext = file.name.split(".").pop()?.toLowerCase() || "unknown";
           if (!analytics.insights.fileTypeBreakdown[ext]) {
             analytics.insights.fileTypeBreakdown[ext] = {
               count: 0,
               size: 0,
-              sizeFormatted: '0 B'
+              sizeFormatted: "0 B",
             };
           }
           analytics.insights.fileTypeBreakdown[ext].count++;
@@ -1966,31 +2161,36 @@ export async function getStorageAnalytics() {
 
     // Sort largest files globally
     analytics.insights.largestFiles.sort((a, b) => b.size - a.size);
-    analytics.insights.largestFiles = analytics.insights.largestFiles.slice(0, 20);
+    analytics.insights.largestFiles = analytics.insights.largestFiles.slice(
+      0,
+      20
+    );
 
     // Generate recommendations
     const usage = analytics.usagePercentage;
     if (usage > 90) {
       analytics.insights.recommendations.push({
-        type: 'critical',
-        title: 'Storage Almost Full',
-        message: 'Consider upgrading or removing unused files immediately.'
+        type: "critical",
+        title: "Storage Almost Full",
+        message: "Consider upgrading or removing unused files immediately.",
       });
     } else if (usage > 75) {
       analytics.insights.recommendations.push({
-        type: 'warning',
-        title: 'High Storage Usage',
-        message: 'Monitor usage closely and consider optimization.'
+        type: "warning",
+        title: "High Storage Usage",
+        message: "Monitor usage closely and consider optimization.",
       });
     }
 
     // Check for large files
-    const largeFiles = analytics.insights.largestFiles.filter(f => f.size > 5 * 1024 * 1024); // 5MB+
+    const largeFiles = analytics.insights.largestFiles.filter(
+      (f) => f.size > 5 * 1024 * 1024
+    ); // 5MB+
     if (largeFiles.length > 0) {
       analytics.insights.recommendations.push({
-        type: 'info',
-        title: 'Large Files Detected',
-        message: `Found ${largeFiles.length} files over 5MB. Consider compression.`
+        type: "info",
+        title: "Large Files Detected",
+        message: `Found ${largeFiles.length} files over 5MB. Consider compression.`,
       });
     }
 
