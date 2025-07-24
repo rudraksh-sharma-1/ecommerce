@@ -1,6 +1,115 @@
 import supabase, { supabaseAdmin } from "./supabase";
 import { formatDateOnlyIST } from "./dateUtils";
 
+//Video Banner
+// Get all video banners
+export async function getAllVideoBanners() {
+  const { data, error } = await supabaseAdmin.from("video_banner").select();
+  if (error) return { success: false, error: error.message };
+  return { success: true, videoBanners: data };
+}
+
+// Add a new video banner (with status)
+export async function addVideoBanner(videoBanner, videoFile) {
+  let videoUrl = videoBanner.video_url;
+
+  if (videoFile && videoFile instanceof File) {
+    const fileExt = videoFile.name.split(".").pop();
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${fileExt}`;
+
+    const { error: uploadError } = await supabaseAdmin.storage
+      .from("videobanner")
+      .upload(fileName, videoFile);
+
+    if (uploadError) return { success: false, error: uploadError.message };
+
+    const { data: urlData } = supabase.storage
+      .from("videobanner")
+      .getPublicUrl(fileName);
+
+    videoUrl = urlData.publicUrl;
+  }
+
+  const insertData = {
+    ...videoBanner,
+    video_url: videoUrl,
+    status: videoBanner.status ?? true, // default to true if not provided
+  };
+
+  const { data, error } = await supabase
+    .from("video_banner")
+    .insert([insertData])
+    .select()
+    .single();
+
+  if (error) return { success: false, error: error.message };
+  return { success: true, videoBanner: data };
+}
+
+// Update a video banner (with status)
+export async function updateVideoBanner(id, videoBanner, videoFile) {
+  let videoUrl = videoBanner.video_url;
+
+  if (videoFile && videoFile instanceof File) {
+    const fileExt = videoFile.name.split(".").pop();
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${fileExt}`;
+
+    const { error: uploadError } = await supabaseAdmin.storage
+      .from("videobanner")
+      .upload(fileName, videoFile);
+
+    if (uploadError) return { success: false, error: uploadError.message };
+
+    const { data: urlData } = supabase.storage
+      .from("videobanner")
+      .getPublicUrl(fileName);
+
+    videoUrl = urlData.publicUrl;
+  }
+
+  const updateData = {
+    ...videoBanner,
+    video_url: videoUrl,
+    status: videoBanner.status ?? true, // ensure status is included
+  };
+
+  const { data, error } = await supabase
+    .from("video_banner")
+    .update(updateData)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) return { success: false, error: error.message };
+  return { success: true, videoBanner: data };
+}
+
+// Delete a video banner
+export async function deleteVideoBanner(id) {
+  const { error } = await supabaseAdmin
+    .from("video_banner")
+    .delete()
+    .eq("id", id);
+
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}
+
+// Toggle video banner status
+export async function toggleVideoBannerStatus(id, status) {
+  const { error } = await supabase
+    .from("video_banner")
+    .update({ status })
+    .eq("id", id);
+
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}
+
 // BANNERS
 export async function getAllBanners() {
   const { data, error } = await supabaseAdmin.from("banners").select();

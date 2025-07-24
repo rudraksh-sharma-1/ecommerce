@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import supabase from '../utils/supabase.ts';
 import { createUserProfileWithAddress } from '../utils/supabaseApi.js';
+import { useLocationContext } from './LocationContext.jsx';
 
 
 // Create the auth context
@@ -142,6 +143,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await supabase.auth.signOut();
       setCurrentUser(null);
+      clearLocationData();
       return { success: true };
     } catch (err) {
       setError(err.message);

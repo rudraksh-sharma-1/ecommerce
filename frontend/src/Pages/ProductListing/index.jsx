@@ -56,103 +56,104 @@ const ProductListing = () => {
   const filterMenuOpen = Boolean(filterAnchorEl);
 
   useEffect(() => {
-  async function fetchProducts() {
-    setLoading(true);
-    let productsResult;
+    async function fetchProducts() {
+      setLoading(true);
+      let productsResult;
 
-    const address = selectedAddress;
-    const lat = address?.latitude;
-    const lon = address?.longitude;
-    const hasCoords = lat && lon;
+      const address = selectedAddress;
+      const lat = address?.latitude;
+      const lon = address?.longitude;
+      const hasCoords = lat && lon;
 
-    if (group) {
-      productsResult = currentUser && hasCoords
-        ? await getProductsByGroupName(group, lat, lon)
-        : await getAllProducts();
-    } else if (subcategory) {
-      productsResult = currentUser && hasCoords
-        ? await getProductsBySubcategoryName(subcategory, lat, lon)
-        : await getAllProducts();
-    } else if (category) {
-      productsResult = currentUser && hasCoords
-        ? await getProductsByCategoryName(category, lat, lon)
-        : await getAllProducts();
-    } else {
-      productsResult = currentUser && hasCoords
-        ? await getNearbyProducts(lat, lon)
-        : await getAllProducts();
-    }
+      if (group) {
+        productsResult = hasCoords
+          ? await getProductsByGroupName(group, lat, lon)
+          : await getAllProducts();
+      } else if (subcategory) {
+        productsResult = hasCoords
+          ? await getProductsBySubcategoryName(subcategory, lat, lon)
+          : await getAllProducts();
+      } else if (category) {
+        productsResult = hasCoords
+          ? await getProductsByCategoryName(category, lat, lon)
+          : await getAllProducts();
+      } else {
+        productsResult = hasCoords
+          ? await getNearbyProducts(lat, lon)
+          : await getAllProducts();
+      }
 
-    const { success, products } = productsResult;
-    let filteredProducts = [];
+      const { success, products } = productsResult;
+      let filteredProducts = [];
 
-    if (success && products) {
-      filteredProducts = products.map((p) => ({
-        ...p,
-        id: p.id || p.product_id,
-        rating: p.rating ?? 0,
-        reviewCount: p.review_count ?? 0,
-        discount: p.discount ?? 0,
-        image: p.image ?? "https://placehold.co/300x300?text=Product",
-      }));
+      if (success && products) {
+        filteredProducts = products.map((p) => ({
+          ...p,
+          id: p.id || p.product_id,
+          rating: p.rating ?? 0,
+          reviewCount: p.review_count ?? 0,
+          discount: p.discount ?? 0,
+          image: p.image ?? "https://placehold.co/300x300?text=Product",
+        }));
 
-      // Apply search filter
-      if (search) {
-        const lowerSearch = search.toLowerCase();
+        // Apply search filter
+        if (search) {
+          const lowerSearch = search.toLowerCase();
+          filteredProducts = filteredProducts.filter(
+            (p) =>
+              (p.name && p.name.toLowerCase().includes(lowerSearch)) ||
+              (p.description &&
+                p.description.toLowerCase().includes(lowerSearch))
+          );
+        }
+
+        // Apply price filter
         filteredProducts = filteredProducts.filter(
-          (p) =>
-            (p.name && p.name.toLowerCase().includes(lowerSearch)) ||
-            (p.description && p.description.toLowerCase().includes(lowerSearch))
+          (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
         );
+
+        // Apply rating filter
+        filteredProducts = filteredProducts.filter(
+          (p) => p.rating >= minRating
+        );
+
+        // Sort products
+        switch (sortOption) {
+          case "price-low":
+            filteredProducts.sort((a, b) => a.price - b.price);
+            break;
+          case "price-high":
+            filteredProducts.sort((a, b) => b.price - a.price);
+            break;
+          case "name-asc":
+            filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+          case "name-desc":
+            filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+          case "rating":
+            filteredProducts.sort((a, b) => b.rating - a.rating);
+            break;
+          default:
+            filteredProducts.sort((a, b) => b.reviewCount - a.reviewCount);
+        }
       }
 
-      // Apply price filter
-      filteredProducts = filteredProducts.filter(
-        (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
-      );
-
-      // Apply rating filter
-      filteredProducts = filteredProducts.filter((p) => p.rating >= minRating);
-
-      // Sort products
-      switch (sortOption) {
-        case "price-low":
-          filteredProducts.sort((a, b) => a.price - b.price);
-          break;
-        case "price-high":
-          filteredProducts.sort((a, b) => b.price - a.price);
-          break;
-        case "name-asc":
-          filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-          break;
-        case "name-desc":
-          filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-          break;
-        case "rating":
-          filteredProducts.sort((a, b) => b.rating - a.rating);
-          break;
-        default:
-          filteredProducts.sort((a, b) => b.reviewCount - a.reviewCount);
-      }
+      setProductList(filteredProducts);
+      setLoading(false);
     }
 
-    setProductList(filteredProducts);
-    setLoading(false);
-  }
-
-  fetchProducts();
-}, [
-  category,
-  subcategory,
-  group,
-  sortOption,
-  priceRange,
-  minRating,
-  search,
-  currentUser,
-  selectedAddress, // Include this in dependency
-]);
-
+    fetchProducts();
+  }, [
+    category,
+    subcategory,
+    group,
+    sortOption,
+    priceRange,
+    minRating,
+    search,
+    selectedAddress, // Include this in dependency
+  ]);
 
   const handleSortClick = (event) => {
     setSortAnchorEl(event.currentTarget);

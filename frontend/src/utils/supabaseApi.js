@@ -1,5 +1,19 @@
 import supabase from "./supabase.ts";
 
+//Video Banner
+// Get all video banners
+
+
+export async function getAllVideoBanners() {
+  const { data, error } = await supabase.from("video_banner").select();
+  if (error) return { success: false, error: error.message };
+
+  // Do NOT call getPublicUrl again — just return the data directly
+  return { success: true, videoBanners: data };
+}
+
+
+
 // PRINT REQUESTS
 /**
  * Uploads an image to the 'prints' bucket and creates a new print request in the 'print_requests' table.
@@ -446,7 +460,7 @@ export async function getAllGroups() {
   const { data, error } = await supabase
     .from("groups")
     .select("*, subcategories(id, name, categories(id, name))")
-    .order('sort_order', { ascending: true });
+    .order("sort_order", { ascending: true });
   if (error) return { success: false, error: error.message };
   return { success: true, groups: data };
 }
@@ -462,13 +476,12 @@ export async function getNearbyProducts(user_lat, user_lon) {
   if (error) return { success: false, error: error.message };
 
   // Optionally: filter out products with inactive categories
-  const filtered = (data || []).filter(product => {
+  const filtered = (data || []).filter((product) => {
     return product.active !== false;
   });
 
   return { success: true, products: filtered };
 }
-
 
 // Fetch all products from Supabase
 export async function getAllProducts() {
@@ -484,13 +497,17 @@ export async function getAllProducts() {
     .order("created_at", { ascending: false });
   if (error) return { success: false, error: error.message };
   // Filter out products whose category is not active
-  const filtered = (data || []).filter(product => {
+  const filtered = (data || []).filter((product) => {
     // If product has subcategories, check category active
     if (product.subcategories && product.subcategories.categories) {
       return product.subcategories.categories.active !== false;
     }
     // If product has groups, check subcategory's category active
-    if (product.groups && product.groups.subcategories && product.groups.subcategories.categories) {
+    if (
+      product.groups &&
+      product.groups.subcategories &&
+      product.groups.subcategories.categories
+    ) {
       return product.groups.subcategories.categories.active !== false;
     }
     return true;
@@ -511,7 +528,7 @@ export async function getProductsBySubcategory(subcategoryId) {
     .eq("subcategory_id", subcategoryId)
     .order("created_at", { ascending: false });
   if (error) return { success: false, error: error.message };
-  const filtered = (data || []).filter(product => {
+  const filtered = (data || []).filter((product) => {
     if (product.subcategories && product.subcategories.categories) {
       return product.subcategories.categories.active !== false;
     }
@@ -552,7 +569,7 @@ export async function getProductsByCategory(categoryId) {
     .eq("subcategories.category_id", categoryId)
     .order("created_at", { ascending: false });
   if (error) return { success: false, error: error.message };
-  const filtered = (data || []).filter(product => {
+  const filtered = (data || []).filter((product) => {
     if (product.subcategories && product.subcategories.categories) {
       return product.subcategories.categories.active !== false;
     }
@@ -563,12 +580,14 @@ export async function getProductsByCategory(categoryId) {
 
 // Fetch products by category name from Supabase (using subcategories)
 export async function getProductsByCategoryName(categoryName, lat, lon) {
-  const { data, error } = await supabase
-    .rpc("get_products_by_category_within_15km", {
+  const { data, error } = await supabase.rpc(
+    "get_products_by_category_within_15km",
+    {
       category_name: categoryName,
       user_lat: lat,
-      user_lon: lon
-    });
+      user_lon: lon,
+    }
+  );
 
   if (error) {
     console.error("Error fetching products by category:", error.message);
@@ -577,8 +596,6 @@ export async function getProductsByCategoryName(categoryName, lat, lon) {
 
   return { success: true, products: data || [] };
 }
-
-
 
 // Fetch products by group name from Supabase
 export async function getProductsByGroupName(groupName, lat, lon) {
@@ -598,7 +615,6 @@ export async function getProductsByGroupName(groupName, lat, lon) {
 
   return { success: true, products: data || [] };
 }
-
 
 /* Add Products to Supabase */
 export async function addProduct(product, imageFile) {
@@ -625,7 +641,6 @@ export async function addProduct(product, imageFile) {
   if (error) return { success: false, error: error.message };
   return { success: true, product: data };
 }
-
 
 /* Update Product in Supabase */
 export async function updateProduct(id, product, imageFile) {
@@ -1306,7 +1321,6 @@ export async function updateUserProfileWithAddress(userId, profileData) {
 }
 
 export async function getUserProfileWithAddress(userId) {
-
   // Fetch all relevant fields directly (no computed column)
   const { data, error } = await supabase
     .from("users")
@@ -1367,7 +1381,6 @@ export async function getUserProfileWithAddress(userId) {
 }
 
 export async function createUserProfileWithAddress(userProfile) {
-
   // Extract detailed address fields
   const {
     houseNumber,
@@ -1453,7 +1466,6 @@ export async function createUserProfileWithAddress(userProfile) {
  * @returns {Promise<{success: boolean, users?: array, error?: string}>}
  */
 
-
 /**
  * Search users by city and state
  * @param {string} city - The city to search for
@@ -1507,7 +1519,7 @@ export async function getUserAddresses(userId) {
     .select()
     .eq("user_id", userId)
     .order("is_default", { ascending: false });
-  
+
   if (error) return { success: false, error: error.message };
   return { success: true, addresses: data };
 }
@@ -1557,10 +1569,13 @@ import axios from "axios";
 
 export async function addUserAddress(userId, address) {
   try {
-    const response = await axios.post("https://ecommerce-kghp.onrender.com/api/geo-address/createAddress", {
-      ...address,
-      user_id: userId,
-    });
+    const response = await axios.post(
+      "https://ecommerce-kghp.onrender.com/api/geo-address/createAddress",
+      {
+        ...address,
+        user_id: userId,
+      }
+    );
 
     return {
       success: true,
@@ -1608,7 +1623,9 @@ export async function updateUserAddress(addressId, address) {
 
 export async function deleteUserAddress(addressId) {
   try {
-    await axios.delete(`https://ecommerce-kghp.onrender.com/api/geo-address/delete/${addressId}`);
+    await axios.delete(
+      `https://ecommerce-kghp.onrender.com/api/geo-address/delete/${addressId}`
+    );
 
     return { success: true };
   } catch (err) {
@@ -1618,7 +1635,6 @@ export async function deleteUserAddress(addressId) {
     };
   }
 }
-
 
 /**
  * Set an address as the default address
@@ -1632,7 +1648,7 @@ export async function setAddressAsDefault(userId, addressId) {
     .update({ is_default: true })
     .eq("id", addressId)
     .eq("user_id", userId);
-  
+
   if (error) return { success: false, error: error.message };
   return { success: true };
 }
@@ -1646,38 +1662,43 @@ export async function migrateUserAddresses(userId) {
   try {
     // Get user details from the users table
     const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', userId)
+      .from("users")
+      .select("*")
+      .eq("id", userId)
       .single();
-    
+
     if (userError) {
       return { success: false, error: userError.message };
     }
 
     // Check if user has address information
-    if (!userData.street_address || !userData.city || !userData.state || !userData.country) {
-      return { success: false, error: 'No address information to migrate' };
+    if (
+      !userData.street_address ||
+      !userData.city ||
+      !userData.state ||
+      !userData.country
+    ) {
+      return { success: false, error: "No address information to migrate" };
     }
 
     // Check if user already has addresses in user_addresses table
     const { data: existingAddresses, error: addressError } = await supabase
-      .from('user_addresses')
-      .select('id')
-      .eq('user_id', userId);
+      .from("user_addresses")
+      .select("id")
+      .eq("user_id", userId);
 
     if (addressError) {
       return { success: false, error: addressError.message };
     }
 
     if (existingAddresses && existingAddresses.length > 0) {
-      return { success: false, error: 'User already has migrated addresses' };
+      return { success: false, error: "User already has migrated addresses" };
     }
 
     // Create a new address entry from user profile data
     const addressData = {
       user_id: userId,
-      address_name: 'Primary Address',
+      address_name: "Primary Address",
       is_default: true,
       street_address: userData.street_address,
       suite_unit_floor: userData.suite_unit_floor,
@@ -1688,11 +1709,11 @@ export async function migrateUserAddresses(userId) {
       state: userData.state,
       postal_code: userData.postal_code,
       country: userData.country,
-      landmark: userData.landmark
+      landmark: userData.landmark,
     };
 
     const { error: insertError } = await supabase
-      .from('user_addresses')
+      .from("user_addresses")
       .insert([addressData]);
 
     if (insertError) {

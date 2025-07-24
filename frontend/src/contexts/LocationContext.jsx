@@ -27,7 +27,9 @@ export const LocationProvider = ({ children }) => {
     const fetchAddresses = async () => {
       if (!currentUser?.id) return;
 
-      const { success, addresses, error } = await getUserAddresses(currentUser.id);
+      const { success, addresses, error } = await getUserAddresses(
+        currentUser.id
+      );
       if (!success) {
         console.error("Failed to fetch addresses:", error);
         return;
@@ -75,7 +77,10 @@ export const LocationProvider = ({ children }) => {
 
               setSelectedAddress(locationData);
               setCurrentLocationAddress(address);
-              localStorage.setItem("selectedAddress", JSON.stringify(locationData));
+              localStorage.setItem(
+                "selectedAddress",
+                JSON.stringify(locationData)
+              );
               resolve(locationData);
             } else {
               alert("Could not retrieve address.");
@@ -95,6 +100,13 @@ export const LocationProvider = ({ children }) => {
     });
   };
 
+  const clearLocationData = () => {
+    setSelectedAddress(null);
+    setAddresses([]);
+    setCurrentLocationAddress(null);
+    localStorage.removeItem("selectedAddress");
+  };
+
   return (
     <LocationContext.Provider
       value={{
@@ -106,7 +118,8 @@ export const LocationProvider = ({ children }) => {
         setAddresses,
         currentLocationAddress,
         setCurrentLocationAddress,
-        useCurrentLocation, // ✅ Exposed for external use
+        useCurrentLocation,
+        clearLocationData, // ✅ Exposed for external use
       }}
     >
       {children}

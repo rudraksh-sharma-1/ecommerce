@@ -38,6 +38,7 @@ const BANNER_POSITIONS = [
   { value: "category", label: "Category Banner" }
 ];
 
+import {Link} from "react-router-dom";
 import { getAllBanners, addBanner, updateBanner, deleteBanner, toggleBannerStatus } from '../../utils/supabaseApi'
 import supabase from '../../utils/supabase'
 
@@ -236,6 +237,7 @@ const BannersPage = () => {
           >
             Add New Banner
           </Button>
+          <Link to={'/VideoBannerManagement'} className="underline">Go to Video Banner Management</Link>
         </Group>
 
         <div className="flex flex-col md:flex-row gap-4 mb-4">
