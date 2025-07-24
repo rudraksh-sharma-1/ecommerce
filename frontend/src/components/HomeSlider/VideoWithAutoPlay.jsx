@@ -3,14 +3,29 @@ import React, { useEffect, useRef, useState } from "react";
 const VideoWithAutoPlay = ({ src }) => {
   const videoRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
 
+  // Detect if user interacted with the page
+  useEffect(() => {
+    const handleInteraction = () => setUserInteracted(true);
+
+    window.addEventListener("click", handleInteraction, { once: true });
+    window.addEventListener("scroll", handleInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("scroll", handleInteraction);
+    };
+  }, []);
+
+  // Observe visibility
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.5, // at least 50% of video should be visible
+        threshold: 0.5,
       }
     );
 
@@ -25,18 +40,26 @@ const VideoWithAutoPlay = ({ src }) => {
     };
   }, []);
 
+  // Handle play/pause and mute/unmute
   useEffect(() => {
     const video = videoRef.current;
-    if (video) {
-      if (isVisible) {
-        video.muted = false;
-        video.play().catch((err) => console.warn("Autoplay failed:", err));
+    if (!video) return;
+
+    if (isVisible) {
+      video.play().catch((err) => {
+        console.warn("Autoplay failed:", err);
+      });
+
+      if (userInteracted) {
+        video.muted = false; // only unmute after user interacted
       } else {
-        video.pause();
         video.muted = true;
       }
+    } else {
+      video.pause();
+      video.muted = true;
     }
-  }, [isVisible]);
+  }, [isVisible, userInteracted]);
 
   return (
     <video
@@ -51,7 +74,7 @@ const VideoWithAutoPlay = ({ src }) => {
       }}
       loop
       playsInline
-      muted // initially muted to satisfy autoplay policy
+      muted // required to let autoplay work at first
       onError={(e) => {
         e.target.onerror = null;
         e.target.poster =
