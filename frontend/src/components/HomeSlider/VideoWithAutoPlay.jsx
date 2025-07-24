@@ -4,13 +4,10 @@ const VideoWithAutoPlay = ({ src }) => {
   const videoRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [userInteracted, setUserInteracted] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
 
-  // Detect first user interaction
+  // Detect if user interacted with the page
   useEffect(() => {
-    const handleInteraction = () => {
-      setUserInteracted(true);
-    };
+    const handleInteraction = () => setUserInteracted(true);
 
     window.addEventListener("click", handleInteraction, { once: true });
     window.addEventListener("scroll", handleInteraction, { once: true });
@@ -21,13 +18,15 @@ const VideoWithAutoPlay = ({ src }) => {
     };
   }, []);
 
-  // Observe video visibility
+  // Observe visibility
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
       },
-      { threshold: 0.5 }
+      {
+        threshold: 0.5,
+      }
     );
 
     if (videoRef.current) {
@@ -52,7 +51,7 @@ const VideoWithAutoPlay = ({ src }) => {
       });
 
       if (userInteracted) {
-        video.muted = isMuted;
+        video.muted = false; // only unmute after user interacted
       } else {
         video.muted = true;
       }
@@ -60,55 +59,28 @@ const VideoWithAutoPlay = ({ src }) => {
       video.pause();
       video.muted = true;
     }
-  }, [isVisible, userInteracted, isMuted]);
-
-  // Toggle mute button
-  const toggleMute = () => {
-    setIsMuted((prev) => !prev);
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-    }
-  };
+  }, [isVisible, userInteracted]);
 
   return (
-    <div style={{ position: "relative" }}>
-      <video
-        ref={videoRef}
-        src={src}
-        className="slider-image"
-        style={{
-          width: "100%",
-          maxHeight: "600px",
-          minHeight: "250px",
-          objectFit: "cover",
-        }}
-        loop
-        playsInline
-        muted
-        onError={(e) => {
-          e.target.onerror = null;
-          e.target.poster =
-            "https://placehold.co/1200x400?text=Video+Not+Available";
-        }}
-      />
-
-      <button
-        onClick={toggleMute}
-        style={{
-          position: "absolute",
-          bottom: "10px",
-          right: "10px",
-          background: "rgba(0, 0, 0, 0.5)",
-          color: "#fff",
-          border: "none",
-          borderRadius: "5px",
-          padding: "6px 10px",
-          cursor: "pointer",
-        }}
-      >
-        {isMuted ? "Unmute" : "Mute"}
-      </button>
-    </div>
+    <video
+      ref={videoRef}
+      src={src}
+      className="slider-image"
+      style={{
+        width: "100%",
+        maxHeight: "600px",
+        minHeight: "250px",
+        objectFit: "cover",
+      }}
+      loop
+      playsInline
+      muted // required to let autoplay work at first
+      onError={(e) => {
+        e.target.onerror = null;
+        e.target.poster =
+          "https://placehold.co/1200x400?text=Video+Not+Available";
+      }}
+    />
   );
 };
 
