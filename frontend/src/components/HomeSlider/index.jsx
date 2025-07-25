@@ -77,6 +77,7 @@ const HomeSlider = () => {
               clickable: true,
               dynamicBullets: true,
             }}
+            spaceBetween={isMobile ? 16 : 0}
             autoplay={banners.length > 1 ? {
               delay: 5000,
               disableOnInteraction: false,
@@ -92,8 +93,8 @@ const HomeSlider = () => {
                   <img
                     src={banner.imageUrl}
                     alt={banner.title}
-                    className="slider-image"
-                    style={{ minHeight: '200px', maxHeight: '600px' }}
+                    className={`slider-image ${isMobile ? 'mobile-slide-image' : ''}`}
+                    
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = 'https://placehold.co/1200x400?text=Banner+Image+Not+Available';

@@ -39,7 +39,7 @@ const BANNER_POSITIONS = [
 ];
 
 import {Link} from "react-router-dom";
-import { getAllBanners, addBanner, updateBanner, deleteBanner, toggleBannerStatus } from '../../utils/supabaseApi'
+import { getAllBanners, addBanner, updateBanner, deleteBanner, toggleBannerStatus, toggleMobileBannerStatus } from '../../utils/supabaseApi'
 import supabase from '../../utils/supabase'
 
 const BannersPage = () => {
@@ -53,7 +53,8 @@ const BannersPage = () => {
     description: "",
     link: "", 
     active: true,
-    position: "hero"
+    position: "hero",
+    is_mobile: false,
   });
   const [activePage, setActivePage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -118,7 +119,8 @@ const BannersPage = () => {
       description: "",
       link: "", 
       active: true,
-      position: "hero"
+      position: "hero",
+      is_mobile: false,
     });
     setModalOpen(true);
   };
@@ -223,6 +225,25 @@ const BannersPage = () => {
       showNotification("Error updating banner status", "red");
     }
   };
+  const toggleMobile = async (id) => {
+    const banner = banners.find(b => b.id === id);
+    if (!banner) return;
+    
+    try {
+      const result = await toggleMobileBannerStatus(id, !banner.is_mobile);
+      if (result.success) {
+        setBanners(banners.map(ban => 
+          ban.id === id ? { ...ban, is_mobile: !ban.is_mobile } : ban
+        ));
+        showNotification(`Banner ${!banner.is_mobile ? 'activated' : 'deactivated'} successfully`, "green");
+      } else {
+        showNotification("Error updating banner status: " + result.error, "red");
+      }
+    } catch (error) {
+      console.error("Error toggling banner status:", error);
+      showNotification("Error updating banner status", "red");
+    }
+  };
 
   return (
     <div className="p-6 mantine-bg min-h-screen">
@@ -261,6 +282,7 @@ const BannersPage = () => {
                 <th>Title</th>
                 <th>Position</th>
                 <th>Status</th>
+                <th>For Mobile</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -287,6 +309,13 @@ const BannersPage = () => {
                     <Switch 
                       checked={banner.active} 
                       onChange={() => toggleActive(banner.id)}
+                      color="green"
+                    />
+                  </td>
+                  <td>
+                    <Switch 
+                      checked={banner.is_mobile} 
+                      onChange={() => toggleMobile(banner.id)}
                       color="green"
                     />
                   </td>
@@ -376,6 +405,18 @@ const BannersPage = () => {
               onChange={(event) => setNewBanner({
                 ...newBanner,
                 active: event.currentTarget.checked
+              })}
+              color="green"
+            />
+          </div>
+
+          <div className="flex items-center mb-2">
+            <Switch 
+              label="Only Mobile" 
+              checked={newBanner.is_mobile} 
+              onChange={(event) => setNewBanner({
+                ...newBanner,
+                is_mobile: event.currentTarget.checked
               })}
               color="green"
             />

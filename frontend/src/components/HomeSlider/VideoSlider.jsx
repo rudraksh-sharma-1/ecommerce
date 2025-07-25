@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { getAllVideoBanners } from "../../utils/supabaseApi.js"; // replace with your actual API
+import React, { useEffect, useState } from "react";
+import { getAllVideoBanners } from "../../utils/supabaseApi.js";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -9,7 +9,6 @@ import "./style.css";
 import VideoWithAutoPlay from "./VideoWithAutoPlay.jsx";
 
 const VideoBannerSlider = () => {
-  console.log("VideoBannerSlider mounted");
   const [isMobile, setIsMobile] = useState(false);
   const [videos, setVideos] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -21,8 +20,6 @@ const VideoBannerSlider = () => {
       try {
         setLoading(true);
         const result = await getAllVideoBanners();
-        console.log("Fetched video banners (raw):", result.videoBanners);
-        console.log("Full API result:", result);
         if (result.success && Array.isArray(result.videoBanners)) {
           const activeVideos = result.videoBanners.filter((b) => b.status);
           setVideos(
@@ -57,21 +54,21 @@ const VideoBannerSlider = () => {
   }, []);
 
   return (
-    <div className="home-slider">
+    <div className="w-full flex justify-center items-center ">
       {loading ? (
-        <div className="loading-container">
-          <div className="spinner"></div>
+        <div className="flex items-center justify-center h-64">
+          <div className="spinner" />
         </div>
       ) : error ? (
-        <div className="error-container">
+        <div className="text-center text-red-500 py-10">
           <p>{error}</p>
         </div>
       ) : videos.length === 0 ? (
-        <div className="error-container">
+        <div className="text-center text-gray-500 py-10">
           <p>No video banners available.</p>
         </div>
       ) : (
-        <>
+        <div className="w-full bg-white">
           <Swiper
             navigation={!isMobile}
             pagination={{ clickable: true, dynamicBullets: true }}
@@ -86,20 +83,29 @@ const VideoBannerSlider = () => {
             loop={videos.length > 1}
             modules={[Navigation, Pagination, Autoplay]}
             onSlideChange={(swiper) => setCurrentSlide(swiper.realIndex)}
-            className="main-slider"
+            className="
+              bg-white
+              w-full 
+              md:w-[90%] 
+              mx-auto 
+              max-h-[600px] 
+              md:max-h-[500px] 
+              min-h-[250px]
+              overflow-hidden
+              border-0 rounded-lg
+            "
           >
             {videos.map((banner) => (
               <SwiperSlide key={banner.id}>
-                
-                  <VideoWithAutoPlay src={banner.videoUrl} />
-                
+                <VideoWithAutoPlay src={banner.videoUrl} />
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="slide-count-btn">
+
+          <div className="text-center mt-4 text-sm text-gray-600">
             {currentSlide + 1}/{videos.length}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

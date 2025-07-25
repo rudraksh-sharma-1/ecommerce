@@ -1,0 +1,15 @@
+.slider-video {
+  width: 100%;
+  max-height: 600px;
+  min-height: 250px;
+  object-fit: cover;
+}
+
+/* For desktop: make the video smaller */
+@media (min-width: 768px) {
+  .slider-video {
+    max-height: 400px; /* Or whatever smaller height you want */
+    width: 90%;         /* Optional: to make width smaller */
+    margin: 0 auto;
+  }
+}

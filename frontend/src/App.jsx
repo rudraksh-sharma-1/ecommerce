@@ -15,7 +15,10 @@ import Cart from "./Pages/Cart";
 import WhatsAppWidget from "./components/WhatsAppWidget/WhatsAppWidget.jsx"; // Import WhatsAppWidget
 import MobileAccountPage from "./Pages/MobileAccountPage/MobileAccountPage.jsx";
 import BusinessPartnerSignup from "./Pages/BusinessPartner/BusinessPartnerSignup.jsx"; // Import MobileAccountPage
-import SubCategoryPage from './Pages/SubCategoryPage/SubCategoryPage.jsx'
+import SubCategoryPage from "./Pages/SubCategoryPage/SubCategoryPage.jsx";
+import Search from "./components/Search/index.jsx";
+import ConditionalCategoriesBar from "./components/CategoriesBar/ConditionalCategoriesBar.jsx";
+import MobileBannerCarousel from './components/MobileBannerCarousel/MobileBannerCarousel.jsx';
 
 import CustomPrinting from "./Pages/CustomPrinting/index.jsx";
 
@@ -54,137 +57,159 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+  const banners = [
+  {
+    id: 1,
+    title: 'Dry Fruits Sale',
+    imageUrl: 'https://your-image-url.com/slide1.jpg',
+    link: '/dryfruits',
+  },
+  {
+    id: 2,
+    title: 'New Offers',
+    imageUrl: 'https://your-image-url.com/slide2.jpg',
+    link: '/offers',
+  },
+];
   return (
     <>
       <AuthProvider>
         <LocationProvider>
-        <SettingsProvider>
-          <PromotionalProvider>
-            <DynamicHead />
-            <BrowserRouter>
-              <AnnouncementBar />
-              <Header />
-              <LocationModal/>
-              <CategoriesBar />
-              <Routes>
-                <Route path={"/"} exact={true} element={<Home />} />
-                <Route
-                  path={"/productListing"}
-                  exact={true}
-                  element={<ProductListing />}
-                />
-                <Route
-                  path={"/product/:id"}
-                  exact={true}
-                  element={<ProductDetails />}
-                />
-                <Route path={"/login"} exact={true} element={<Login />} />
-                <Route path={"/signup"} exact={true} element={<Signup />} />
-                <Route
-                  path={"/reset-password"}
-                  exact={true}
-                  element={<ResetPassword />}
-                />
-                <Route path={"/about-us"} exact={true} element={<AboutUs />} />
-                <Route
-                  path={"/contact-us"}
-                  exact={true}
-                  element={<ContactUs />}
-                />
-                <Route path={"/cart"} exact={true} element={<Cart />} />
-                <Route
-                  path={"/custom-printing"}
-                  exact={true}
-                  element={<CustomPrinting />}
-                />
-                <Route
-                  path={"/privacy-policy"}
-                  exact={true}
-                  element={<PrivacyPolicy />}
-                />
-                <Route
-                  path={"/terms-of-service"}
-                  exact={true}
-                  element={<TermsOfService />}
-                />
-                <Route path={"/faq"} exact={true} element={<FAQ />} />
-                <Route
-                  path={"/BusinessPartner"}
-                  exact={true}
-                  element={<BusinessPartnerLogin />}
-                />
-                <Route
-                  path={"/BusinessPartnerSignup"}
-                  exact={true}
-                  element={<BusinessPartnerSignup />}
-                />
-                <Route
-                  path="/subcategories/:categoryName"
-                  element={<SubCategoryPage />}
-                />
-                <Route
-                  path={"/shipping-returns"}
-                  exact={true}
-                  element={<ShippingReturns />}
-                />
-                <Route
-                  path={"/account"}
-                  exact={true}
-                  element={
-                    <ProtectedRoute>
-                      <Account />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path={"/MobileAccount"}
-                  exact={true}
-                  element={
-                    <ProtectedRoute>
-                      <MobileAccountPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path={"/wishlist"}
-                  exact={true}
-                  element={
-                    <ProtectedRoute>
-                      <Wishlist />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path={"/enquiry-history"}
-                  exact={true}
-                  element={
-                    <ProtectedRoute>
-                      <EnquiryHistory />
-                    </ProtectedRoute>
-                  }
-                />{" "}
-                {/* Add protected route for EnquiryHistory */}
-                <Route
-                  path={"/coming-soon"}
-                  exact={true}
-                  element={<ComingSoon />}
-                />{" "}
-                {/* Add route for ComingSoon */}
-                {/* Fallback 404 route */}
-                <Route
-                  path="*"
-                  element={
-                    <div style={{ padding: 40, textAlign: "center" }}>
-                      <h2>404 - Page Not Found</h2>
-                    </div>
-                  }
-                />
-              </Routes>
-              <WhatsAppWidget />
-              <Footer />
-            </BrowserRouter>
-          </PromotionalProvider>
-        </SettingsProvider>
+          <SettingsProvider>
+            <PromotionalProvider>
+              <DynamicHead />
+              <BrowserRouter>
+                <AnnouncementBar />
+                <Header />
+                <div className="mobile-search-bar-container w-full px-5 py-4 pt-5 z-999">
+                  <Search />
+                </div>
+                 <MobileBannerCarousel />
+                <LocationModal />
+                <ConditionalCategoriesBar />
+                <Routes>
+                  <Route path={"/"} exact={true} element={<Home />} />
+                  <Route
+                    path={"/productListing"}
+                    exact={true}
+                    element={<ProductListing />}
+                  />
+                  <Route
+                    path={"/product/:id"}
+                    exact={true}
+                    element={<ProductDetails />}
+                  />
+                  <Route path={"/login"} exact={true} element={<Login />} />
+                  <Route path={"/signup"} exact={true} element={<Signup />} />
+                  <Route
+                    path={"/reset-password"}
+                    exact={true}
+                    element={<ResetPassword />}
+                  />
+                  <Route
+                    path={"/about-us"}
+                    exact={true}
+                    element={<AboutUs />}
+                  />
+                  <Route
+                    path={"/contact-us"}
+                    exact={true}
+                    element={<ContactUs />}
+                  />
+                  <Route path={"/cart"} exact={true} element={<Cart />} />
+                  <Route
+                    path={"/custom-printing"}
+                    exact={true}
+                    element={<CustomPrinting />}
+                  />
+                  <Route
+                    path={"/privacy-policy"}
+                    exact={true}
+                    element={<PrivacyPolicy />}
+                  />
+                  <Route
+                    path={"/terms-of-service"}
+                    exact={true}
+                    element={<TermsOfService />}
+                  />
+                  <Route path={"/faq"} exact={true} element={<FAQ />} />
+                  <Route
+                    path={"/BusinessPartner"}
+                    exact={true}
+                    element={<BusinessPartnerLogin />}
+                  />
+                  <Route
+                    path={"/BusinessPartnerSignup"}
+                    exact={true}
+                    element={<BusinessPartnerSignup />}
+                  />
+                  <Route
+                    path="/subcategories/:categoryName"
+                    element={<SubCategoryPage />}
+                  />
+                  <Route
+                    path={"/shipping-returns"}
+                    exact={true}
+                    element={<ShippingReturns />}
+                  />
+                  <Route
+                    path={"/account"}
+                    exact={true}
+                    element={
+                      <ProtectedRoute>
+                        <Account />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path={"/MobileAccount"}
+                    exact={true}
+                    element={
+                      <ProtectedRoute>
+                        <MobileAccountPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path={"/wishlist"}
+                    exact={true}
+                    element={
+                      <ProtectedRoute>
+                        <Wishlist />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path={"/enquiry-history"}
+                    exact={true}
+                    element={
+                      <ProtectedRoute>
+                        <EnquiryHistory />
+                      </ProtectedRoute>
+                    }
+                  />{" "}
+                  {/* Add protected route for EnquiryHistory */}
+                  <Route
+                    path={"/coming-soon"}
+                    exact={true}
+                    element={<ComingSoon />}
+                  />{" "}
+                  {/* Add route for ComingSoon */}
+                  {/* Fallback 404 route */}
+                  <Route
+                    path="*"
+                    element={
+                      <div style={{ padding: 40, textAlign: "center" }}>
+                        <h2>404 - Page Not Found</h2>
+                      </div>
+                    }
+                  />
+                </Routes>
+                <WhatsAppWidget />
+                <Footer />
+              </BrowserRouter>
+            </PromotionalProvider>
+          </SettingsProvider>
         </LocationProvider>
       </AuthProvider>
       <ToastContainer

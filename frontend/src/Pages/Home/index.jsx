@@ -252,9 +252,7 @@ export const Home = () => {
   return (
     <>
       {/* Search Bar For mobile Screens */}
-      <div className="mobile-search-bar-container  w-full px-5 py-3 pt-5 bg-white">
-        <Search />
-      </div>
+      
 
       {/* Add spacer to push content below the search bar on mobile */}
       <div
@@ -289,6 +287,31 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* Latest Products Section */}
+      <section className="py-4 bg-white">
+        <div className="container px-4">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl sm:text-2xl font-semibold">
+              Latest Products
+            </h2>
+            <a
+              href="/productListing"
+              className="text-sm text-blue-600 hover:underline"
+            >
+              View All
+            </a>
+          </div>
+
+          <ProductsSlider
+            products={newProducts}
+            slidesPerViewMobile={1.2}
+            slidesPerViewTablet={2.5}
+            slidesPerViewDesktop={4}
+            slidesPerViewLarge={5}
+          />
+        </div>
+      </section>
+
       {/* Free Shipping Banner - Keep this dynamic for promotional content */}
       <section className="py-4 bg-white">
         <div className="container px-4">
@@ -315,31 +338,6 @@ export const Home = () => {
               </p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Latest Products Section */}
-      <section className="py-4 bg-white">
-        <div className="container px-4">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl sm:text-2xl font-semibold">
-              Latest Products
-            </h2>
-            <a
-              href="/productListing"
-              className="text-sm text-blue-600 hover:underline"
-            >
-              View All
-            </a>
-          </div>
-
-          <ProductsSlider
-            products={newProducts}
-            slidesPerViewMobile={1.2}
-            slidesPerViewTablet={2.5}
-            slidesPerViewDesktop={4}
-            slidesPerViewLarge={5}
-          />
         </div>
       </section>
 
@@ -400,7 +398,7 @@ export const Home = () => {
 
               {/* Insert PromoBanner every 2 sections */}
 
-              <section className="py-4 bg-white">
+              {/* <section className="py-4 bg-white">
         <div className="container px-4">
           <div className="shipping-banner w-full lg:w-[90%] mx-auto py-4 px-4 sm:px-6 border-2 border-red-200 rounded-lg shadow-sm bg-gradient-to-r from-red-50 to-white">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -426,7 +424,7 @@ export const Home = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
               
               {/* {(index + 1) % 2 === 0 && <PromoBanner />} */}
             </React.Fragment>

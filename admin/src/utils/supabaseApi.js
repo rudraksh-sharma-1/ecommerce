@@ -188,6 +188,15 @@ export async function toggleBannerStatus(id, active) {
   return { success: true };
 }
 
+export async function toggleMobileBannerStatus(id, is_mobile) {
+  const { error } = await supabase
+    .from("banners")
+    .update({ is_mobile })
+    .eq("id", id);
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}
+
 // ADS BANNERS
 export async function getAllAdsBanners() {
   const { data, error } = await supabaseAdmin.from("ads_banners").select();

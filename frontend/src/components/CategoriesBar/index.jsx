@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsShop } from "react-icons/bs";
 import { MapPinned } from "lucide-react";
+import Badge from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
 import {
   getAllCategories,
   getAllSubcategories,
@@ -12,7 +15,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import CategoriesMenu from "../CategoriesMenu";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdClose } from "react-icons/md";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, User } from "lucide-react";
 import { FaHome } from "react-icons/fa";
 import {
   MdCategory,
@@ -22,6 +25,20 @@ import {
 } from "react-icons/md";
 import "./style.css";
 import { useLocationContext } from "../../contexts/LocationContext.jsx";
+import { getCartItems } from "../../utils/supabaseApi";
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: 3, // Move badge more to the left to avoid covering text
+    top: 0, // Adjust top position slightly
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+    backgroundColor: "#ff4081",
+    fontSize: "0.7rem",
+    minWidth: "16px",
+    height: "16px",
+  },
+}));
 
 const CategoriesBar = () => {
   const [categories, setCategories] = useState([]);
@@ -40,12 +57,34 @@ const CategoriesBar = () => {
   const navigate = useNavigate();
   const [searchOverlayOpen, setSearchOverlayOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [cartCount, setCartCount] = useState(0);
 
   // Remove hoveredCategory and isDropdownHovered from state, use refs instead
   const hoveredCategoryRef = useRef(null);
   const hoveredSubcategoryRef = useRef(null);
   const isDropdownHoveredRef = useRef(false);
   const isGroupsDropdownHoveredRef = useRef(false);
+
+  useEffect(() => {
+    async function fetchCart() {
+      if (!currentUser) {
+        setCartCount(0);
+        return;
+      }
+      const { success, cartItems } = await getCartItems(currentUser.id);
+      if (success && cartItems) {
+        const total = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+        setCartCount(total);
+      } else {
+        setCartCount(0);
+      }
+    }
+    fetchCart();
+    // Listen for cart updates
+    window.addEventListener("cartUpdated", fetchCart);
+    return () => window.removeEventListener("cartUpdated", fetchCart);
+  }, [currentUser]);
+
   const [dropdownRender, setDropdownRender] = useState({
     categoryId: null,
     position: { top: 0, left: 0 },
@@ -148,7 +187,7 @@ const CategoriesBar = () => {
         const featuredCategories = categoriesResult.categories.filter(
           (cat) => cat.active && cat.featured
         );
-        
+
         setCategories(featuredCategories.slice(0, 7));
         setMobileCategories(featuredCategories);
 
@@ -441,6 +480,13 @@ const CategoriesBar = () => {
     }
     if (type === "home") navigate("/");
     if (type === "cart") navigate("/cart");
+    if (type === "Login") {
+      if (currentUser) {
+        navigate("/MobileAccount");
+      } else {
+        navigate("/login");
+      }
+    }
   };
 
   return (
@@ -721,7 +767,7 @@ const CategoriesBar = () => {
                   );
                 })
               )}
-             {/*  <button
+              {/*  <button
                 onClick={() =>
                   scrollContainerRef.current.scrollBy({
                     left: 200,
@@ -733,11 +779,19 @@ const CategoriesBar = () => {
                 ▶
               </button> */}
             </div>
-              <button className="absolute hidden md:flex bg-white text-black border-0 rounded-lg pr-1 my-2 right-3 items-center cursor-pointer hover:shadow-emerald-800 whitespace-nowrap">
-                <img src="https://i.postimg.cc/Z51W2bVM/Screenshot-2025-07-15-124657.png" alt="E-Haat" className="w-15 border-0 rounded-lg pr-1"/>
-                E-Haat
-                <img src="https://i.postimg.cc/PqyrYm0j/Screenshot-2025-07-15-162637-removebg-preview.png" alt="E-Haat" className="w-12 border-0 rounded-lg pr-1 pl-1 " />
-              </button>
+            <button className="absolute hidden md:flex bg-white text-black border-0 rounded-lg pr-1 my-2 right-3 items-center cursor-pointer hover:shadow-emerald-800 whitespace-nowrap">
+              <img
+                src="https://i.postimg.cc/Z51W2bVM/Screenshot-2025-07-15-124657.png"
+                alt="E-Haat"
+                className="w-15 border-0 rounded-lg pr-1"
+              />
+              E-Haat
+              <img
+                src="https://i.postimg.cc/PqyrYm0j/Screenshot-2025-07-15-162637-removebg-preview.png"
+                alt="E-Haat"
+                className="w-12 border-0 rounded-lg pr-1 pl-1 "
+              />
+            </button>
           </div>
         </div>
       </div>
@@ -1186,20 +1240,23 @@ const CategoriesBar = () => {
             </div>
             <div className="pb-13 w-full">
               {/* Location Selection Button */}
-              <button className="w-full border-0  items-center text-center font-bold text-xs text-black-800 transition-colors md:px-2 px-1 border-t" onClick={handleSidebarLocationClick}>
-                <Link
-                  className=" flex items-center align-middle justify-center text-center font-bold rounded transition-colors"
-                >
+              <button
+                className="w-full border-0  items-center text-center font-bold text-xs text-black-800 transition-colors md:px-2 px-1 border-t"
+                onClick={handleSidebarLocationClick}
+              >
+                <Link className=" flex items-center align-middle justify-center text-center font-bold rounded transition-colors">
                   <MapPinned className="pr-1 size-8" />
                   <span className="whitespace-nowrap">Current Location</span>
                 </Link>
               </button>
-               {currentLocationAddress && (
-                  <div className="mt-4 p-2 bg-gray-100 rounded text-sm text-center">
-                    <span className="flex font-bold">Current Location:</span>{" "}
-                    <span className="flex flex-wrap ">{currentLocationAddress}</span>
-                  </div>
-                )}
+              {currentLocationAddress && (
+                <div className="mt-4 p-2 bg-gray-100 rounded text-sm text-center">
+                  <span className="flex font-bold">Current Location:</span>{" "}
+                  <span className="flex flex-wrap ">
+                    {currentLocationAddress}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1270,13 +1327,17 @@ const CategoriesBar = () => {
             padding: 0,
           }}
         >
-          <MdOutlineShoppingCart size={22} />
+          <StyledBadge badgeContent={cartCount} color="secondary">
+            <MdOutlineShoppingCart size={22} />
+          </StyledBadge>
+
           <span style={{ fontSize: "11px" }}>Cart</span>
         </button>
+
         <button
           className="mobile-bottom-nav-btn"
           aria-label="Menu"
-          onClick={() => handleBottomMenu("menu")}
+          onClick={() => handleBottomMenu("Login")}
           style={{
             background: "none",
             border: "none",
@@ -1287,8 +1348,8 @@ const CategoriesBar = () => {
             padding: 0,
           }}
         >
-          <BsShop size={22}/>
-          <span style={{ fontSize: "11px" }}>E-Haat</span>
+          <User size={22} />
+          <span style={{ fontSize: "11px" }}>My Account</span>
         </button>
       </div>
 

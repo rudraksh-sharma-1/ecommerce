@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import "./autoplay.css";
 
 const VideoWithAutoPlay = ({ src }) => {
   const videoRef = useRef(null);
@@ -65,7 +66,13 @@ const VideoWithAutoPlay = ({ src }) => {
     <video
       ref={videoRef}
       src={src}
-      className="slider-image"
+      className=" w-full
+    min-h-[250px]
+    max-h-[600px]
+    object-cover
+    md:max-h-[400px]    
+    md:w-[90%]           
+    mx-auto   "
       style={{
         width: "100%",
         maxHeight: "600px",
@@ -80,6 +87,7 @@ const VideoWithAutoPlay = ({ src }) => {
         e.target.poster =
           "https://placehold.co/1200x400?text=Video+Not+Available";
       }}
+      controls
     />
   );
 };
