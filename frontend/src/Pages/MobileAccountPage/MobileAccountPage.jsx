@@ -22,7 +22,7 @@ function MobileAccountPage() {
   }, [navigate]);
 
   return (
-    <div className="md:hidden max-w-sm mx-auto p-4 pt-10 space-y-4">
+    <div className="md:hidden max-w-sm mx-auto p-4 pt-15 space-y-4">
       {/* Each link as a wide vertical button */}
       <Link
         to="/account"

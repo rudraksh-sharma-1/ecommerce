@@ -1,9 +1,9 @@
 // components/ConditionalCategoriesBar.jsx
 import React from "react";
 import { useLocation } from "react-router-dom";
-import CategoriesBar from ".";
+import MobileCategoriesBar from ".";
 
-const ConditionalCategoriesBar = () => {
+const ConditionalMobileCategoriesBar = () => {
   const location = useLocation();
 
   // Hide CategoriesBar on /MobileAccount
@@ -11,7 +11,7 @@ const ConditionalCategoriesBar = () => {
     return null;
   }
 
-  return <CategoriesBar />;
+  return <MobileCategoriesBar/>;
 };
 
-export default ConditionalCategoriesBar;
+export default ConditionalMobileCategoriesBar;

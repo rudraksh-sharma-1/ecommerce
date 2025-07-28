@@ -255,10 +255,10 @@ export const Home = () => {
       
 
       {/* Add spacer to push content below the search bar on mobile */}
-      <div
+      {/* <div
         className="mobile-search-spacer md:hidden"
         style={{ height: "60px" }}
-      ></div>
+      ></div> */}
 
       <HomeSlider />
       <FlashSale />

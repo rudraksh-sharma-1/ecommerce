@@ -17,8 +17,8 @@ import MobileAccountPage from "./Pages/MobileAccountPage/MobileAccountPage.jsx";
 import BusinessPartnerSignup from "./Pages/BusinessPartner/BusinessPartnerSignup.jsx"; // Import MobileAccountPage
 import SubCategoryPage from "./Pages/SubCategoryPage/SubCategoryPage.jsx";
 import Search from "./components/Search/index.jsx";
-import ConditionalCategoriesBar from "./components/CategoriesBar/ConditionalCategoriesBar.jsx";
 import MobileBannerCarousel from './components/MobileBannerCarousel/MobileBannerCarousel.jsx';
+import MobileCategoriesBar from "./components/CategoriesBar/MobileCategoriesBar.jsx";
 
 import CustomPrinting from "./Pages/CustomPrinting/index.jsx";
 
@@ -40,6 +40,7 @@ import AnnouncementBar from "./components/AnnouncementBar";
 import CategoriesBar from "./components/CategoriesBar";
 import { LocationProvider } from "./contexts/LocationContext.jsx";
 import LocationModal from "./components/LocationModal/LocationModal.jsx";
+import ConditionalMobileCategoriesBar from "./components/CategoriesBar/ConditionalMobileCategoriesBar.jsx";
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -84,9 +85,10 @@ function App() {
                 <div className="mobile-search-bar-container w-full px-5 py-4 pt-5 z-999">
                   <Search />
                 </div>
-                 <MobileBannerCarousel />
                 <LocationModal />
-                <ConditionalCategoriesBar />
+                 <MobileBannerCarousel />
+                 <MobileCategoriesBar/>
+                 <CategoriesBar className="sm:hidden"/>
                 <Routes>
                   <Route path={"/"} exact={true} element={<Home />} />
                   <Route

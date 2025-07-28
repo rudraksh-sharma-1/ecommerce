@@ -248,7 +248,7 @@ const Header = () => {
         }`}
       >
         <div className="header-main border-b border-gray-200 shadow-sm">
-          <div className=" w-full px-5 ">
+          <div className=" w-full px-1">
             <div className="flex items-center w-full p-0 align-middle h-25 justify-between">
               {/* Logo section */}
               <div className="flex-shrink-1 logo-container w-25 left-0">
@@ -532,7 +532,7 @@ const Header = () => {
         </div>
         <button
           className="border-0 rounded-lg flex items-center text-xs text-blue-700 hover:text-blue-700 transition-colors  
-             px-2  md:mx-0 md:px-4 w-full overflow-hidden whitespace-nowrap md:hidden "
+              md:mx-0 md:px-4 w-full overflow-hidden whitespace-nowrap md:hidden "
           onClick={() => setShowModal(true)}
         >
           <Link className="flex items-center space-x-1">

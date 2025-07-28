@@ -40,10 +40,12 @@
 @media (max-width: 767px) {
   .categories-bar-spacer {
   width: 100%;
+  visibility: hidden !important ;
 }
   .categories-bar {
     position: relative;
-    top: 26px !important;
+    visibility: hidden !important;
+    top: 20px !important;
     min-height: 36px;
     height: 43px;
   }

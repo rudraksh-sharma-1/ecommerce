@@ -23,7 +23,7 @@ const HomeSlider = () => {
         setLoading(true);
         const result = await getAllBanners();
         if (result.success && Array.isArray(result.banners)) {
-          const heroBanners = result.banners.filter(b => b.active && b.position === 'hero');
+          const heroBanners = result.banners.filter(b => b.active && b.position === 'hero' && !b.is_mobile);
           setBanners(heroBanners.map(b => ({
             id: b.id,
             title: b.title,
@@ -56,7 +56,7 @@ const HomeSlider = () => {
   }, []);
 
   return (
-    <div className="home-slider">
+    <div className="home-slider rounded-2xl">
       {loading ? (
         <div className="loading-container">
           <div className="spinner"></div>
@@ -78,11 +78,13 @@ const HomeSlider = () => {
               dynamicBullets: true,
             }}
             spaceBetween={isMobile ? 16 : 0}
+            slidesPerView={isMobile ? 1.2 : 1}
+            centeredSlides={isMobile}
             autoplay={banners.length > 1 ? {
               delay: 5000,
               disableOnInteraction: false,
             } : false}
-            loop={banners.length > 1}
+            loop={true}
             modules={[Navigation, Pagination, Autoplay]}
             onSlideChange={(swiper) => setCurrentSlide(swiper.realIndex)}
             className="main-slider"
@@ -93,7 +95,7 @@ const HomeSlider = () => {
                   <img
                     src={banner.imageUrl}
                     alt={banner.title}
-                    className={`slider-image ${isMobile ? 'mobile-slide-image' : ''}`}
+                    className={`slider-image ${isMobile ? 'mobile-slide-image' : 'border-0 rounded-2xl'}`}
                     
                     onError={(e) => {
                       e.target.onerror = null;
