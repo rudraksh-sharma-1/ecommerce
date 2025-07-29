@@ -45,7 +45,7 @@ const ProductsSlider = ({
   }
 
   return (
-    <div className="products-slider py-6 sm:py-8">
+    <div className="products-slider py-6 !pt-1 sm:py-8">
       {(title || subtitle) && (
         <div className="section-header mb-6 px-4">
           {title && <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">{title}</h2>}

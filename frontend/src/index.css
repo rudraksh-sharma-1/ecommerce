@@ -112,3 +112,12 @@ footer form input::placeholder{font-size: 14px;}
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.clip-left {
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.clip-right {
+  clip-path: polygon(0% 0, 100% 0, 100% 100%, 15% 100%);
+
+}

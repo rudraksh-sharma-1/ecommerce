@@ -4,6 +4,7 @@ import Link from "@mui/material/Link";
 import HomeIcon from "@mui/icons-material/Home";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
 import ProductZoom from "../../components/ProductZoom/Index";
+import supabase from "../../utils/supabase";
 import { useParams } from "react-router-dom";
 import { getAllProducts, getProductsByCategory } from "../../utils/supabaseApi";
 import Rating from "@mui/material/Rating";
@@ -150,14 +151,19 @@ const ProductDetails = () => {
 
       // Fetch related products
       if (product.category) {
-        const { success: relSuccess, products: relProducts } =
-          await getProductsByCategory(product.category);
-        if (relSuccess && relProducts) {
-          setRelatedProducts(
-            relProducts
-              .filter((p) => String(p.id) !== String(product.id))
-              .slice(0, 4)
-          );
+        const { data: categoryData } = await supabase
+          .from("categories")
+          .select("id")
+          .eq("name", product.category)
+          .single();
+        if (categoryData?.id) {
+          const { success: relSuccess, products: relProducts } =
+            await getProductsByCategory(categoryData.id);
+          if (relSuccess && relProducts) {
+            setRelatedProducts(
+              relProducts.filter((p) => String(p.id) !== String(product.id)).slice(0, 4)
+            );
+          }
         } else {
           setRelatedProducts([]);
         }
@@ -328,8 +334,8 @@ const ProductDetails = () => {
                   {cartAdded
                     ? "Added!"
                     : cartLoading
-                    ? "Adding..."
-                    : "Add to Cart"}
+                      ? "Adding..."
+                      : "Add to Cart"}
                 </Button>
 
                 <IconButton

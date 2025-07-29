@@ -50,6 +50,16 @@ const ProductItem = ({ product }) => {
     }
   };
 
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
   useEffect(() => {
     async function checkWishlist() {
       try {
@@ -102,9 +112,15 @@ const ProductItem = ({ product }) => {
   };
 
   const handleAddToCart = async () => {
-    if (!currentUser || !product || !product.id) {
-      return;
-    }
+     if (!currentUser) {
+    alert("Please login to add items to cart.");
+    return;
+  }
+
+  if (!product || !product.id) {
+    /* alert("Product information is missing."); */
+    return;
+  }
     setCartLoading(true);
     try {
       const { success, error, cartItem } = await addToCart(currentUser.id, product.id, 1);
@@ -132,7 +148,7 @@ const ProductItem = ({ product }) => {
     image: "https://placehold.co/300x300?text=Product",
     description: "High quality product with excellent features and modern design"
   };
-  
+
   // Function to truncate description to a fixed number of words
   const truncateDescription = (text, wordCount = 8) => {
     if (!text) return "Premium quality product with excellent features and modern design.";
@@ -140,21 +156,22 @@ const ProductItem = ({ product }) => {
     if (words.length <= wordCount) return text;
     return words.slice(0, wordCount).join(' ') + '...';
   };
-  
+
   // Use provided product data or defaults
   const {
-    id, 
-    name, 
+    id,
+    name,
     category,
     subcategories,
-    price, 
-    oldPrice, 
-    rating, 
+    price,
+    old_price,  
+    rating,       
     reviewCount,
     discount,
     image,
     description
   } = product || defaultProduct;
+  /* console.log("Product data:", product); */
 
   // Get subcategory name and category name from the joined data
   const subcategoryName = subcategories?.name;
@@ -163,6 +180,64 @@ const ProductItem = ({ product }) => {
   // DEBUG: Show error to user (optional, simple alert)
   // You can replace alert with a nicer UI feedback
   // Example: const [errorMsg, setErrorMsg] = useState("");
+
+
+  /* Mobile Product Card */
+  if (isMobile) return (
+    <div className="w-[170px] h-[260px] bg-white rounded-xl shadow-lg flex flex-col">
+      <div className="relative w-full h-[130px] rounded-t-md overflow-hidden bg-green-200 flex items-center justify-center">
+        <Link to={`/product/${id}`} className="">
+          <img
+            src={image}
+            alt={name}
+            className="w-full h-full object-contain"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'https://placehold.co/100x100?text=Image';
+            }}
+          />
+        </Link>
+        {/* {oldPrice !== null && oldPrice !== undefined && oldPrice > 0 && (
+          <span className="text-gray-800 line-through text-[11px]">
+            ₹{oldPrice.toFixed(0)}
+          </span>
+        )} */}
+
+        { discount != 0 && discount != null && discount != undefined &&
+          <div className="absolute top-0 left-0 bg-red-600 text-white text-xs font-bold px-1 py-[2px] rounded-sm">
+          {product.discount}% off
+        </div>}
+        <div className="absolute top-0 right-0 bg-white text-[10px] font-semibold px-2 py-[1px] rounded-md shadow-lg border z-10">
+          <span className="text-green-600">{rating}</span> ★
+        </div>
+      </div>
+
+      <div className="mt-2 flex flex-col justify-between flex-1 p-1.5">
+        <div>
+          <h3 className="text-[13px] font-medium line-clamp-2">{name}</h3>
+          {/* <p className="text-xs text-gray-500 mt-1">1 Variant</p> */}
+        </div>
+
+        <div className="mt-2 flex items-center justify-between">
+          <div className="flex align-middle justify-center text-[13px] bg-yellow-300 px-0.5 py-0.5 rounded-lg">
+            <span className="text-black font-semibold mr-1">₹{price.toFixed(0)}</span>
+            {old_price != 0 && old_price != undefined && old_price != null  && (
+              <span className="text-gray-800 line-through text-[11px] py-0.5 px-0.5 pl-1.5 bg-white rounded-r-md clip-left">
+                ₹{old_price.toFixed(0)}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={handleAddToCart}
+            disabled={!currentUser || cartLoading}
+            className="bg-green-600 text-white text-xs font-semibold px-5 shrink-1 rounded-full"
+          >
+            {cartAdded ? "✔️" : "ADD"}
+          </button>
+        </div>
+      </div>
+    </div>
+  ); // mobile view
 
   return (
     <div className="product-item group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col min-h-[400px]">
@@ -174,10 +249,10 @@ const ProductItem = ({ product }) => {
         )}
 
         <Link to={`/product/${id}`} className="block h-full">
-          <img 
-            src={image} 
-            alt={name} 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+          <img
+            src={image}
+            alt={name}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = 'https://placehold.co/300x300?text=Product';
@@ -198,7 +273,7 @@ const ProductItem = ({ product }) => {
           </Tooltip>
           <Tooltip title={cartAdded ? "Added!" : "Add to cart"} placement="left">
             <span>
-              <StyledIconButton 
+              <StyledIconButton
                 aria-label="add-to-cart"
                 onClick={handleAddToCart}
                 disabled={cartLoading || !currentUser}
@@ -216,16 +291,16 @@ const ProductItem = ({ product }) => {
         {/* Category/Subcategory */}
         <div className="category mb-2 flex-shrink-0">
           {subcategoryName ? (
-            <Link 
-              to={`/productListing?subcategory=${encodeURIComponent(subcategoryName)}&category=${encodeURIComponent(categoryName)}`} 
+            <Link
+              to={`/productListing?subcategory=${encodeURIComponent(subcategoryName)}&category=${encodeURIComponent(categoryName)}`}
               className="text-xs text-gray-500 hover:text-blue-600 transition-colors inline-block truncate max-w-full"
               title={subcategoryName}
             >
               {subcategoryName.charAt(0).toUpperCase() + subcategoryName.slice(1)}
             </Link>
           ) : (
-            <Link 
-              to={`/productListing?category=${encodeURIComponent(categoryName)}`} 
+            <Link
+              to={`/productListing?category=${encodeURIComponent(categoryName)}`}
               className="text-xs text-gray-500 hover:text-blue-600 transition-colors inline-block truncate max-w-full"
               title={categoryName}
             >
@@ -253,8 +328,8 @@ const ProductItem = ({ product }) => {
             )}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            {oldPrice && (
-              <span className="text-gray-500 line-through text-sm">₹{oldPrice.toFixed(2)}</span>
+            {old_price != 0 && old_price!= undefined && old_price!= null && (
+              <span className="text-gray-500 line-through text-sm">₹{old_price.toFixed(2)}</span>
             )}
             <span className="text-red-600 font-bold text-base">₹{price.toFixed(2)}</span>
           </div>

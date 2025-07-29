@@ -264,11 +264,11 @@ export const Home = () => {
       <FlashSale />
 
       {/* Popular Products Section */}
-      <section className="bg-white py-4 mt-0">
+      <section className="bg-white sm:!py-10 !py-0 mt-0">
         <div className="container px-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex-1">
-              <h2 className="text-xl sm:text-2xl font-semibold mb-1">
+              <h2 className="text-xl sm:text-2xl font-semibold mb-1 mt-5">
                 Popular Products
               </h2>
             </div>
@@ -279,7 +279,7 @@ export const Home = () => {
 
           <ProductsSlider
             products={popularProducts}
-            slidesPerViewMobile={1.2}
+            slidesPerViewMobile={2}
             slidesPerViewTablet={2.5}
             slidesPerViewDesktop={4}
             slidesPerViewLarge={5}
@@ -288,15 +288,15 @@ export const Home = () => {
       </section>
 
       {/* Latest Products Section */}
-      <section className="py-4 bg-white">
+      <section className="sm:!py-10 !py-0  bg-white">
         <div className="container px-4">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between ">
             <h2 className="text-xl sm:text-2xl font-semibold">
               Latest Products
             </h2>
             <a
               href="/productListing"
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-blue-600 items-center flex align-middle hover:underline"
             >
               View All
             </a>
@@ -304,7 +304,7 @@ export const Home = () => {
 
           <ProductsSlider
             products={newProducts}
-            slidesPerViewMobile={1.2}
+            slidesPerViewMobile={2}
             slidesPerViewTablet={2.5}
             slidesPerViewDesktop={4}
             slidesPerViewLarge={5}
@@ -344,15 +344,15 @@ export const Home = () => {
       <VideoBannerSlider/>
 
       {/* Featured Products Section */}
-      <section className="py-4 bg-white">
+      <section className="sm:!py-10 !py-0  bg-white">
         <div className="container px-4">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between">
             <h2 className="text-xl sm:text-2xl font-semibold">
               Featured Products
             </h2>
             <a
               href="/productListing"
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-blue-600 hover:underline items-center flex align-middle"
             >
               View All
             </a>
@@ -360,7 +360,7 @@ export const Home = () => {
 
           <ProductsSlider
             products={featuredProducts}
-            slidesPerViewMobile={1.2}
+            slidesPerViewMobile={2}
             slidesPerViewTablet={2.5}
             slidesPerViewDesktop={4}
             slidesPerViewLarge={5}
@@ -372,15 +372,15 @@ export const Home = () => {
         ({ key, label, products }, index) =>
           products.length > 0 && (
             <React.Fragment key={key}>
-              <section className="py-4 bg-white">
+              <section className="sm:!py-10 !py-0  bg-white">
                 <div className="container px-4">
-                  <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between">
                     <h2 className="text-xl sm:text-2xl font-semibold">
                       {label}
                     </h2>
                     <a
                       href="/productListing"
-                      className="text-sm text-blue-600 hover:underline"
+                      className="text-sm text-blue-600 hover:underline text-center flex items-center align-middle"
                     >
                       View All
                     </a>
@@ -388,7 +388,7 @@ export const Home = () => {
 
                   <ProductsSlider
                     products={products}
-                    slidesPerViewMobile={1.2}
+                    slidesPerViewMobile={2}
                     slidesPerViewTablet={2.5}
                     slidesPerViewDesktop={4}
                     slidesPerViewLarge={5}
