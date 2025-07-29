@@ -279,7 +279,7 @@ export const Home = () => {
 
           <ProductsSlider
             products={popularProducts}
-            slidesPerViewMobile={2}
+            slidesPerViewMobile={2.5}
             slidesPerViewTablet={2.5}
             slidesPerViewDesktop={4}
             slidesPerViewLarge={5}
@@ -304,7 +304,7 @@ export const Home = () => {
 
           <ProductsSlider
             products={newProducts}
-            slidesPerViewMobile={2}
+            slidesPerViewMobile={2.5}
             slidesPerViewTablet={2.5}
             slidesPerViewDesktop={4}
             slidesPerViewLarge={5}
@@ -360,7 +360,7 @@ export const Home = () => {
 
           <ProductsSlider
             products={featuredProducts}
-            slidesPerViewMobile={2}
+            slidesPerViewMobile={2.5}
             slidesPerViewTablet={2.5}
             slidesPerViewDesktop={4}
             slidesPerViewLarge={5}
@@ -388,7 +388,7 @@ export const Home = () => {
 
                   <ProductsSlider
                     products={products}
-                    slidesPerViewMobile={2}
+                    slidesPerViewMobile={2.5}
                     slidesPerViewTablet={2.5}
                     slidesPerViewDesktop={4}
                     slidesPerViewLarge={5}

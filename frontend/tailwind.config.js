@@ -10,6 +10,11 @@ export default {
       backgroundColor: {
         primary: "orange",
       },
+       screens: {
+        'xs': '325px',
+        'xsm': '370px',
+        'sm2': '425px',
+      },
     },
   },
   plugins: [

@@ -184,7 +184,7 @@ const ProductItem = ({ product }) => {
 
   /* Mobile Product Card */
   if (isMobile) return (
-    <div className="w-[170px] h-[260px] bg-white rounded-xl shadow-lg flex flex-col">
+    <div className=" xs:w-[110px] xsm:w-[120px] sm2:w-[150px] h-[260px] bg-white rounded-xl shadow-lg flex flex-col">
       <div className="relative w-full h-[130px] rounded-t-md overflow-hidden bg-green-200 flex items-center justify-center">
         <Link to={`/product/${id}`} className="">
           <img
@@ -212,25 +212,25 @@ const ProductItem = ({ product }) => {
         </div>
       </div>
 
-      <div className="mt-2 flex flex-col justify-between flex-1 p-1.5">
+      <div className="mt-2 flex flex-col justify-between flex-1 p-1">
         <div>
-          <h3 className="text-[13px] font-medium line-clamp-2">{name}</h3>
+          <h3 className="text-xs line-clamp-2">{name}</h3>
           {/* <p className="text-xs text-gray-500 mt-1">1 Variant</p> */}
         </div>
 
-        <div className="mt-2 flex items-center justify-between">
-          <div className="flex align-middle justify-center text-[13px] bg-yellow-300 px-0.5 py-0.5 rounded-lg">
+        <div className="mt-2 flex  items-center justify-between">
+          <div className="justify-center text-[13px] bg-yellow-300 px-0.5 py-0.5 rounded-lg">
             <span className="text-black font-semibold mr-1">₹{price.toFixed(0)}</span>
             {old_price != 0 && old_price != undefined && old_price != null  && (
-              <span className="text-gray-800 line-through text-[11px] py-0.5 px-0.5 pl-1.5 bg-white rounded-r-md clip-left">
+              <p className="text-gray-800 line-through text-[11px] py-0.5 px-0.5 pl-1.5 bg-white rounded-r-md ">
                 ₹{old_price.toFixed(0)}
-              </span>
+              </p>
             )}
           </div>
           <button
             onClick={handleAddToCart}
             disabled={!currentUser || cartLoading}
-            className="bg-green-600 text-white text-xs font-semibold px-5 shrink-1 rounded-full"
+            className="bg-green-600 text-white text-xs text-center px-5 font-semibold rounded-full"
           >
             {cartAdded ? "✔️" : "ADD"}
           </button>

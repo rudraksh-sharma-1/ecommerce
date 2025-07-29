@@ -56,7 +56,7 @@ const ProductsSlider = ({
       <div className="relative">
         <Swiper
           slidesPerView={slidesPerViewMobile}
-          spaceBetween={16}
+          spaceBetween={12}
           navigation={showNavigation && !isMobile}
           pagination={showPagination ? {
             clickable: true,
