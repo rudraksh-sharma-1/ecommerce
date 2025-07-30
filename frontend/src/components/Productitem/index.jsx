@@ -215,8 +215,8 @@ const ProductItem = ({ product }) => {
 
       <div className="mt-2 flex flex-col justify-between flex-1 p-1">
         <div>
-          <h3 className="text-xs line-clamp-2">{name}</h3>
-          {uom ? <p>{uom}</p> : <p className="text-xs text-gray-500 mt-1">1 Variant</p>}
+          <h3 className="text-xs line-clamp-2 mb-3">{name}</h3>
+          {uom ? <p className='text-xs text-gray-500 mt-1'>{uom}</p> : <p className="text-xs text-gray-500 mt-1">1 Variant</p>}
         </div>
 
         <div className="mt-2 flex items-center justify-between">
