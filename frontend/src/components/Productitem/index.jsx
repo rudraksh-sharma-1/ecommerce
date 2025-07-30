@@ -112,15 +112,15 @@ const ProductItem = ({ product }) => {
   };
 
   const handleAddToCart = async () => {
-     if (!currentUser) {
-    alert("Please login to add items to cart.");
-    return;
-  }
+    if (!currentUser) {
+      alert("Please login to add items to cart.");
+      return;
+    }
 
-  if (!product || !product.id) {
-    /* alert("Product information is missing."); */
-    return;
-  }
+    if (!product || !product.id) {
+      /* alert("Product information is missing."); */
+      return;
+    }
     setCartLoading(true);
     try {
       const { success, error, cartItem } = await addToCart(currentUser.id, product.id, 1);
@@ -164,12 +164,13 @@ const ProductItem = ({ product }) => {
     category,
     subcategories,
     price,
-    old_price,  
-    rating,       
+    old_price,
+    rating,
     reviewCount,
     discount,
     image,
-    description
+    description,
+    uom
   } = product || defaultProduct;
   /* console.log("Product data:", product); */
 
@@ -203,10 +204,10 @@ const ProductItem = ({ product }) => {
           </span>
         )} */}
 
-        { discount != 0 && discount != null && discount != undefined &&
+        {discount != 0 && discount != null && discount != undefined &&
           <div className="absolute top-0 left-0 bg-red-600 text-white text-xs font-bold px-1 py-[2px] rounded-sm">
-          {product.discount}% off
-        </div>}
+            {product.discount}% off
+          </div>}
         <div className="absolute top-0 right-0 bg-white text-[10px] font-semibold px-2 py-[1px] rounded-md shadow-lg border z-10">
           <span className="text-green-600">{rating}</span> ★
         </div>
@@ -215,25 +216,27 @@ const ProductItem = ({ product }) => {
       <div className="mt-2 flex flex-col justify-between flex-1 p-1">
         <div>
           <h3 className="text-xs line-clamp-2">{name}</h3>
-          {/* <p className="text-xs text-gray-500 mt-1">1 Variant</p> */}
+          {uom ? <p>{uom}</p> : <p className="text-xs text-gray-500 mt-1">1 Variant</p>}
         </div>
 
-        <div className="mt-2 flex  items-center justify-between">
+        <div className="mt-2 flex items-center justify-between">
           <div className="justify-center text-[13px] bg-yellow-300 px-0.5 py-0.5 rounded-lg">
             <span className="text-black font-semibold mr-1">₹{price.toFixed(0)}</span>
-            {old_price != 0 && old_price != undefined && old_price != null  && (
-              <p className="text-gray-800 line-through text-[11px] py-0.5 px-0.5 pl-1.5 bg-white rounded-r-md ">
+            {old_price != 0 && old_price != undefined && old_price != null && (
+              <p className="text-gray-800 line-through text-[11px] py-0.5 px-0.5 pl-1.5 bg-white rounded-md ">
                 ₹{old_price.toFixed(0)}
               </p>
             )}
           </div>
-          <button
-            onClick={handleAddToCart}
-            disabled={!currentUser || cartLoading}
-            className="bg-green-600 text-white text-xs text-center px-5 font-semibold rounded-full"
-          >
-            {cartAdded ? "✔️" : "ADD"}
-          </button>
+         <button
+    onClick={handleAddToCart}
+    disabled={!currentUser || cartLoading}
+    className="bg-green-200 text-black text-[10px] px-3 py-0 h-[16px] rounded-2xl leading-none flex items-center justify-center"
+>
+    {cartAdded ? "✔️" : "ADD"}
+</button>
+
+
         </div>
       </div>
     </div>
@@ -328,7 +331,7 @@ const ProductItem = ({ product }) => {
             )}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            {old_price != 0 && old_price!= undefined && old_price!= null && (
+            {old_price != 0 && old_price != undefined && old_price != null && (
               <span className="text-gray-500 line-through text-sm">₹{old_price.toFixed(2)}</span>
             )}
             <span className="text-red-600 font-bold text-base">₹{price.toFixed(2)}</span>

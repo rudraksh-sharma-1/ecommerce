@@ -112,33 +112,34 @@ export const Home = () => {
               selectedAddress.latitude,
               selectedAddress.longitude
             );
-        } else {
+            /* console.log("Selected Address:", selectedAddress); */
+          } else {
+            productFetchFn = getAllProducts;
+          }
+        } catch (err) {
+          console.error("Error determining product fetch method:", err);
           productFetchFn = getAllProducts;
         }
-      } catch (err) {
-        console.error("Error determining product fetch method:", err);
-        productFetchFn = getAllProducts;
-      }
-
-      const [
-        { success: prodSuccess, products: prodData },
-        { success: catSuccess, categories: catData },
-        { success: banSuccess, banners: banData },
-      ] = await Promise.all([
-        productFetchFn(),
-        getAllCategories(),
-        getAllBanners(),
-      ]);
-
-      setProducts(
-        prodSuccess && prodData
+        
+        const [
+          { success: prodSuccess, products: prodData },
+          { success: catSuccess, categories: catData },
+          { success: banSuccess, banners: banData },
+        ] = await Promise.all([
+          productFetchFn(),
+          getAllCategories(),
+          getAllBanners(),
+        ]);
+        setProducts(
+          prodSuccess && prodData
           ? prodData.map((p) => ({ ...p, id: p.id || p.product_id }))
           : []
-      );
-      setCategories(catSuccess && catData ? catData : []);
-      setBanners(banSuccess && banData ? banData : []);
-      setLoading(false);
-    }
+        );
+        /* console.log("Fetching nearby products using address:", products); */
+        setCategories(catSuccess && catData ? catData : []);
+        setBanners(banSuccess && banData ? banData : []);
+        setLoading(false);
+      }
 
     fetchAllData();
   }, [selectedAddress]);
@@ -277,6 +278,7 @@ export const Home = () => {
             </div>
           </div>
 
+          {/* {console.log("Popular Products:", popularProducts)} */}
           <ProductsSlider
             products={popularProducts}
             slidesPerViewMobile={2.5}

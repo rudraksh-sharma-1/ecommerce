@@ -107,8 +107,9 @@ const ProductsPage = () => {
     seasonal_product: false,
     international_product: false,
     top_sale: false,
-    is_global:false,
+    is_global: false,
     category: "",
+    uom: "",
   });
   const itemsPerPage = 10;
   const itemsPerLoad = 10;
@@ -405,14 +406,15 @@ const ProductsPage = () => {
       review_count: 0,
       featured: false,
       popular: false,
-      most_orders:false,
-      top_rating:false,
-      limited_product:false,
-      seasonal_product:false,
-      international_product:false,
-      top_sale:false,
-      is_global:false,
+      most_orders: false,
+      top_rating: false,
+      limited_product: false,
+      seasonal_product: false,
+      international_product: false,
+      top_sale: false,
+      is_global: false,
       category: "",
+      uom: "",
     });
     setModalOpen(true);
   };
@@ -624,22 +626,22 @@ const ProductsPage = () => {
             subcategoryFilter ||
             groupFilter ||
             activeFilter) && (
-            <Button
-              variant="light"
-              color="gray"
-              onClick={() => {
-                setSearchQuery("");
-                setCategoryFilter(null);
-                setSubcategoryFilter(null);
-                setGroupFilter(null);
-                setStatusFilter(null);
-                setActivePage(1);
-              }}
-              className="lg:w-auto w-full"
-            >
-              Clear Filters
-            </Button>
-          )}
+              <Button
+                variant="light"
+                color="gray"
+                onClick={() => {
+                  setSearchQuery("");
+                  setCategoryFilter(null);
+                  setSubcategoryFilter(null);
+                  setGroupFilter(null);
+                  setStatusFilter(null);
+                  setActivePage(1);
+                }}
+                className="lg:w-auto w-full"
+              >
+                Clear Filters
+              </Button>
+            )}
         </div>
 
         <div className="overflow-x-auto">
@@ -769,6 +771,12 @@ const ProductsPage = () => {
                   className="text-gray-800 dark:text-gray-200 font-semibold"
                 >
                   Popular
+                </th>
+                <th
+                  style={{ textAlign: "center", padding: "12px 8px" }}
+                  className="text-gray-800 dark:text-gray-200 font-semibold"
+                >
+                  UOM
                 </th>
                 <th
                   style={{ textAlign: "center", padding: "12px 8px" }}
@@ -981,8 +989,8 @@ const ProductsPage = () => {
                         product.stock > 10
                           ? "green"
                           : product.stock > 0
-                          ? "yellow"
-                          : "red"
+                            ? "yellow"
+                            : "red"
                       }
                       variant="light"
                       size="sm"
@@ -1089,6 +1097,15 @@ const ProductsPage = () => {
                     </Badge>
                   </td>
                   <td style={{ textAlign: "center", padding: "8px" }}>
+                    <Badge
+                      color={product.uom ? "orange" : "gray"}
+                      variant="light"
+                      size="sm"
+                    >
+                      {product.uom ? product.uom : "No"}
+                    </Badge>
+                  </td>
+                  <td style={{ textAlign: "center", padding: "8px" }}>
                     <Badge color={product.active ? "green" : "red"} size="sm">
                       {product.active ? "Active" : "Inactive"}
                     </Badge>
@@ -1178,10 +1195,10 @@ const ProductsPage = () => {
             </Text>
             <Text size="sm" color="dimmed" className="mt-2">
               {searchQuery ||
-              categoryFilter ||
-              subcategoryFilter ||
-              groupFilter ||
-              activeFilter
+                categoryFilter ||
+                subcategoryFilter ||
+                groupFilter ||
+                activeFilter
                 ? "Try adjusting your filters or search terms"
                 : 'Click "Add New Product" to get started'}
             </Text>
@@ -1225,7 +1242,7 @@ const ProductsPage = () => {
                   const discountPercent = Math.round(
                     ((updatedProduct.old_price - value) /
                       updatedProduct.old_price) *
-                      100
+                    100
                   );
                   updatedProduct.discount = Math.max(0, discountPercent);
                 }
@@ -1299,64 +1316,63 @@ const ProductsPage = () => {
           {(newProduct.price > 0 ||
             newProduct.old_price > 0 ||
             newProduct.discount > 0) && (
-            <div className="p-5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-700 shadow-sm">
-              <Text
-                size="sm"
-                weight={500}
-                className="mb-4 text-blue-800 dark:text-blue-300"
-              >
-                Pricing Helper
-              </Text>
-              <div className="grid grid-cols-3 gap-4 text-xs">
-                <div className="bg-white dark:bg-gray-800/50 p-3 rounded-md border border-gray-200 dark:border-gray-600">
-                  <Text
-                    color="dimmed"
-                    className="text-gray-600 dark:text-gray-400 font-medium mb-1"
-                  >
-                    Current Price:
-                  </Text>
-                  <Text
-                    weight={600}
-                    className="text-gray-900 dark:text-gray-100 text-sm"
-                  >
-                    ₹{newProduct.price || 0}
-                  </Text>
-                </div>
-                <div className="bg-white dark:bg-gray-800/50 p-3 rounded-md border border-gray-200 dark:border-gray-600">
-                  <Text
-                    color="dimmed"
-                    className="text-gray-600 dark:text-gray-400 font-medium mb-1"
-                  >
-                    Old Price:
-                  </Text>
-                  <Text
-                    weight={600}
-                    className="text-gray-900 dark:text-gray-100 text-sm"
-                  >
-                    ₹{newProduct.old_price || 0}
-                  </Text>
-                </div>
-                <div className="bg-white dark:bg-gray-800/50 p-3 rounded-md border border-gray-200 dark:border-gray-600">
-                  <Text
-                    color="dimmed"
-                    className="text-gray-600 dark:text-gray-400 font-medium mb-1"
-                  >
-                    You Save:
-                  </Text>
-                  <Text
-                    weight={600}
-                    className="text-green-700 dark:text-green-400 text-sm"
-                  >
-                    {newProduct.old_price && newProduct.price
-                      ? `₹${newProduct.old_price - newProduct.price} (${
-                          newProduct.discount
+              <div className="p-5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-700 shadow-sm">
+                <Text
+                  size="sm"
+                  weight={500}
+                  className="mb-4 text-blue-800 dark:text-blue-300"
+                >
+                  Pricing Helper
+                </Text>
+                <div className="grid grid-cols-3 gap-4 text-xs">
+                  <div className="bg-white dark:bg-gray-800/50 p-3 rounded-md border border-gray-200 dark:border-gray-600">
+                    <Text
+                      color="dimmed"
+                      className="text-gray-600 dark:text-gray-400 font-medium mb-1"
+                    >
+                      Current Price:
+                    </Text>
+                    <Text
+                      weight={600}
+                      className="text-gray-900 dark:text-gray-100 text-sm"
+                    >
+                      ₹{newProduct.price || 0}
+                    </Text>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800/50 p-3 rounded-md border border-gray-200 dark:border-gray-600">
+                    <Text
+                      color="dimmed"
+                      className="text-gray-600 dark:text-gray-400 font-medium mb-1"
+                    >
+                      Old Price:
+                    </Text>
+                    <Text
+                      weight={600}
+                      className="text-gray-900 dark:text-gray-100 text-sm"
+                    >
+                      ₹{newProduct.old_price || 0}
+                    </Text>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800/50 p-3 rounded-md border border-gray-200 dark:border-gray-600">
+                    <Text
+                      color="dimmed"
+                      className="text-gray-600 dark:text-gray-400 font-medium mb-1"
+                    >
+                      You Save:
+                    </Text>
+                    <Text
+                      weight={600}
+                      className="text-green-700 dark:text-green-400 text-sm"
+                    >
+                      {newProduct.old_price && newProduct.price
+                        ? `₹${newProduct.old_price - newProduct.price} (${newProduct.discount
                         }%)`
-                      : "₹0 (0%)"}
-                  </Text>
+                        : "₹0 (0%)"}
+                    </Text>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* Category Selection */}
           <div className="space-y-3">
@@ -1365,8 +1381,8 @@ const ProductsPage = () => {
             </Text>
 
             {newProduct.category_id ||
-            newProduct.subcategory_id ||
-            newProduct.group_id ? (
+              newProduct.subcategory_id ||
+              newProduct.group_id ? (
               <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border border-green-200 dark:border-green-700">
                 <div className="flex items-center justify-between mb-3">
                   <Text
@@ -1523,12 +1539,12 @@ const ProductsPage = () => {
                           .toLowerCase()
                           .includes(groupSearchQuery.toLowerCase())
                       ).length === 0 && (
-                        <div className="text-center py-6">
-                          <Text size="sm" color="dimmed">
-                            No groups found matching "{groupSearchQuery}"
-                          </Text>
-                        </div>
-                      )}
+                          <div className="text-center py-6">
+                            <Text size="sm" color="dimmed">
+                              No groups found matching "{groupSearchQuery}"
+                            </Text>
+                          </div>
+                        )}
                     </div>
                   )}
                 </div>
@@ -1585,13 +1601,12 @@ const ProductsPage = () => {
                                 setSelectedSubcategory(null);
                                 setSelectedGroup(null);
                               }}
-                              className={`p-3 rounded-lg cursor-pointer transition-colors text-xs ${
-                                selectedCategory?.id === category.id
+                              className={`p-3 rounded-lg cursor-pointer transition-colors text-xs ${selectedCategory?.id === category.id
                                   ? "bg-blue-500 text-white shadow-sm"
                                   : hoveredCategory?.id === category.id
-                                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-                                  : "hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
-                              }`}
+                                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
+                                    : "hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
+                                }`}
                             >
                               {category.name}
                             </div>
@@ -1639,13 +1654,12 @@ const ProductsPage = () => {
                                   setSelectedSubcategory(subcategory);
                                   setSelectedGroup(null);
                                 }}
-                                className={`p-3 rounded-lg cursor-pointer transition-colors text-xs ${
-                                  selectedSubcategory?.id === subcategory.id
+                                className={`p-3 rounded-lg cursor-pointer transition-colors text-xs ${selectedSubcategory?.id === subcategory.id
                                     ? "bg-indigo-500 text-white shadow-sm"
                                     : hoveredSubcategory?.id === subcategory.id
-                                    ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300"
-                                    : "hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
-                                }`}
+                                      ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300"
+                                      : "hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
+                                  }`}
                               >
                                 {subcategory.name}
                               </div>
@@ -1721,6 +1735,17 @@ const ProductsPage = () => {
               </div>
             )}
           </div>
+
+          
+          <TextInput
+            label="Unit of Measure (UOM)"
+            placeholder="Enter product UOM (e.g., kg, pcs)"
+            minRows={3}
+            value={newProduct.uom || ""}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, uom: e.target.value })
+            }
+          />
 
           <Switch
             label="Active"
@@ -1841,7 +1866,7 @@ const ProductsPage = () => {
             color="orange"
           />
 
-            <TextInput
+          <TextInput
             label="Category Name"
             placeholder="Enter product Category Name"
             minRows={3}
