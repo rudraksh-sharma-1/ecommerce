@@ -169,7 +169,8 @@ const ProductItem = ({ product }) => {
     reviewCount,
     discount,
     image,
-    description
+    description,
+    uom
   } = product || defaultProduct;
 
   // Get subcategory name and category name from the joined data
@@ -201,19 +202,20 @@ const ProductItem = ({ product }) => {
 
       <div className="mt-2 flex flex-col justify-between flex-1">
         <h3 className="text-[13px] font-medium line-clamp-2">{name}</h3>
+        {uom ? <p className='text-xs text-gray-500 mt-1'>{uom}</p> : <p className="text-xs text-gray-500 mt-1">1 Variant</p>}
         <div className="mt-2 flex items-center justify-between">
-          <div className="flex items-center text-[13px] bg-yellow-300 px-1 py-[2px] rounded">
-            <span className="text-black font-semibold mr-1">₹{price.toFixed(0)}</span>
+          <div className="flex justify-evenly items-center text-[15px] w-25  bg-yellow-300 px-1 py-[2px] rounded">
+            <span className="text-black font-semibold w-10 mr-1">₹{price.toFixed(0)}</span>
             {old_price && old_price !== 0 && (
-              <span className="text-gray-800 line-through text-[11px] px-1 pl-2 bg-white rounded-r-sm clip-left">
+              <span className="text-gray-800 line-through w-15 text-[12px] px-1 pl-2 bg-white rounded-r-sm clip-left">
                 ₹{old_price.toFixed(0)}
               </span>
             )}
           </div>
-          <button className="bg-green-600 text-white text-xs font-semibold px-4 rounded-full"
+          <button className="bg-green-600 text-white text-xs font-semibold px-4 mr-5 rounded-full"
             onClick={handleAddToCart}
             disabled={!currentUser || cartLoading}>
-            {cartAdded ? "✔️" :<ShoppingCartIcon style={{ fontSize: "16px" }} />}
+            {cartAdded ? "✔️" : <ShoppingCartIcon style={{ fontSize: "16px" }} />}
           </button>
         </div>
       </div>
