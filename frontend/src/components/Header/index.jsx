@@ -536,10 +536,10 @@ const Header = () => {
               md:mx-0 md:px-4 w-full overflow-hidden whitespace-nowrap md:hidden "
           onClick={() => {setShowModal(true), setModalMode("visibility")}}
         >
-          <Link className="flex items-center space-x-1">
-            <MapPin className="size-5 md:size-4 text-black" />
-            <span className="truncate text-sm flex">
-              Select Delivery Address <ChevronRight size={20} />
+          <Link className="flex items-center align-middle space-x-1">
+            <MapPin className="size-4 md:size-4 text-black" />
+            <span className="truncate text-xs flex">
+              Select Delivery Address <ChevronRight size={16} />
               {selectedAddress ?<span>{selectedAddress.city} {selectedAddress.state} {selectedAddress.postal_code}</span>: <></>}
             </span>
           </Link>
