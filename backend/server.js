@@ -24,7 +24,8 @@ const allowedOrigins = [
   'http://localhost:5173',
   'https://ecommerce-umber-five-95.vercel.app',
   'https://admin-eight-flax.vercel.app',
-  'https://ecommerce-six-brown-12.vercel.app'
+  'https://ecommerce-six-brown-12.vercel.app',
+  'https://www.bigbestmart.com'
 ];
 
 
