@@ -40,7 +40,7 @@ const LocationModal = () => {
       alert("Location Reset")
     } catch (error) {
       alert("Error resetting Location:", error)
-    }finally{
+    } finally {
       setResetLoading(false)
     }
   }
@@ -129,12 +129,8 @@ const LocationModal = () => {
           </div>
         ) : (
           <>
-            {addresses.length === 0 ? (
-              <p className="text-gray-500 text-sm mb-2">
-                No saved addresses found.
-              </p>
-            ) : (
-              addresses.map((addr, idx) => {
+            <div className="flex gap-4 overflow-x-auto scrollbar-hide px-1 py-2">
+              {addresses.map((addr, idx) => {
                 const isSelected =
                   selectedAddress?.id && addr.id === selectedAddress.id;
 
@@ -145,10 +141,10 @@ const LocationModal = () => {
                       setSelectedAddress(addr);
                       setOrderAddress(addr);
                       setCurrentLocationAddress(null);
-                      setLocationcleared(false)
+                      setLocationcleared(false);
                       setShowModal(false);
                     }}
-                    className={`border p-3 rounded-md mb-2 cursor-pointer hover:bg-gray-100 transition ${isSelected ? "bg-gray-200 border-blue-600" : ""
+                    className={`min-w-[47%] border p-3 rounded-md cursor-pointer hover:bg-gray-100 transition shrink-0 ${isSelected ? "bg-gray-200 border-blue-600" : ""
                       }`}
                   >
                     {addr.is_default && (
@@ -156,9 +152,9 @@ const LocationModal = () => {
                         Default Address
                       </p>
                     )}
-                    <p className="font-bold">{addr.address_name}</p>
-                    <p className="text-sm">{addr.street_address}</p>
-                    <p className="text-sm">{addr.state}</p>
+                    <p className="font-bold text-sm">{addr.address_name}</p>
+                    <p className="text-xs">{addr.street_address}</p>
+                    <p className="text-xs">{addr.state}</p>
                     <p className="text-xs text-gray-500">{addr.postal_code}</p>
 
                     {isSelected && (
@@ -168,8 +164,9 @@ const LocationModal = () => {
                     )}
                   </div>
                 );
-              })
-            )}
+              })}
+            </div>
+
 
             <Link
               to="/account"
