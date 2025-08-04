@@ -60,6 +60,10 @@ const ProductListing = () => {
       setLoading(true);
       let productsResult;
 
+      if(selectedAddress===null){
+        productsResult = await getAllProducts();
+      }
+
       const address = selectedAddress;
       const lat = address?.latitude;
       const lon = address?.longitude;

@@ -70,7 +70,8 @@ const Header = () => {
   const userDropdownRef = useRef(null);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth <= 320);
 
-  const { showModal, setShowModal, selectedAddress } = useLocationContext();
+
+  const { showModal, setShowModal, selectedAddress,setModalMode } = useLocationContext();
 
   useEffect(() => {
     const handleResize = () => {
@@ -291,9 +292,9 @@ const Header = () => {
                 <button
                   className="border-0 rounded-lg md:flex items-center text-xs text-black hover:text-blue-700 transition-colors  
              px-2  md:mx-0 md:px-4 w-auto max-w-[160px] overflow-hidden whitespace-nowrap hidden "
-                  onClick={() => setShowModal(true)}
+                  onClick={() => {setShowModal(true), setModalMode("visibility")}}
                 >
-                  <Link to="/" className="flex items-center space-x-1">
+                  <Link className="flex items-center space-x-1">
                     <MapPinned className="size-5 md:size-4" />
                     <span className="truncate text-xs flex">
                       <span className="">Location</span>
@@ -446,7 +447,7 @@ const Header = () => {
                             Refund
                           </Link>
                           <Link
-                            to="/coming-soon?feature=orders"
+                            to="/MyOrders"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             onClick={() => setUserDropdownOpen(false)}
                           >
@@ -533,12 +534,13 @@ const Header = () => {
         <button
           className="border-0 rounded-lg flex items-center text-xs text-blue-700 hover:text-blue-700 transition-colors  
               md:mx-0 md:px-4 w-full overflow-hidden whitespace-nowrap md:hidden "
-          onClick={() => setShowModal(true)}
+          onClick={() => {setShowModal(true), setModalMode("visibility")}}
         >
           <Link className="flex items-center space-x-1">
             <MapPin className="size-5 md:size-4 text-black" />
             <span className="truncate text-sm flex">
               Select Delivery Address <ChevronRight size={20} />
+              {selectedAddress ?<span>{selectedAddress.city} {selectedAddress.state} {selectedAddress.postal_code}</span>: <></>}
             </span>
           </Link>
         </button>

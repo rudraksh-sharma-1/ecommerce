@@ -93,11 +93,12 @@ const AddressForm = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                House/Building Number
+                House/Building Number <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={formData.house_number}
+                required
                 onChange={handleChange("house_number")}
                 placeholder="House/Building Number"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
@@ -133,11 +134,12 @@ const AddressForm = ({
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Locality
+                Locality <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={formData.locality}
+                required
                 onChange={handleChange("locality")}
                 placeholder="Locality/Area/Neighborhood"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
@@ -148,11 +150,12 @@ const AddressForm = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Area
+                Area <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={formData.area}
+                required
                 onChange={handleChange("area")}
                 placeholder="Area"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"

@@ -273,9 +273,9 @@ export const Home = () => {
                 Popular Products
               </h2>
             </div>
-            <div className="w-full md:w-auto md:flex-1">
+            {/* <div className="w-full md:w-auto md:flex-1">
               <ProductTabs />
-            </div>
+            </div> */}
           </div>
 
           {/* {console.log("Popular Products:", popularProducts)} */}

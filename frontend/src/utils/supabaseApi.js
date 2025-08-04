@@ -1,5 +1,4 @@
 import supabase from "./supabase.ts";
-
 //Video Banner
 // Get all video banners
 
@@ -147,9 +146,8 @@ export async function createPrintRequestWithEnquiry({
     }
 
     // 2. Create corresponding enquiry for chat functionality
-    const enquiryMessage = `Custom printing request for ${productType}\n\nDetails:\n- Size: ${size}\n- Color: ${color}\n- Quantity: ${quantity}\n- Position: ${position}\n- Estimated Price: ₹${
-      totalPrice || 0
-    }\n\nImage: ${imageUrl || "No image uploaded"}`;
+    const enquiryMessage = `Custom printing request for ${productType}\n\nDetails:\n- Size: ${size}\n- Color: ${color}\n- Quantity: ${quantity}\n- Position: ${position}\n- Estimated Price: ₹${totalPrice || 0
+      }\n\nImage: ${imageUrl || "No image uploaded"}`;
 
     const enquiryData = {
       user_id: userId,
@@ -714,38 +712,7 @@ export async function deleteUser(id) {
   return { success: true };
 }
 
-// ORDERS
-export async function getAllOrders() {
-  const { data, error } = await supabase.from("orders").select();
-  if (error) return { success: false, error: error.message };
-  return { success: true, orders: data };
-}
-
-export async function updateOrderStatus(id, status, adminNotes = "") {
-  const { error } = await supabase
-    .from("orders")
-    .update({ status, adminNotes })
-    .eq("id", id);
-  if (error) return { success: false, error: error.message };
-  return { success: true };
-}
-
 // --- CART MANAGEMENT ---
-export async function getCartItems(user_id) {
-  const { data, error } = await supabase
-    .from("cart_items")
-    .select("id, product_id, quantity, added_at, products(*)")
-    .eq("user_id", user_id);
-  if (error) return { success: false, error: error.message };
-  // Flatten product data for easier use
-  const cartItems = (data || []).map((item) => ({
-    ...item.products,
-    cart_item_id: item.id,
-    quantity: item.quantity,
-    added_at: item.added_at,
-  }));
-  return { success: true, cartItems };
-}
 
 export async function addToCart(user_id, product_id, quantity = 1) {
   // Upsert: if item exists, update quantity; else insert
@@ -754,7 +721,7 @@ export async function addToCart(user_id, product_id, quantity = 1) {
     .select("id, quantity")
     .eq("user_id", user_id)
     .eq("product_id", product_id)
-    .single();
+    .maybeSingle(); // Use maybeSingle to avoid 406 if not found
   if (findError && findError.code !== "PGRST116")
     return { success: false, error: findError.message };
   if (existing) {
@@ -779,25 +746,45 @@ export async function addToCart(user_id, product_id, quantity = 1) {
   }
 }
 
-export async function updateCartItem(cart_item_id, quantity) {
-  const { data, error } = await supabase
-    .from("cart_items")
-    .update({ quantity })
-    .eq("id", cart_item_id)
-    .select()
-    .single();
-  if (error) return { success: false, error: error.message };
-  return { success: true, cartItem: data };
-}
+export const getCartItems = async (user_id) => {
+  try {
+    const res = await axios.get(`https://ecommerce-kghp.onrender.com/api/cart/${user_id}`);
+    return { success: true, cartItems: res.data.cartItems };
+  } catch (err) {
+    console.error("Error fetching cart items:", err);
+    return { success: false, cartItems: [], error: err };
+  }
+};
 
-export async function removeCartItem(cart_item_id) {
-  const { error } = await supabase
-    .from("cart_items")
-    .delete()
-    .eq("id", cart_item_id);
-  if (error) return { success: false, error: error.message };
-  return { success: true };
-}
+export const updateCartItem = async (cart_item_id, quantity) => {
+  try {
+    const res = await axios.put(`https://ecommerce-kghp.onrender.com/api/cart/update/${cart_item_id}`, { quantity });
+    return { success: true, updated: res.data };
+  } catch (err) {
+    console.error("Error updating cart item:", err);
+    return { success: false, error: err };
+  }
+};
+
+export const removeCartItem = async (cart_item_id) => {
+  try {
+    const res = await axios.delete(`https://ecommerce-kghp.onrender.com/api/cart/remove/${cart_item_id}`);
+    return { success: true, removed: res.data };
+  } catch (err) {
+    console.error("Error removing cart item:", err);
+    return { success: false, error: err };
+  }
+};
+
+export const clearCart = async (user_id) => {
+  try {
+    const res = await axios.delete(`https://ecommerce-kghp.onrender.com/api/cart/clear/${user_id}`);
+    return { success: true, cleared: res.data };
+  } catch (err) {
+    console.error("Error clearing cart:", err);
+    return { success: false, error: err };
+  }
+};
 
 // --- WISHLIST MANAGEMENT ---
 export async function getWishlistItems(user_id) {
@@ -849,16 +836,41 @@ export async function removeFromWishlist(wishlist_item_id) {
   return { success: true };
 }
 
-export async function clearCart(user_id) {
+/* export async function clearCart(user_id) {
   const { error } = await supabase
     .from("cart_items")
     .delete()
     .eq("user_id", user_id);
   if (error) return { success: false, error: error.message };
   return { success: true };
-}
+} */
 
 // --- ORDER MANAGEMENT ---
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'https://ecommerce-kghp.onrender.com/api/order';
+// ORDERS
+export async function getAllOrders() {
+  try {
+    const res = await axios.get(`${BASE_URL}/all`);
+    return res.data;
+  } catch (err) {
+    return { success: false, error: err.response?.data?.error || err.message };
+  }
+}
+
+// 2. Update Order Status (Admin)
+export async function updateOrderStatus(id, status, adminNotes = "") {
+  try {
+    const res = await axios.put(`${BASE_URL}/status/${id}`, {
+      status,
+      adminnotes: adminNotes,
+    });
+    return res.data;
+  } catch (err) {
+    return { success: false, error: err.response?.data?.error || err.message };
+  }
+}
+
+// 3. Place Order (Flat address)
 export async function placeOrder(
   user_id,
   items,
@@ -868,40 +880,23 @@ export async function placeOrder(
   address,
   payment_method
 ) {
-  // 1. Insert order
-  const { data: order, error: orderError } = await supabase
-    .from("orders")
-    .insert([{ user_id, subtotal, shipping, total, address, payment_method }])
-    .select()
-    .single();
-  if (orderError) return { success: false, error: orderError.message };
-  // 2. Insert order items
-  const orderItemsToInsert = items.map((item) => ({
-    order_id: order.id,
-    product_id: item.product_id,
-    quantity: item.quantity,
-    price: item.price,
-  }));
-  const { error: itemsError } = await supabase
-    .from("order_items")
-    .insert(orderItemsToInsert);
-  if (itemsError) return { success: false, error: itemsError.message };
-  // 3. Clear user's cart
-  await clearCart(user_id);
-  return { success: true, order };
+  try {
+    const res = await axios.post(`${BASE_URL}/place`, {
+      user_id,
+      items,
+      subtotal,
+      shipping,
+      total,
+      address,
+      payment_method,
+    });
+    return res.data;
+  } catch (err) {
+    return { success: false, error: err.response?.data?.error || err.message };
+  }
 }
 
-/**
- * Place order with detailed address information
- * @param {string} user_id - User ID
- * @param {Array} items - Order items
- * @param {number} subtotal - Subtotal amount
- * @param {number} shipping - Shipping cost
- * @param {number} total - Total amount
- * @param {Object} detailedAddress - Detailed address object
- * @param {string} payment_method - Payment method
- * @returns {Promise<{success: boolean, order?: object, error?: string}>}
- */
+// 4. Place Order with Detailed Address
 export async function placeOrderWithDetailedAddress(
   user_id,
   items,
@@ -909,83 +904,50 @@ export async function placeOrderWithDetailedAddress(
   shipping,
   total,
   detailedAddress,
-  payment_method
+  payment_method,
+  razorpay_order_id,
+  razorpay_payment_id,
+  razorpay_signature
 ) {
-  // Convert detailed address to a formatted string for the order
-  const addressString = [
-    detailedAddress.houseNumber && detailedAddress.streetAddress
-      ? `${detailedAddress.houseNumber} ${detailedAddress.streetAddress}`
-      : detailedAddress.streetAddress,
-    detailedAddress.suiteUnitFloor,
-    detailedAddress.locality,
-    detailedAddress.area,
-    detailedAddress.city,
-    detailedAddress.state,
-    detailedAddress.postalCode,
-    detailedAddress.country || "India",
-    detailedAddress.landmark ? `Near ${detailedAddress.landmark}` : null,
-  ]
-    .filter(Boolean)
-    .join(", ");
-
-  // 1. Insert order with detailed address fields
-  const orderData = {
-    user_id,
-    subtotal,
-    shipping,
-    total,
-    address: addressString,
-    payment_method,
-    // Store detailed address fields separately for better querying
-    shipping_house_number: detailedAddress.houseNumber,
-    shipping_street_address: detailedAddress.streetAddress,
-    shipping_suite_unit_floor: detailedAddress.suiteUnitFloor,
-    shipping_locality: detailedAddress.locality,
-    shipping_area: detailedAddress.area,
-    shipping_city: detailedAddress.city,
-    shipping_state: detailedAddress.state,
-    shipping_postal_code: detailedAddress.postalCode,
-    shipping_country: detailedAddress.country || "India",
-    shipping_landmark: detailedAddress.landmark,
-  };
-
-  const { data: order, error: orderError } = await supabase
-    .from("orders")
-    .insert([orderData])
-    .select()
-    .single();
-
-  if (orderError) return { success: false, error: orderError.message };
-
-  // 2. Insert order items
-  const orderItemsToInsert = items.map((item) => ({
-    order_id: order.id,
-    product_id: item.product_id,
-    quantity: item.quantity,
-    price: item.price,
-  }));
-
-  const { error: itemsError } = await supabase
-    .from("order_items")
-    .insert(orderItemsToInsert);
-
-  if (itemsError) return { success: false, error: itemsError.message };
-
-  // 3. Clear user's cart
-  await clearCart(user_id);
-
-  return { success: true, order };
+  try {
+    const res = await axios.post(`${BASE_URL}/place-detailed`, {
+      user_id,
+      items,
+      subtotal,
+      shipping,
+      total,
+      detailedAddress,
+      payment_method,
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature
+    });
+    return res.data;
+  } catch (err) {
+    return { success: false, error: err.response?.data?.error || err.message };
+  }
 }
 
+// 5. Get Orders for a User
 export async function getUserOrders(user_id) {
-  const { data, error } = await supabase
-    .from("orders")
-    .select("*, order_items(*, products(*))")
-    .eq("user_id", user_id)
-    .order("created_at", { ascending: false });
-  if (error) return { success: false, error: error.message };
-  return { success: true, orders: data };
+  try {
+    const res = await axios.get(`${BASE_URL}/user/${user_id}`);
+    return res.data;
+  } catch (err) {
+    return { success: false, error: err.response?.data?.error || err.message };
+  }
 }
+
+export async function getOrderItemsByOrderId(order_id) {
+  try {
+    const res = await axios.get(`https://ecommerce-kghp.onrender.com/api/orderItems/${order_id}`)
+    return res.data
+  }
+  catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
 
 // --- ENQUIRY MANAGEMENT ---
 export async function createEnquiry({

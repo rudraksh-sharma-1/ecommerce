@@ -1349,7 +1349,7 @@ const CategoriesBar = () => {
           }}
         >
           <User size={22} />
-          <span style={{ fontSize: "11px" }}>My Account</span>
+          <span style={{ fontSize: "11px" }}>Account</span>
         </button>
       </div>
 

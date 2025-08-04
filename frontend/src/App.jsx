@@ -21,6 +21,7 @@ import MobileBannerCarousel from './components/MobileBannerCarousel/MobileBanner
 import MobileCategoriesBar from "./components/CategoriesBar/MobileCategoriesBar.jsx";
 
 import CustomPrinting from "./Pages/CustomPrinting/index.jsx";
+import MyOrders from "./Pages/MyOrders/MyOrders.jsx";
 
 import Account from "./Pages/Account";
 import Wishlist from "./Pages/Wishlist";
@@ -135,6 +136,11 @@ function App() {
                     element={<TermsOfService />}
                   />
                   <Route path={"/faq"} exact={true} element={<FAQ />} />
+                  <Route
+                    path={"/MyOrders"}
+                    exact={true}
+                    element={<MyOrders />}
+                  />
                   <Route
                     path={"/BusinessPartner"}
                     exact={true}
