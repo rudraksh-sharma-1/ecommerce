@@ -24,7 +24,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'https://ecommerce-umber-five-95.vercel.app',
   'https://admin-eight-flax.vercel.app',
-  'http://192.168.1.2:5173'
+  'https://ecommerce-umber-five-95.vercel.app'
 ];
 
 
