@@ -6,18 +6,18 @@ const AdminOrders = () => {
   const [expanded, setExpanded] = useState(null);
 
   const fetchOrders = async () => {
-    const res = await axios.get("https://ecommerce-kghp.onrender.com/api/order/all");
+    const res = await axios.get("https://ecommerce-wvkv.onrender.com/api/order/all");
     setOrders(res.data.orders || []);
   };
 
   const deleteOrder = async (order_id) => {
     if (!window.confirm("Are you sure you want to delete this order?")) return;
-    await axios.delete(`https://ecommerce-kghp.onrender.com/api/order/delete/${order_id}`);
+    await axios.delete(`https://ecommerce-wvkv.onrender.com/api/order/delete/${order_id}`);
     fetchOrders(); // Refresh list
   };
 
   const updateOrder = async (id, status, adminnotes) => {
-    await axios.put(`https://ecommerce-kghp.onrender.com/api/order/status/${id}`, { status, adminnotes });
+    await axios.put(`https://ecommerce-wvkv.onrender.com/api/order/status/${id}`, { status, adminnotes });
     fetchOrders(); // Refresh
   };
 
@@ -84,7 +84,7 @@ const OrderItems = ({ orderId, onUpdate, status, adminnotes }) => {
   const [form, setForm] = useState({ status, adminnotes });
 
   useEffect(() => {
-    axios.get(`https://ecommerce-kghp.onrender.com/api/orderItems/order/${orderId}`).then((res) => {
+    axios.get(`https://ecommerce-wvkv.onrender.com/api/orderItems/order/${orderId}`).then((res) => {
       setItems(res.data.items || []);
     });
   }, [orderId]);

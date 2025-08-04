@@ -67,7 +67,7 @@ const LocationModal = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://ecommerce-kghp.onrender.com/api/locationsroute/get-coordinates?pincode=${pincode}`
+        `https://ecommerce-wvkv.onrender.com/api/locationsroute/get-coordinates?pincode=${pincode}`
       );
       const { lat, lng, state } = res.data;
 
