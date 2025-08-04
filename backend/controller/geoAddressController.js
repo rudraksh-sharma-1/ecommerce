@@ -1,8 +1,6 @@
 import axios from "axios";
 import { supabase } from "../config/supabaseClient.js";
 
-
-
 export const createGeoAddress = async (req, res) => {
   try {
     const {

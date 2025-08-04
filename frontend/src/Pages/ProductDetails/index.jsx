@@ -61,9 +61,11 @@ const ProductDetails = () => {
     }
     setCartLoading(true);
     try {
+      const user_id =currentUser.id
+      const product_id =productData.id
       const { success, error } = await addToCart(
-        currentUser.id,
-        productData.id,
+        user_id,
+        product_id,
         quantity
       );
       setCartLoading(false);

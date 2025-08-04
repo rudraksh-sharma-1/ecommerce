@@ -7,13 +7,29 @@ const LocationContext = createContext();
 export const LocationProvider = ({ children }) => {
   const { currentUser } = useAuth();
   const [showModal, setShowModal] = useState(false);
+  const [modalMode, setModalMode] = useState("visibility"); // or "order"
+  const [locationCleared, setLocationcleared] = useState(() => {
+    const stored = localStorage.getItem("locationCleared");
+    return stored === "true"; // string comparison
+  });
   const [selectedAddress, setSelectedAddress] = useState(() => {
     const stored = localStorage.getItem("selectedAddress");
     return stored ? JSON.parse(stored) : null;
   });
 
+  const [orderAddress, setOrderAddress] = useState(() => {
+    const stored = localStorage.getItem("orderAddress");
+    return stored ? JSON.parse(stored) : null;
+  });
+
   const [addresses, setAddresses] = useState([]);
   const [currentLocationAddress, setCurrentLocationAddress] = useState(null); // NEW
+
+  useEffect(() => {
+    if (orderAddress) {
+      localStorage.setItem("orderAddress", JSON.stringify(orderAddress));
+    }
+  }, [orderAddress]);
 
   // ✅ Save selected address to localStorage
   useEffect(() => {
@@ -38,7 +54,7 @@ export const LocationProvider = ({ children }) => {
       setAddresses(addresses);
 
       const defaultAddress = addresses.find((addr) => addr.is_default);
-      if (!selectedAddress && defaultAddress) {
+      if (!selectedAddress && defaultAddress && locationCleared == false) {
         setSelectedAddress(defaultAddress);
       }
     };
@@ -66,14 +82,26 @@ export const LocationProvider = ({ children }) => {
 
             const data = await response.json();
             const result = data?.results?.[0];
+            console.log("OpenCage components:", data?.results?.[0]?.components);
+
             const address = result?.formatted;
+            const components = result?.components || {};
 
             if (address) {
               const locationData = {
-                address,
+                id: null, // no DB id for geolocation
+                house_number: "",
+                street_address: result?.components?.road || "",
+                city: result?.components?.city || result?.components?.town || "",
+                state: result?.components?.state || "",
+                postal_code: result?.components?.postcode || "",
+                country: result?.components?.country || "",
                 latitude,
                 longitude,
+                formatted_address: address,
+                is_geolocation: true
               };
+
 
               setSelectedAddress(locationData);
               setCurrentLocationAddress(address);
@@ -100,11 +128,17 @@ export const LocationProvider = ({ children }) => {
     });
   };
 
+  useEffect(() => {
+    localStorage.setItem("locationCleared", locationCleared.toString());
+  }, [locationCleared]);
+
+
   const clearLocationData = () => {
     setSelectedAddress(null);
-    setAddresses([]);
+    setOrderAddress(null);
     setCurrentLocationAddress(null);
     localStorage.removeItem("selectedAddress");
+    localStorage.removeItem("orderAddress");
   };
 
   return (
@@ -119,7 +153,13 @@ export const LocationProvider = ({ children }) => {
         currentLocationAddress,
         setCurrentLocationAddress,
         useCurrentLocation,
-        clearLocationData, // ✅ Exposed for external use
+        clearLocationData,
+        orderAddress,
+        setOrderAddress, // ✅ Exposed for external use
+        modalMode,
+        setModalMode,
+        locationCleared,
+        setLocationcleared,
       }}
     >
       {children}

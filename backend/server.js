@@ -12,6 +12,11 @@ import warehouseRoute from './routes/warehouseRoute.js'
 import productWarehouseRoute  from './routes/productWarehouseRoutes.js';
 import productsRoute from './routes/productRoutes.js'
 import locationRoute from './routes/locationRoutes.js'
+import cartRoutes from "./routes/cartRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
+import orderItemsRoutes from "./routes/orderItemsRoutes.js"
+import checkCartAvailabilityRoute from './routes/checkCartAvailabilityRoute.js'
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -58,5 +63,10 @@ app.use('/api/warehouse', warehouseRoute);
 app.use('/api/productwarehouse', productWarehouseRoute);
 app.use('/api/productsroute', productsRoute);
 app.use('/api/locationsroute', locationRoute);
+app.use("/api/cart", cartRoutes);
+app.use("/api/order", orderRoutes);
+app.use("/api/orderItems", orderItemsRoutes);
+app.use("/api/check", checkCartAvailabilityRoute);
+app.use("/api/payment", paymentRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
