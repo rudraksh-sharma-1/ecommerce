@@ -25,7 +25,8 @@ const allowedOrigins = [
   'https://ecommerce-umber-five-95.vercel.app',
   'https://admin-eight-flax.vercel.app',
   'https://ecommerce-six-brown-12.vercel.app',
-  'https://www.bigbestmart.com'
+  'https://www.bigbestmart.com',
+  'https://admin-eight-ruddy.vercel.app'
 ];
 
 
