@@ -72,10 +72,9 @@ const AboutUs = () => {
           <h2 className="text-2xl font-semibold mb-8 text-center">Meet Our Team</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
-              { name: 'John Doe', position: 'Founder & CEO', image: 'team-1.jpg' },
-              { name: 'Jane Smith', position: 'Creative Director', image: 'team-2.jpg' },
-              { name: 'Michael Brown', position: 'Head of Operations', image: 'team-3.jpg' },
-              { name: 'Sarah Johnson', position: 'Customer Service Manager', image: 'team-4.jpg' }
+              { name: 'Vikas Jha', position: 'Founder & CEO', image: 'Vikas.jpg' },
+              { name: 'Rahul Mishra', position: 'CTO', image: 'Rahul.jpg' },
+              { name: 'Rudraksh Sharma', position: 'Web developer', image: 'Rudra.jpg' }
             ].map((member, index) => (
               <div key={index} className="bg-white p-4 rounded-lg shadow text-center">
                 <img 
