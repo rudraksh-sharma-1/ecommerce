@@ -31,7 +31,7 @@ const Cart = () => {
       setLoading(true);
       const { success, cartItems, error } = await getCartItems(user_id);
       setCartItems(success && cartItems ? cartItems : []);
-      console.log(cartItems)
+      /* console.log(cartItems) */
       setLoading(false);
     }
     fetchCart();
@@ -213,7 +213,7 @@ const Cart = () => {
         prefill: {
           name: currentUser.name,
           email: currentUser.email,
-          contact: user_phone,
+          contact: currentUser.phone,
         },
         theme: {
           color: "#3f51b5",

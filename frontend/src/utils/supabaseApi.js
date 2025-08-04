@@ -758,7 +758,7 @@ export const getCartItems = async (user_id) => {
 
 export const updateCartItem = async (cart_item_id, quantity) => {
   try {
-    const res = await axios.patch(`https://ecommerce-kghp.onrender.com/api/cart/update/${cart_item_id}`, { quantity });
+    const res = await axios.put(`https://ecommerce-kghp.onrender.com/api/cart/update/${cart_item_id}`, { quantity });
     return { success: true, updated: res.data };
   } catch (err) {
     console.error("Error updating cart item:", err);
