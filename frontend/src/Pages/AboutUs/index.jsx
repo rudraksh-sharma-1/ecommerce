@@ -73,7 +73,7 @@ const AboutUs = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
               { name: 'Vikas Jha', position: 'Founder & CEO', image: 'Vikas.jpg' },
-              { name: 'Rahul Mishra', position: 'CTO', image: 'Rahul.jpg' },
+    
               { name: 'Rudraksh Sharma', position: 'Web developer', image: 'Rudra.jpg' }
             ].map((member, index) => (
               <div key={index} className="bg-white p-4 rounded-lg shadow text-center">
