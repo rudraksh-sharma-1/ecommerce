@@ -53,7 +53,7 @@ const BusinessPartnerSignup = () => {
     }
     try {
       const response = await axios.post(
-        "https://ecommerce-kghp.onrender.com/api/business/signup",
+        "https://ecommerce-wvkv.onrender.com/api/business/signup",
         formData,
         {
           withCredentials: true,

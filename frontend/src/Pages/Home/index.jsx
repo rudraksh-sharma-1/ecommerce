@@ -7,10 +7,8 @@ import Tab from "@mui/material/Tab";
 import { useAuth } from "../../contexts/AuthContext";
 import ProductsSlider from "../../components/ProductsSlider";
 import { useLocationContext } from "../../contexts/LocationContext.jsx";
-import VideoBannerSlider from '../../components/HomeSlider/VideoSlider.jsx'
-import promoImage from '../../../src/assets/mobile-promo.png'
-
-
+import VideoBannerSlider  from '../../components/HomeSlider/VideoSlider.jsx'
+import ProductsNew from "../LastMobileProducts/LastMobileProducts.jsx";
 
 // Import Swiper styles
 import "swiper/css";
@@ -306,9 +304,9 @@ useEffect(() => {
                 Popular Products
               </h2>
             </div>
-            <div className="w-full md:w-auto md:flex-1">
+            {/* <div className="w-full md:w-auto md:flex-1">
               <ProductTabs />
-            </div>
+            </div> */}
           </div>
 
           {/* {console.log("Popular Products:", popularProducts)} */}
@@ -514,6 +512,7 @@ useEffect(() => {
             </React.Fragment>
           )
       )}
+        <ProductsNew/>
     </>
   );
 };

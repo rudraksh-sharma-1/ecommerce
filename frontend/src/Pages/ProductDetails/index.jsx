@@ -61,9 +61,11 @@ const ProductDetails = () => {
     }
     setCartLoading(true);
     try {
+      const user_id =currentUser.id
+      const product_id =productData.id
       const { success, error } = await addToCart(
-        currentUser.id,
-        productData.id,
+        user_id,
+        product_id,
         quantity
       );
       setCartLoading(false);
@@ -198,12 +200,12 @@ const ProductDetails = () => {
   return (
     <>
       {/* Search Bar For mobile Screens */}
-      <div className="mobile-search-bar-container block md:hidden w-full mt-3 px-5 py-3">
+      {/* <div className="mobile-search-bar-container block md:hidden w-full mt-3 px-5 py-3">
         <Search />
-      </div>
+      </div> */}
       {/* this div is only for spacing between search bar and product detail */}
       {/* <div className="mt-5 h-12 md:hidden"></div> */}
-      <div className="py-3 sm:py-5 bg-gray-50">
+      <div className="py-3 sm:py-5 bg-gray-50 mt-5">
         <div className="container px-4">
           <Breadcrumbs aria-label="breadcrumb" className="text-sm mb-4">
             <Link

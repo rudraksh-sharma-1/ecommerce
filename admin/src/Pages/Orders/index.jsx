@@ -1,577 +1,150 @@
-import React, { useState, useEffect } from "react";
-import {
-  Card,
-  Title,
-  Text,
-  Table,
-  Group,
-  Badge,
-  ActionIcon,
-  Button,
-  TextInput,
-  Select,
-  Menu,
-  Modal,
-  Textarea,
-  LoadingOverlay,
-  Alert,
-  Pagination,
-  Avatar,
-  Tooltip,
-} from "@mantine/core";
-import {
-  FaSearch,
-  FaEdit,
-  FaEye,
-  FaCheck,
-  FaTimes,
-  FaBoxOpen,
-  FaTruck,
-  FaMoneyBillWave,
-  FaShippingFast,
-  FaUserAlt,
-  FaBox,
-  FaCartPlus,
-  FaFilter,
-} from "react-icons/fa";
-import { getAllOrders, updateOrderStatus } from '../../utils/supabaseApi'
-import supabase from '../../utils/supabase';
-import { formatDateIST } from '../../utils/dateUtils';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-const orderStatusColors = {
-  pending: "yellow",
-  processing: "blue",
-  shipped: "indigo",
-  delivered: "green",
-  cancelled: "red",
-  refunded: "gray",
-};
-
-const OrdersPage = () => {
+const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [dateFilter, setDateFilter] = useState("");
-  const [activePage, setActivePage] = useState(1);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [statusModalOpen, setStatusModalOpen] = useState(false);
-  const [orderDetailModal, setOrderDetailModal] = useState(false);
-  const [newStatus, setNewStatus] = useState("");
-  const [adminNotes, setAdminNotes] = useState("");
-  const [fetchingCustomer, setFetchingCustomer] = useState(false);
-  const [customerData, setCustomerData] = useState(null);
-  
-  const itemsPerPage = 10;
+  const [expanded, setExpanded] = useState(null);
 
-  // Fetch orders on component mount
+  const fetchOrders = async () => {
+    const res = await axios.get("https://ecommerce-wvkv.onrender.com/api/order/all");
+    setOrders(res.data.orders || []);
+  };
+
+  const deleteOrder = async (order_id) => {
+    if (!window.confirm("Are you sure you want to delete this order?")) return;
+    await axios.delete(`https://ecommerce-wvkv.onrender.com/api/order/delete/${order_id}`);
+    fetchOrders(); // Refresh list
+  };
+
+  const updateOrder = async (id, status, adminnotes) => {
+    await axios.put(`https://ecommerce-wvkv.onrender.com/api/order/status/${id}`, { status, adminnotes });
+    fetchOrders(); // Refresh
+  };
+
   useEffect(() => {
     fetchOrders();
   }, []);
 
-  // Fetch orders from Supabase
-  const fetchOrders = async () => {
-    try {
-      setLoading(true);
-      const result = await getAllOrders();
-      if (result.success) {
-        setOrders(result.orders);
-      } else {
-        setError("Failed to fetch orders");
-      }
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-      setError("An unexpected error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handle status update
-  const handleStatusUpdate = async () => {
-    if (!selectedOrder || !newStatus) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const result = await updateOrderStatus(selectedOrder.id, newStatus, adminNotes);
-      
-      if (result.success) {
-        // Update order in local state
-        setOrders(orders.map(order => {
-          if (order.id === selectedOrder.id) {
-            return { ...order, status: newStatus, adminNotes };
-          }
-          return order;
-        }));
-        
-        setStatusModalOpen(false);
-        setNewStatus("");
-        setAdminNotes("");
-        setSelectedOrder(null);
-      } else {
-        setError("Failed to update order status");
-      }
-    } catch (error) {
-      console.error("Error updating order status:", error);
-      setError("An unexpected error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // View order details and fetch customer data
-  const handleViewOrder = async (order) => {
-    setSelectedOrder(order);
-    setOrderDetailModal(true);
-    
-    if (order.userId) {
-      try {
-        setFetchingCustomer(true);
-        const { data: userData, error: userError } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', order.userId)
-          .single();
-        if (!userError && userData) {
-          setCustomerData(userData);
-        }
-      } catch (error) {
-        console.error("Error fetching customer data:", error);
-      } finally {
-        setFetchingCustomer(false);
-      }
-    }
-  };
-
-  // Filter orders based on search and filters
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = searchQuery === "" ||
-      (order.id && order.id.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (order.customerName && order.customerName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (order.customerEmail && order.customerEmail.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    const matchesStatus = statusFilter === "" || order.status === statusFilter;
-    
-    const matchesDate = dateFilter === "" || 
-      (order.date && (
-        dateFilter === "today" ? 
-          new Date(order.date).toDateString() === new Date().toDateString() : 
-        dateFilter === "week" ? 
-          new Date(order.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) : 
-        dateFilter === "month" ? 
-          new Date(order.date) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : 
-          true
-      ));
-    
-    return matchesSearch && matchesStatus && matchesDate;
-  });
-
-  // Paginate filtered orders
-  const paginatedOrders = filteredOrders.slice(
-    (activePage - 1) * itemsPerPage,
-    activePage * itemsPerPage
-  );
-
-  // Calculate total pages for pagination
-  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
-
   return (
-    <div style={{ position: "relative" }}>
-      <LoadingOverlay visible={loading} />
-      
-      {error && (
-        <Alert color="red" title="Error" onClose={() => setError(null)} mb="md">
-          {error}
-        </Alert>
-      )}
-      
-      <Card shadow="sm" p="lg" radius="md" withBorder>
-        <Card.Section withBorder inheritPadding py="xs">
-          <Group position="apart">
-            <Title order={3}>Orders Management</Title>
-            <Button 
-              variant="subtle"
-              onClick={fetchOrders}
-            >
-              Refresh Orders
-            </Button>
-          </Group>
-        </Card.Section>
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-semibold mb-6">📦 Admin Orders Panel</h1>
 
-        <Group mt="md" mb="md">
-          <TextInput
-            placeholder="Search by order ID or customer..."
-            icon={<FaSearch size={14} />}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.currentTarget.value)}
-            style={{ flex: 1 }}
-          />
-          
-          <Select
-            placeholder="Order Status"
-            clearable
-            data={[
-              { value: "", label: "All Statuses" },
-              { value: "pending", label: "Pending" },
-              { value: "processing", label: "Processing" },
-              { value: "shipped", label: "Shipped" },
-              { value: "delivered", label: "Delivered" },
-              { value: "cancelled", label: "Cancelled" },
-              { value: "refunded", label: "Refunded" }
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-            style={{ width: 150 }}
-          />
-          
-          <Select
-            placeholder="Date"
-            clearable
-            data={[
-              { value: "", label: "All Time" },
-              { value: "today", label: "Today" },
-              { value: "week", label: "This Week" },
-              { value: "month", label: "This Month" }
-            ]}
-            value={dateFilter}
-            onChange={setDateFilter}
-            style={{ width: 150 }}
-          />
-        </Group>
-
-        <Table striped highlightOnHover>
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Customer</th>
-              <th>Date</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedOrders.length > 0 ? (
-              paginatedOrders.map((order) => (
-                <tr key={order.id}>
-                  <td>
-                    <Text weight={500} size="sm">
-                      #{order.id.substring(0, 8)}
-                    </Text>
-                  </td>
-                  <td>
-                    <Group spacing="sm">
-                      <Avatar 
-                        size={30} 
-                        radius="xl" 
-                        src={order.customerAvatar || null}
-                        color="blue"
-                      >
-                        <FaUserAlt size={16} />
-                      </Avatar>
-                      <div>
-                        <Text size="sm" weight={500}>
-                          {order.customerName || "Anonymous"}
-                        </Text>
-                        <Text size="xs" color="dimmed">
-                          {order.customerEmail || "No email"}
-                        </Text>
-                      </div>
-                    </Group>
-                  </td>
-                  <td>
-                    <Text size="sm">{formatDateIST(order.date)}</Text>
-                  </td>
-                  <td>
-                    <Text weight={500} size="sm">
-                      ₹{parseFloat(order.totalAmount || 0).toFixed(2)}
-                    </Text>
-                  </td>
-                  <td>
-                    <Badge 
-                      color={orderStatusColors[order.status] || "gray"}
-                      variant="filled"
-                      size="sm"
-                    >
-                      {order.status || "Unknown"}
-                    </Badge>
-                  </td>
-                  <td>
-                    <Group spacing={8}>
-                      <Tooltip label="View Details">
-                        <ActionIcon 
-                          color="blue" 
-                          variant="light"
-                          onClick={() => handleViewOrder(order)}
-                        >
-                          <FaEye size={16} />
-                        </ActionIcon>
-                      </Tooltip>
-                      <Tooltip label="Update Status">
-                        <ActionIcon 
-                          color="green" 
-                          variant="light"
-                          onClick={() => {
-                            setSelectedOrder(order);
-                            setNewStatus(order.status || "");
-                            setAdminNotes(order.adminNotes || "");
-                            setStatusModalOpen(true);
-                          }}
-                        >
-                          <FaEdit size={16} />
-                        </ActionIcon>
-                      </Tooltip>
-                    </Group>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={6} style={{ textAlign: "center", padding: "20px 0" }}>
-                  <Text color="dimmed">No orders found</Text>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </Table>
-
-        {totalPages > 1 && (
-          <Group position="center" mt="xl">
-            <Pagination
-              total={totalPages}
-              page={activePage}
-              onChange={setActivePage}
-            />
-          </Group>
-        )}
-      </Card>
-
-      {/* Order Status Update Modal */}
-      <Modal
-        opened={statusModalOpen}
-        onClose={() => setStatusModalOpen(false)}
-        title="Update Order Status"
-        size="md"
-      >
-        <div style={{ padding: "10px 0" }}>
-          <Select
-            label="New Status"
-            placeholder="Select new status"
-            data={[
-              { value: "pending", label: "Pending" },
-              { value: "processing", label: "Processing" },
-              { value: "shipped", label: "Shipped" },
-              { value: "delivered", label: "Delivered" },
-              { value: "cancelled", label: "Cancelled" },
-              { value: "refunded", label: "Refunded" }
-            ]}
-            value={newStatus}
-            onChange={setNewStatus}
-            required
-            mb="md"
-          />
-          
-          <Textarea
-            label="Admin Notes"
-            placeholder="Add notes about this status change"
-            value={adminNotes}
-            onChange={(e) => setAdminNotes(e.currentTarget.value)}
-            minRows={3}
-            mb="md"
-          />
-          
-          <Group position="right" mt="md">
-            <Button variant="outline" onClick={() => setStatusModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button color="blue" onClick={handleStatusUpdate}>
-              Update Status
-            </Button>
-          </Group>
-        </div>
-      </Modal>
-
-      {/* Order Details Modal */}
-      <Modal
-        opened={orderDetailModal}
-        onClose={() => {
-          setOrderDetailModal(false);
-          setSelectedOrder(null);
-          setCustomerData(null);
-        }}
-        title="Order Details"
-        size="lg"
-      >
-        {selectedOrder && (
-          <div>
-            <Group position="apart" mb="md">
+      <div className="space-y-6">
+        {orders.map((order) => (
+          <div key={order.id} className="bg-white p-4 rounded-lg shadow-md">
+            <div className="flex justify-between items-center">
               <div>
-                <Text weight={700} size="lg">Order #{selectedOrder.id.substring(0, 8)}</Text>
-                <Text size="sm" color="dimmed">Placed on {formatDateIST(selectedOrder.date)}</Text>
-              </div>
-              <Badge 
-                color={orderStatusColors[selectedOrder.status] || "gray"}
-                variant="filled"
-                size="lg"
-              >
-                {selectedOrder.status || "Unknown"}
-              </Badge>
-            </Group>
+                <p className="font-semibold text-gray-800">Order ID: {order.id}</p>
+                <p>User ID: {order.user_id}</p>
+                <p>Razorpay Payment ID: {order.razorpay_payment_id}</p>
+                {/* <p>User ID: {order.razorpay_order_id}</p>
+                <p>User ID: {order.razorpay_signature}</p> */}
+                <p>Total Amount: ₹{order.total}</p>
+                <p>Status: {order.status}</p>
 
-            <Card withBorder mb="md">
-              <Title order={5} mb="xs">Customer Information</Title>
-              {fetchingCustomer ? (
-                <Text size="sm">Loading customer data...</Text>
-              ) : customerData ? (
-                <div>
-                  <Group>
-                    <Avatar 
-                      size={40} 
-                      radius="xl" 
-                      src={customerData.avatar || null}
-                      color="blue"
-                    >
-                      <FaUserAlt size={20} />
-                    </Avatar>
-                    <div>
-                      <Text weight={500}>{customerData.name || "N/A"}</Text>
-                      <Text size="sm">{customerData.email || "N/A"}</Text>
-                      <Text size="sm">Phone: {customerData.phone || "N/A"}</Text>
-                    </div>
-                  </Group>
+                {/* ➕ Delivery Address Section */}
+                <div className="mt-3 text-sm text-gray-700 bg-gray-50 p-3 rounded border">
+                  <p className="font-semibold mb-1">📦 Delivery Address</p>
+                  <p>Name: {order.users?.name || "Not Provided"}</p>
+                  <p>Email: {order.users?.email || "Not Provided"}</p>
+                  <p>Phone: {order.users?.phone || "Not Provided"}</p>
+
+                  <p>Address: {order.address}, {order.city}, {order.state}, {order.pincode}, {order.country}</p>
                 </div>
-              ) : (
-                <Text size="sm">Customer information not available</Text>
-              )}
-            </Card>
+              </div>
 
-            <Card withBorder mb="md">
-              <Title order={5} mb="xs">Order Items</Title>
-              <Table>
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedOrder.items && selectedOrder.items.length > 0 ? (
-                    selectedOrder.items.map((item, index) => (
-                      <tr key={index}>
-                        <td>
-                          <Group spacing="sm">
-                            <Avatar 
-                              size={30} 
-                              radius="md" 
-                              src={item.imageUrl || null}
-                              color="gray"
-                            >
-                              <FaBox size={16} />
-                            </Avatar>
-                            <Text size="sm">{item.name || "Unknown Product"}</Text>
-                          </Group>
-                        </td>
-                        <td>₹{parseFloat(item.price || 0).toFixed(2)}</td>
-                        <td>{item.quantity || 1}</td>
-                        <td>₹{parseFloat((item.price || 0) * (item.quantity || 1)).toFixed(2)}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={4} style={{ textAlign: "center" }}>
-                        <Text color="dimmed">No items found</Text>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colSpan={3} style={{ textAlign: "right" }}>
-                      <Text weight={500}>Subtotal:</Text>
-                    </td>
-                    <td>
-                      <Text weight={500}>
-                        ₹{parseFloat(selectedOrder.subtotal || selectedOrder.totalAmount || 0).toFixed(2)}
-                      </Text>
-                    </td>
-                  </tr>
-                  {selectedOrder.shipping && (
-                    <tr>
-                      <td colSpan={3} style={{ textAlign: "right" }}>
-                        <Text>Shipping:</Text>
-                      </td>
-                      <td>
-                        <Text>₹{parseFloat(selectedOrder.shipping || 0).toFixed(2)}</Text>
-                      </td>
-                    </tr>
-                  )}
-                  {selectedOrder.tax && (
-                    <tr>
-                      <td colSpan={3} style={{ textAlign: "right" }}>
-                        <Text>Tax:</Text>
-                      </td>
-                      <td>
-                        <Text>₹{parseFloat(selectedOrder.tax || 0).toFixed(2)}</Text>
-                      </td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td colSpan={3} style={{ textAlign: "right" }}>
-                      <Text weight={700}>Total:</Text>
-                    </td>
-                    <td>
-                      <Text weight={700} size="lg">
-                        ₹{parseFloat(selectedOrder.totalAmount || 0).toFixed(2)}
-                      </Text>
-                    </td>
-                  </tr>
-                </tfoot>
-              </Table>
-            </Card>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setExpanded(expanded === order.id ? null : order.id)}
+                  className="bg-blue-100 text-blue-700 px-3 py-1 rounded"
+                >
+                  {expanded === order.id ? "Hide Items" : "View Items"}
+                </button>
+                <button
+                  onClick={() => deleteOrder(order.id)}
+                  className="bg-red-100 text-red-600 px-3 py-1 rounded"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
 
-            {selectedOrder.shippingAddress && (
-              <Card withBorder mb="md">
-                <Title order={5} mb="xs">Shipping Information</Title>
-                <Text>
-                  {selectedOrder.shippingAddress.name || "N/A"}<br />
-                  {selectedOrder.shippingAddress.street || "N/A"}<br />
-                  {selectedOrder.shippingAddress.city || "N/A"}, {selectedOrder.shippingAddress.state || "N/A"} {selectedOrder.shippingAddress.zip || "N/A"}<br />
-                  {selectedOrder.shippingAddress.country || "N/A"}
-                </Text>
-              </Card>
+            {expanded === order.id && (
+              <OrderItems orderId={order.id} onUpdate={updateOrder} status={order.status} adminnotes={order.adminnotes} />
             )}
-
-            {selectedOrder.adminNotes && (
-              <Card withBorder mb="md">
-                <Title order={5} mb="xs">Admin Notes</Title>
-                <Text>{selectedOrder.adminNotes}</Text>
-              </Card>
-            )}
-
-            <Group position="right" mt="xl">
-              <Button 
-                variant="light" 
-                color="blue"
-                onClick={() => {
-                  setOrderDetailModal(false);
-                  setNewStatus(selectedOrder.status || "");
-                  setAdminNotes(selectedOrder.adminNotes || "");
-                  setStatusModalOpen(true);
-                }}
-              >
-                Update Status
-              </Button>
-            </Group>
           </div>
-        )}
-      </Modal>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default OrdersPage;
+const OrderItems = ({ orderId, onUpdate, status, adminnotes }) => {
+  const [items, setItems] = useState([]);
+  const [form, setForm] = useState({ status, adminnotes });
+
+  useEffect(() => {
+    axios.get(`https://ecommerce-wvkv.onrender.com/api/orderItems/order/${orderId}`).then((res) => {
+      setItems(res.data.items || []);
+    });
+  }, [orderId]);
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = () => {
+    onUpdate(orderId, form.status, form.adminnotes);
+  };
+
+  return (
+    <div className="mt-4 border-t pt-4">
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Status</label>
+        <select
+          name="status"
+          value={form.status}
+          onChange={handleChange}
+          className="border px-2 py-1 rounded w-full"
+        >
+          <option value="Pending">Pending</option>
+          <option value="Processing">Processing</option>
+          <option value="Shipped">Shipped</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Admin Notes</label>
+        <textarea
+          name="adminnotes"
+          value={form.adminnotes??""}
+          onChange={handleChange}
+          className="border px-2 py-1 rounded w-full"
+        />
+      </div>
+
+      <button
+        onClick={handleSubmit}
+        className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+      >
+        Save Changes
+      </button>
+
+      <div className="mt-4">
+        <h4 className="font-semibold text-gray-800 mb-2">Items:</h4>
+        {items.map((item) => (
+          <div key={item.id} className="border rounded p-2 mb-2 bg-gray-100">
+            <p className="text-sm font-medium">
+              {item.products?.name || "Unknown Product"} — Qty: {item.quantity}
+            </p>
+            {item.products?.image && (
+              <img src={item.products.image} alt="product" className="w-16 h-16 object-cover mt-1" />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default AdminOrders;

@@ -61,7 +61,7 @@ const SubCategoryPage = () => {
   }, [selectedSubcategory]);
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row ">
       {/* Sidebar */}
       <aside className="md:w-40 sm:w-20 bg-white border-0 rounded shadow-lg shadow-cyan-500/50 h-screen overflow-y-auto p-4 hide-scrollbar">
         <h2 className="text-xl font-semibold mb-6 text-center text-orange-500">
@@ -82,7 +82,7 @@ const SubCategoryPage = () => {
                 >
                   <img
                     src={sub.image_url}
-                    alt={sub.name}
+                    alt="Image"
                     className="w-15 h-15 rounded-full object-cover border border-gray-300 shadow-sm mb-2"
                   />
                   <span className="text-sm">{sub.name}</span>

@@ -37,6 +37,7 @@ import EnhancedStoragePage from "./Pages/Storage/enhanced";
 import WarehouseList from "./Pages/WarehousePages/WarehouseList.jsx";
 import WarehouseProducts from './Pages/WarehousePages/WarehouseProducts.jsx'
 import VideoBannerManagement from "./Pages/VideoBanners/VideoBannerManagement.jsx";
+import AdminOrders from "./Pages/Orders/index.jsx";
 import ShippingBanner from "./Pages/ShippingBanner/ShippingBanner.jsx"
 
 const MainLayout = () => {
@@ -183,6 +184,10 @@ function App() {
         {
           path: "/warehouselist",
           element: <WarehouseList />,
+        },
+        {
+          path: "/AdminOrders",
+          element: <AdminOrders />,
         },
         {
           path: "/warehouseproducts/:id/products",

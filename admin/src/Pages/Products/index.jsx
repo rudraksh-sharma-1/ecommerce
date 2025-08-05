@@ -69,6 +69,7 @@ const ProductsPage = () => {
   const [activePage, setActivePage] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
+  const [visible, setVisible] = useState(true);
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -117,6 +118,28 @@ const ProductsPage = () => {
   const [imageFiles, setImageFiles] = useState([]); // for selected image files
   const [videoFile, setVideoFile] = useState(null); // for selected video file
   const [displayImageFile, setDisplayImageFile] = useState(null); // for display image file
+
+  useEffect(() => {
+    const fetchSetting = async () => {
+      const { data, error } = await supabase
+        .from("product_grid_settings")
+        .select("is_visible")
+        .single();
+
+      if (data) setVisible(data.is_visible);
+    };
+
+    fetchSetting();
+  }, []);
+
+  const toggleVisibility = async () => {
+    const { error } = await supabase
+      .from("product_grid_settings")
+      .update({ is_visible: !visible })
+      .eq("id", "1"); // replace with actual ID
+
+    if (!error) setVisible(!visible);
+  };
 
   // Check authentication on component mount
   useEffect(() => {
@@ -540,6 +563,14 @@ const ProductsPage = () => {
             onClick={openAddModal}
           >
             Add New Product
+          </Button>
+
+          <Button
+            onClick={toggleVisibility}
+            color="blue"
+            variant="filled"
+          >
+            {visible ? "Hide Last Product Page" : "Show Last Product Page"}
           </Button>
         </Group>
 
@@ -1602,10 +1633,10 @@ const ProductsPage = () => {
                                 setSelectedGroup(null);
                               }}
                               className={`p-3 rounded-lg cursor-pointer transition-colors text-xs ${selectedCategory?.id === category.id
-                                  ? "bg-blue-500 text-white shadow-sm"
-                                  : hoveredCategory?.id === category.id
-                                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-                                    : "hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
+                                ? "bg-blue-500 text-white shadow-sm"
+                                : hoveredCategory?.id === category.id
+                                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
+                                  : "hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
                                 }`}
                             >
                               {category.name}
@@ -1655,10 +1686,10 @@ const ProductsPage = () => {
                                   setSelectedGroup(null);
                                 }}
                                 className={`p-3 rounded-lg cursor-pointer transition-colors text-xs ${selectedSubcategory?.id === subcategory.id
-                                    ? "bg-indigo-500 text-white shadow-sm"
-                                    : hoveredSubcategory?.id === subcategory.id
-                                      ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300"
-                                      : "hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
+                                  ? "bg-indigo-500 text-white shadow-sm"
+                                  : hoveredSubcategory?.id === subcategory.id
+                                    ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300"
+                                    : "hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
                                   }`}
                               >
                                 {subcategory.name}
@@ -1736,7 +1767,7 @@ const ProductsPage = () => {
             )}
           </div>
 
-          
+
           <TextInput
             label="Unit of Measure (UOM)"
             placeholder="Enter product UOM (e.g., kg, pcs)"
