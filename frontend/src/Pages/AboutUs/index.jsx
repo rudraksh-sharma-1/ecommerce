@@ -9,7 +9,7 @@ const AboutUs = () => {
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">About BIG & BEST MART (OPC) PRIVATE LIMITED {/* {getSetting('company_name', 'BBMart')} */}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">About {/* BIG & BEST MART (OPC) PRIVATE LIMITED */} {/* {getSetting('company_name', 'BBMart')} */}</h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             {getSetting('about_hero_text', 'Your one-stop destination for quality stationery and custom printing services.')}
           </p>
@@ -31,7 +31,7 @@ const AboutUs = () => {
           <div className="md:w-1/2">
             <h2 className="text-2xl font-semibold mb-4">{getSetting('about_story_title', 'Our Story')}</h2>
             <p className="text-gray-700 mb-4">
-              {getSetting('about_story_paragraph_1', 'Founded in 2015, BBMart started as a small stationery shop with a vision to provide high-quality products to students and professionals alike. Over the years, we\'ve grown into a comprehensive stationery and printing service provider.')}
+              {getSetting('about_story_paragraph_1', 'Founded in 2015, BIG & BEST MART (OPC) PRIVATE LIMITED started as a small stationery shop with a vision to provide high-quality products to students and professionals alike. Over the years, we\'ve grown into a comprehensive stationery and printing service provider.')}
             </p>
             <p className="text-gray-700 mb-4">
               {getSetting('about_story_paragraph_2', 'Our journey began with a simple idea: to make quality stationery accessible to everyone. Today, we pride ourselves on offering an extensive range of products and services that cater to diverse needs - from basic school supplies to custom printed merchandise.')}
