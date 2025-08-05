@@ -287,6 +287,12 @@ export async function getUserProfile(userId) {
 }
 
 // BANNERS
+export async function getshipping() {
+  const { data, error } = await supabase.from("shipping_banner").select();
+  if (error) return { success: false, error: error.message };
+  return { success: true, banners: data };
+}
+
 export async function getAllBanners() {
   const { data, error } = await supabase.from("banners").select();
   if (error) return { success: false, error: error.message };

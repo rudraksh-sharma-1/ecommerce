@@ -37,6 +37,7 @@ import EnhancedStoragePage from "./Pages/Storage/enhanced";
 import WarehouseList from "./Pages/WarehousePages/WarehouseList.jsx";
 import WarehouseProducts from './Pages/WarehousePages/WarehouseProducts.jsx'
 import VideoBannerManagement from "./Pages/VideoBanners/VideoBannerManagement.jsx";
+import ShippingBanner from "./Pages/ShippingBanner/ShippingBanner.jsx"
 
 const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -190,6 +191,10 @@ function App() {
         {
           path: "/VideoBannerManagement",
           element: <VideoBannerManagement />,
+        },
+        {
+          path: "/ShippingBanner",
+          element: <ShippingBanner />,
         },
       ],
     },

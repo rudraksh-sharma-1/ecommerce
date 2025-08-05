@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllBanners } from '../../utils/supabaseApi';
+import { getshipping, getAllBanners } from '../../utils/supabaseApi';
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
@@ -21,7 +21,7 @@ const HomeSlider = () => {
     const fetchHeroBanners = async () => {
       try {
         setLoading(true);
-        const result = await getAllBanners();
+        const result = await getAllBanners(); 
         if (result.success && Array.isArray(result.banners)) {
           const heroBanners = result.banners.filter(b => b.active && b.position === 'hero' && !b.is_mobile);
           setBanners(heroBanners.map(b => ({
@@ -43,6 +43,7 @@ const HomeSlider = () => {
     };
     fetchHeroBanners();
   }, []);
+  
 
   useEffect(() => {
     const checkMobile = () => {

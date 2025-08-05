@@ -27,22 +27,11 @@ import {
   FaEye,
   FaUpload
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { getshippingBanner, updateBanner, deleteBanner, toggleBannerStatus, toggleMobileBannerStatus, addShippingBanner } from '../../utils/supabaseApi';
+import supabase from '../../utils/supabase';
 
-
-// Banner positions options
-const BANNER_POSITIONS = [
-  { value: "hero", label: "Hero Banner (Top)" },
-  { value: "featured", label: "Featured Section" },
-  { value: "sidebar", label: "Sidebar" },
-  { value: "promo", label: "Promotional Banner" },
-  { value: "category", label: "Category Banner" }
-];
-
-import {Link} from "react-router-dom";
-import { getAllBanners, addBanner, updateBanner, deleteBanner, toggleBannerStatus, toggleMobileBannerStatus } from '../../utils/supabaseApi'
-import supabase from '../../utils/supabase'
-
-const BannersPage = () => {
+const ShippingBanner = () => {
   const [banners, setBanners] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -60,40 +49,49 @@ const BannersPage = () => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState({ visible: false, message: "", color: "" });
+  const [filteredBanners, setFilteredBanners] = useState([]);
+  const [shipb, setshipb] = useState(false);
   const itemsPerPage = 5;
 
-  useEffect(() => {
-    async function getBanners() {
-      setLoading(true);
-      const { data: banners, error } = await supabase.from('banners').select();
-      console.log(banners)
-      if (error) {
-        setNotification({ visible: true, message: error.message, color: 'red' });
-      } else if (banners && banners.length > 0) {
-        setBanners(banners);
+  // Reusable banner fetching function
+  const fetchBanners = async () => {
+    setLoading(true);
+    try {
+      // First try direct Supabase query
+      const { data: getshipping, error } = await supabase.from('shipping_banner').select();
+      
+      if (!error && getshipping && getshipping.length > 0) {
+        setBanners(getshipping);
+        return;
       }
+      
+      // Fallback to API function if Supabase query fails
+      const result = await getshippingBanner();
+      if (result.success) {
+        setBanners(result.getshipping);
+      } else {
+        showNotification("Error loading banners: " + result.error, "red");
+      }
+    } catch (error) {
+      console.error("Error fetching banners:", error);
+      showNotification("Error loading banners", "red");
+    } finally {
       setLoading(false);
     }
-    getBanners();
-    const fetchBanners = async () => {
-      setLoading(true);
-      try {
-        const result = await getAllBanners();
-        if (result.success) {
-          setBanners(result.banners);
-        } else {
-          showNotification("Error loading banners: " + result.error, "red");
-        }
-      } catch (error) {
-        console.error("Error fetching banners:", error);
-        showNotification("Error loading banners", "red");
-      } finally {
-        setLoading(false);
-      }
-    };
+  };
 
+  // Initial data load
+  useEffect(() => {
     fetchBanners();
   }, []);
+
+  // Filter banners based on search
+  useEffect(() => {
+    const filteredBanner = banners?.filter(banner => 
+      banner.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredBanners(filteredBanner || []);
+  }, [banners, searchQuery]);
 
   // Show notification helper
   const showNotification = (message, color = "blue") => {
@@ -101,14 +99,9 @@ const BannersPage = () => {
     setTimeout(() => setNotification({ visible: false, message: "", color: "" }), 4000);
   };
 
-  // Filter banners based on search
-  const filteredBanners = banners.filter(banner => 
-    banner.title?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   // Calculate pagination
-  const totalPages = Math.ceil(filteredBanners.length / itemsPerPage);
-  const paginatedBanners = filteredBanners.slice(
+  const totalPages = Math.ceil(filteredBanners?.length / itemsPerPage);
+  const paginatedBanners = filteredBanners?.slice(
     (activePage - 1) * itemsPerPage,
     activePage * itemsPerPage
   );
@@ -138,7 +131,7 @@ const BannersPage = () => {
   };
 
   const handleSaveBanner = async () => {
-    // Validation
+    setshipb(true);
     if (!newBanner.title.trim()) {
       showNotification("Banner title is required", "red");
       return;
@@ -155,25 +148,17 @@ const BannersPage = () => {
         // Update existing banner
         const result = await updateBanner(currentBanner.id, newBanner, newBanner.image instanceof File ? newBanner.image : null);
         if (result.success) {
-          // Refresh banner list
-          const updatedBanners = await getAllBanners();
-          if (updatedBanners.success) {
-            setBanners(updatedBanners.banners);
-            showNotification("Banner updated successfully", "green");
-          }
+          showNotification("Banner updated successfully", "green");
+          await fetchBanners(); // Refresh the list
         } else {
           showNotification("Error updating banner: " + result.error, "red");
         }
       } else {
         // Add new banner
-        const result = await addBanner(newBanner, newBanner.image instanceof File ? newBanner.image : null);
+        const result = await addShippingBanner(newBanner, newBanner.image instanceof File ? newBanner.image : null);
         if (result.success) {
-          // Refresh banner list
-          const updatedBanners = await getAllBanners();
-          if (updatedBanners.success) {
-            setBanners(updatedBanners.banners);
-            showNotification("Banner added successfully", "green");
-          }
+          showNotification("Shipping Banner added successfully", "green");
+          await fetchBanners(); // Refresh the list
         } else {
           showNotification("Error adding banner: " + result.error, "red");
         }
@@ -188,22 +173,17 @@ const BannersPage = () => {
   };
 
   const handleDeleteBanner = async (id) => {
-    if (window.confirm("Are you sure you want to delete this banner?")) {
-      setLoading(true);
-      try {
-        const result = await deleteBanner(id);
-        if (result.success) {
-          setBanners(banners.filter(banner => banner.id !== id));
-          showNotification("Banner deleted successfully", "green");
-        } else {
-          showNotification("Error deleting banner: " + result.error, "red");
-        }
-      } catch (error) {
-        console.error("Error deleting banner:", error);
-        showNotification("Error deleting banner", "red");
-      } finally {
-        setLoading(false);
+    try {
+      const result = await deleteBanner(id);
+      if (result.success) {
+        showNotification("Banner deleted successfully", "green");
+        await fetchBanners(); // Refresh the list
+      } else {
+        showNotification("Error deleting banner: " + result.error, "red");
       }
+    } catch (error) {
+      console.error("Error deleting banner:", error);
+      showNotification("Error deleting banner", "red");
     }
   };
 
@@ -214,9 +194,7 @@ const BannersPage = () => {
     try {
       const result = await toggleBannerStatus(id, !banner.active);
       if (result.success) {
-        setBanners(banners.map(ban => 
-          ban.id === id ? { ...ban, active: !ban.active } : ban
-        ));
+        await fetchBanners(); // Refresh the list
         showNotification(`Banner ${!banner.active ? 'activated' : 'deactivated'} successfully`, "green");
       } else {
         showNotification("Error updating banner status: " + result.error, "red");
@@ -226,6 +204,7 @@ const BannersPage = () => {
       showNotification("Error updating banner status", "red");
     }
   };
+
   const toggleMobile = async (id) => {
     const banner = banners.find(b => b.id === id);
     if (!banner) return;
@@ -233,9 +212,7 @@ const BannersPage = () => {
     try {
       const result = await toggleMobileBannerStatus(id, !banner.is_mobile);
       if (result.success) {
-        setBanners(banners.map(ban => 
-          ban.id === id ? { ...ban, is_mobile: !ban.is_mobile } : ban
-        ));
+        await fetchBanners(); // Refresh the list
         showNotification(`Banner ${!banner.is_mobile ? 'activated' : 'deactivated'} successfully`, "green");
       } else {
         showNotification("Error updating banner status: " + result.error, "red");
@@ -248,117 +225,139 @@ const BannersPage = () => {
 
   return (
     <div className="p-6 mantine-bg min-h-screen">
+      {notification.visible && (
+        <Notification 
+          color={notification.color}
+          onClose={() => setNotification({ ...notification, visible: false })}
+          className="mb-4"
+        >
+          {notification.message}
+        </Notification>
+      )}
+
       <Card shadow="sm" p="lg" radius="md" className="mantine-card mb-6">
         <Group position="apart" className="mb-4">
-          <Title order={2}>Banners Management</Title>
+          <Title order={2}>Shipping Management</Title>
           <Button 
-             icon={<FaPlus />} 
-             color="blue"
-             variant="filled"
-             onClick={openAddModal}
+            leftIcon={<FaPlus />} 
+            color="blue"
+            onClick={openAddModal}
           >
-            Add New Banner
+            Add New Shipping Banner
           </Button>
-          <Link to={'/VideoBannerManagement'} className="underline">Go to Video Banner Management</Link>
-           <Link to={'/ShippingBanner'} className="underline">Go to Shipping Banner Management</Link>
         </Group>
 
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           <TextInput
             className="flex-1"
             placeholder="Search banners..."
-            leftSection={<FaSearch />}
+            icon={<FaSearch />}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        <div className="overflow-x-auto">
-          <Table striped highlightOnHover>
-            <colgroup>
-              <col style={{ width: 200, textAlign: 'center' }} />
-            </colgroup>
-            <thead>
-              <tr>
-                <th style={{ width: 200, textAlign: 'center', verticalAlign: 'middle' }}>Banner</th>
-                <th>Title</th>
-                <th>Position</th>
-                <th>Status</th>
-                <th>For Mobile</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedBanners.map((banner) => (
-                <tr key={banner.id}>
-                  <td style={{ width: 200, textAlign: 'center', verticalAlign: 'middle' }}>
-                  <div style={{ width: 200, height: 130, overflow: 'hidden', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5', marginLeft: 'auto', marginRight: 'auto' }}>
-                      {banner.image ? (
-                        <img
-                          src={banner.image}
-                          alt={banner.title}
-                          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                        />
-                      ) : (
-                        <span className="text-gray-400">No Image</span>
-                      )}
-                    </div>
-                    <div className="text-xs text-gray-400 mt-1">#{String(banner.id).slice(-4)}</div>
-                  </td>
-                  <td>{banner.title}</td>
-                  <td className="capitalize">{banner.position}</td>
-                  <td>
-                    <Switch 
-                      checked={banner.active} 
-                      onChange={() => toggleActive(banner.id)}
-                      color="green"
-                    />
-                  </td>
-                  <td>
-                    <Switch 
-                      checked={banner.is_mobile} 
-                      onChange={() => toggleMobile(banner.id)}
-                      color="green"
-                    />
-                  </td>
-                  <td>
-                    <Group spacing={8}>
-                      <ActionIcon 
-                        color="blue"
-                        onClick={() => openEditModal(banner)}
-                      >
-                        <FaEdit size={16} />
-                      </ActionIcon>
-                      <ActionIcon 
-                        color="teal"
-                        onClick={() => openPreviewModal(banner)}
-                      >
-                        <FaEye size={16} />
-                      </ActionIcon>
-                      <ActionIcon 
-                        color="red" 
-                        onClick={() => handleDeleteBanner(banner.id)}
-                      >
-                        <FaTrash size={16} />
-                      </ActionIcon>
-                    </Group>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-
-        {totalPages > 1 && (
-          <div className="flex justify-center mt-4">
-            <Pagination
-              total={totalPages}
-              value={activePage}
-              onChange={setActivePage}
-              size="sm"
-              radius="md"
-            />
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <Loader size="lg" />
           </div>
+        ) : (
+          <>
+            <div className="overflow-x-auto">
+              <Table striped highlightOnHover>
+                <thead>
+                  <tr>
+                    <th style={{ width: 200, textAlign: 'center' }}>Banner</th>
+                    <th>Title</th>
+                    <th>Position</th>
+                    <th>Status</th>
+                    <th>For Mobile</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedBanners?.map((banner) => (
+                    <tr key={banner.id}>
+                      <td style={{ width: 200, textAlign: 'center' }}>
+                        <div style={{ 
+                          width: 200, 
+                          height: 130, 
+                          overflow: 'hidden', 
+                          borderRadius: 4, 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'center', 
+                          background: '#f5f5f5',
+                          margin: '0 auto'
+                        }}>
+                          {banner.image ? (
+                            <img
+                              src={banner.image}
+                              alt={banner.title}
+                              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                            />
+                          ) : (
+                            <span className="text-gray-400">No Image</span>
+                          )}
+                        </div>
+                        <div className="text-xs text-gray-400 mt-1">#{String(banner.id).slice(-4)}</div>
+                      </td>
+                      <td>{banner.title}</td>
+                      <td className="capitalize">{banner.position}</td>
+                      <td>
+                        <Switch 
+                          checked={banner.active} 
+                          onChange={() => toggleActive(banner.id)}
+                          color="green"
+                        />
+                      </td>
+                      <td>
+                        <Switch 
+                          checked={banner.is_mobile} 
+                          onChange={() => toggleMobile(banner.id)}
+                          color="green"
+                        />
+                      </td>
+                      <td>
+                        <Group spacing={8}>
+                          <ActionIcon 
+                            color="blue"
+                            onClick={() => openEditModal(banner)}
+                          >
+                            <FaEdit size={16} />
+                          </ActionIcon>
+                          <ActionIcon 
+                            color="teal"
+                            onClick={() => openPreviewModal(banner)}
+                          >
+                            <FaEye size={16} />
+                          </ActionIcon>
+                          <ActionIcon 
+                            color="red" 
+                            onClick={() => handleDeleteBanner(banner.id)}
+                          >
+                            <FaTrash size={16} />
+                          </ActionIcon>
+                        </Group>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-4">
+                <Pagination
+                  total={totalPages}
+                  value={activePage}
+                  onChange={setActivePage}
+                  size="sm"
+                  radius="md"
+                />
+              </div>
+            )}
+          </>
         )}
       </Card>
 
@@ -380,8 +379,8 @@ const BannersPage = () => {
 
           <TextInput
             label="Redirect Link"
-            placeholder="Enter redirect URL (e.g., /products/category)"
-            leftSection={<FaLink size={14} />}
+            placeholder="Enter redirect URL"
+            icon={<FaLink size={14} />}
             value={newBanner.link}
             onChange={(e) => setNewBanner({ ...newBanner, link: e.target.value })}
           />
@@ -441,7 +440,7 @@ const BannersPage = () => {
             label="Banner Image"
             placeholder="Upload banner image"
             accept="image/*"
-            leftSection={<FaUpload size={14} />}
+            icon={<FaUpload size={14} />}
             onChange={(file) => setNewBanner({ ...newBanner, image: file })}
           />
 
@@ -462,7 +461,11 @@ const BannersPage = () => {
             <Button variant="default" onClick={() => setModalOpen(false)}>
               Cancel
             </Button>
-            <Button color="blue" onClick={handleSaveBanner}>
+            <Button 
+              color="blue" 
+              onClick={handleSaveBanner}
+              loading={saving}
+            >
               {currentBanner ? "Update Banner" : "Add Banner"}
             </Button>
           </Group>
@@ -515,4 +518,4 @@ const BannersPage = () => {
   );
 };
 
-export default BannersPage;
+export default ShippingBanner;

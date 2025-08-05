@@ -109,7 +109,44 @@ export async function toggleVideoBannerStatus(id, status) {
   if (error) return { success: false, error: error.message };
   return { success: true };
 }
+//shipping BANNERS
+export async function getshippingBanner() {
+  const { data, error } = await supabase.from("shipping_banner").select();
+  if (error) return { success: false, error: error.message };
+  return { success: true, getshipping: data };
+}
 
+export async function addShippingBanner(banner, imageFile) {
+  let imageUrl = banner.image;
+  if (imageFile && imageFile instanceof File) {
+    const fileExt = imageFile.name.split(".").pop();
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}.${fileExt}`;
+    const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+      .from("banners")
+      .upload(fileName, imageFile);
+    console.log(uploadData)
+    if (uploadError) {
+      console.log("uploadError", uploadError)
+      return { success: false, error: uploadError.message };
+    }
+    const { data: urlData } = supabase.storage
+      .from("banners")
+      .getPublicUrl(fileName);
+    imageUrl = urlData.publicUrl;
+  }
+  const bannerToInsert = { ...banner, image: imageUrl };
+  const { data, error } = await supabase
+    .from("shipping_banner")
+    .insert([bannerToInsert])
+    .select()
+    .single();
+  if (error) {
+    return { success: false, error: error.message };
+  }
+  return { success: true, banner: data };
+}
 // BANNERS
 export async function getAllBanners() {
   const { data, error } = await supabaseAdmin.from("banners").select();
