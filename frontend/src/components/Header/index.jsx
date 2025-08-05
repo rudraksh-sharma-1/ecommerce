@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Search from "../Search";
 import Navigation from "../Navigation";
 import Badge from "@mui/material/Badge";
@@ -18,6 +18,7 @@ import { FaBusinessTime } from "react-icons/fa";
 import { FaListCheck } from "react-icons/fa6";
 import { ArrowRightLeft } from "lucide-react";
 import { useLocationContext } from "../../contexts/LocationContext.jsx";
+import { useLocation } from 'react-router-dom'
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useSettings } from "../../contexts/SettingsContext.jsx";
@@ -68,19 +69,18 @@ const Header = () => {
   const { getPromoSetting } = usePromotional();
   const navigate = useNavigate();
   const userDropdownRef = useRef(null);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth <= 320);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
 
-  const { showModal, setShowModal, selectedAddress,setModalMode } = useLocationContext();
+  const { showModal, setShowModal, selectedAddress, setModalMode } = useLocationContext();
+  const location = useLocation();
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth <= 320);
+      setIsMobile(window.innerWidth <= 768);
     };
 
     window.addEventListener("resize", handleResize);
-
-    // Cleanup the event listener when the component unmounts
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -180,7 +180,7 @@ const Header = () => {
   // Check for window resize to determine mobile view
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 767) {
+      if (window.innerWidth > 768) {
         setSearchExpanded(false);
       }
     };
@@ -241,12 +241,13 @@ const Header = () => {
     };
   }, []);
 
+  if (isMobile && location.pathname.startsWith("/subcategories")) return null;
+
   return (
     <>
       <header
-        className={`bg-white header-container ${
-          announcementBarVisible ? "with-announcement-bar" : ""
-        }`}
+        className={`bg-white header-container ${announcementBarVisible ? "with-announcement-bar" : ""
+          }`}
       >
         <div className="header-main border-b border-gray-200 shadow-sm">
           <div className=" w-full px-1">
@@ -266,6 +267,177 @@ const Header = () => {
                     }}
                   />
                 </Link>
+                {/* <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `md:hidden block !m-0 border rounded-md ${isActive ? "bg-blue-500 text-white" : "bg-white"
+                    }`
+                  }
+                >
+                  <img
+                    src="https://i.postimg.cc/G21jC29J/Gemini-Generated-Image-592j5z592j5z592j.png"
+                    alt={`${getSetting("company_name", "BBMart")} Logo`}
+                    className="h-full w-full mt-2 object-cover bg-transparent"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/160x40?text=" +
+                        getSetting("company_name", "BBMart");
+                    }}
+                  />
+                </NavLink>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `md:hidden block !m-0 border rounded-md ${isActive ? "bg-blue-500 text-white" : "bg-white"
+                    }`
+                  }
+                >
+                  <img
+                    src="https://i.postimg.cc/G21jC29J/Gemini-Generated-Image-592j5z592j5z592j.png"
+                    alt={`${getSetting("company_name", "BBMart")} Logo`}
+                    className="h-full w-full mt-2 object-cover bg-transparent"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/160x40?text=" +
+                        getSetting("company_name", "BBMart");
+                    }}
+                  />
+                </NavLink>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `md:hidden block !m-0 border rounded-md ${isActive ? "bg-blue-500 text-white" : "bg-white"
+                    }`
+                  }
+                >
+                  <img
+                    src="https://i.postimg.cc/G21jC29J/Gemini-Generated-Image-592j5z592j5z592j.png"
+                    alt={`${getSetting("company_name", "BBMart")} Logo`}
+                    className="h-full w-full mt-2 object-cover bg-transparent"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/160x40?text=" +
+                        getSetting("company_name", "BBMart");
+                    }}
+                  />
+                </NavLink>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `md:hidden block !m-0 border rounded-md ${isActive ? "bg-blue-500 text-white" : "bg-white"
+                    }`
+                  }
+                >
+                  <img
+                    src="https://i.postimg.cc/G21jC29J/Gemini-Generated-Image-592j5z592j5z592j.png"
+                    alt={`${getSetting("company_name", "BBMart")} Logo`}
+                    className="h-full w-full mt-2 object-cover bg-transparent"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/160x40?text=" +
+                        getSetting("company_name", "BBMart");
+                    }}
+                  />
+                </NavLink>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `md:hidden block !m-0 border rounded-md ${isActive ? "bg-blue-500 text-white" : "bg-white"
+                    }`
+                  }
+                >
+                  <img
+                    src="https://i.postimg.cc/G21jC29J/Gemini-Generated-Image-592j5z592j5z592j.png"
+                    alt={`${getSetting("company_name", "BBMart")} Logo`}
+                    className="h-full w-full mt-2 object-cover bg-transparent"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/160x40?text=" +
+                        getSetting("company_name", "BBMart");
+                    }}
+                  />
+                </NavLink>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `md:hidden block !m-0 border rounded-md ${isActive ? "bg-blue-500 text-white" : "bg-white"
+                    }`
+                  }
+                >
+                  <img
+                    src="https://i.postimg.cc/G21jC29J/Gemini-Generated-Image-592j5z592j5z592j.png"
+                    alt={`${getSetting("company_name", "BBMart")} Logo`}
+                    className="h-full w-full mt-2 object-cover bg-transparent"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/160x40?text=" +
+                        getSetting("company_name", "BBMart");
+                    }}
+                  />
+                </NavLink> */}
+
+              </div>
+              {/* <div className="flex-shrink-1 logo-container w-25 md:hidden px-1 ">
+                <Link
+                  to={"/"}
+                  className="md:hidden block !m-0 border rounded-md"
+                >
+                  <img
+                    src="https://i.postimg.cc/gjFGcVZV/New.png"
+                    alt={`${getSetting("company_name", "BBMart")} Logo`}
+                    className="h-full w-full mt-2 rounded-md object-cover "
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/160x40?text=" +
+                        getSetting("company_name", "BBMart");
+                    }}
+                  />
+                </Link>
+              </div>
+              <div className="flex-shrink-1 logo-container w-25 md:hidden ">
+                <Link
+                  to={"/"}
+                  className="md:hidden block !m-0 border rounded-md"
+                >
+                  <img
+                    src="https://i.postimg.cc/G21jC29J/Gemini-Generated-Image-592j5z592j5z592j.png"
+                    alt={`${getSetting("company_name", "BBMart")} Logo`}
+                    className="h-full w-full mt-2 object-cover "
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/160x40?text=" +
+                        getSetting("company_name", "BBMart");
+                    }}
+                  />
+                </Link>
+              </div>
+              <div className="flex-shrink-1 logo-container w-25 md:hidden ">
+                <Link
+                  to={"/"}
+                  className="md:hidden block !m-0 border rounded-md"
+                >
+                  <img
+                    src="https://i.postimg.cc/G21jC29J/Gemini-Generated-Image-592j5z592j5z592j.png"
+                    alt={`${getSetting("company_name", "BBMart")} Logo`}
+                    className="h-full w-full mt-2 object-cover "
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/160x40?text=" +
+                        getSetting("company_name", "BBMart");
+                    }}
+                  />
+                </Link>
+              </div>
+              <div className="flex-shrink-1 logo-container w-25 md:hidden ">
                 <Link
                   to={"/"}
                   className="md:hidden block !m-0 border rounded-md"
@@ -284,6 +456,26 @@ const Header = () => {
                 </Link>
               </div>
 
+              <div className="flex-shrink-1 md:hidden w-15 mr-1 right-0">
+                <Link
+                  to={"/BusinessPartner"}
+                  className="md:hidden block !m-0 border rounded-md text-xs text-center"
+                >
+                  <img
+                    src="https://i.postimg.cc/nrsbjpQY/Whats-App-Image-2025-07-08-at-15-28-23-removebg-preview.png"
+                    alt={`${getSetting("company_name", "BBMart")} Logo`}
+                    className="h-full w-full  object-cover "
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/160x40?text=" +
+                        getSetting("company_name", "BBMart");
+                    }}
+                  />
+                  Connect
+                </Link>
+              </div> */}
+
               <div className="w-auto flex ">
                 {/* Navigation - desktop only */}
 
@@ -292,7 +484,7 @@ const Header = () => {
                 <button
                   className="border-0 rounded-lg md:flex items-center text-xs text-black hover:text-blue-700 transition-colors  
              px-2  md:mx-0 md:px-4 w-auto max-w-[160px] overflow-hidden whitespace-nowrap hidden "
-                  onClick={() => {setShowModal(true), setModalMode("visibility")}}
+                  onClick={() => { setShowModal(true), setModalMode("visibility") }}
                 >
                   <Link className="flex items-center space-x-1">
                     <MapPinned className="size-5 md:size-4" />
@@ -320,18 +512,18 @@ const Header = () => {
               {/* Action Icons */}
               <div className="flex flex-shrink-3 items-center ml-auto md:ml-4 space-x-1">
                 {/* MOBILE ICONS: Only show wishlist, cart, and account icons on mobile */}
-                <div className="flex md:hidden items-center w-30 justify-center space-x-1">
-                  {/* Enquiry */}
+                {/* <div className="flex md:hidden items-center w-30 justify-center space-x-1"> */}
+                {/* Enquiry */}
 
-                  {/* <Link
+                {/* <Link
                   to="/enquiry-history"
                   className="p-2 text-gray-600 hover:text-blue-600"
                 >
                   <FaListCheck />
                 </Link>*/}
 
-                  {/* Cart */}
-                  {/* <Link
+                {/* Cart */}
+                {/* <Link
                   to="/cart"
                   className="p-2 text-gray-600 hover:text-blue-600"
                 >
@@ -340,8 +532,8 @@ const Header = () => {
                   </StyledBadge>
                 </Link> */}
 
-                  {/* Account */}
-                  {/*{currentUser ? (
+                {/* Account */}
+                {/*{currentUser ? (
                   <Link
                     to="/MobileAccount"
                     className="p-2 text-gray-600 hover:text-blue-600"
@@ -356,7 +548,7 @@ const Header = () => {
                     <FaRegUser className="w-5 h-5" />
                   </Link>
                 )}*/}
-                </div>
+                {/* </div> */}
 
                 {/* Desktop Elements */}
                 {/* Enquiry History Icon - Only show for logged in users */}
@@ -533,14 +725,14 @@ const Header = () => {
         </div>
         <button
           className="border-0 rounded-lg flex items-center text-xs text-blue-700 hover:text-blue-700 transition-colors  
-              md:mx-0 md:px-4 w-full overflow-hidden whitespace-nowrap md:hidden "
-          onClick={() => {setShowModal(true), setModalMode("visibility")}}
+           md:mx-0 md:px-4 w-full overflow-hidden whitespace-nowrap md:hidden "
+          onClick={() => { setShowModal(true), setModalMode("visibility") }}
         >
           <Link className="flex items-center align-middle space-x-1">
             <MapPin className="size-4 md:size-4 text-black" />
             <span className="truncate text-xs flex">
               Select Delivery Address <ChevronRight size={16} />
-              {selectedAddress ?<span>{selectedAddress.city} {selectedAddress.state} {selectedAddress.postal_code}</span>: <></>}
+              {selectedAddress ? <span>{selectedAddress.city} {selectedAddress.state} {selectedAddress.postal_code}</span> : <></>}
             </span>
           </Link>
         </button>

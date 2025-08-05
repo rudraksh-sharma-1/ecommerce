@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const MobileCategoriesBar = () => {
   const [categories, setCategories] = useState([]);
-   const location = useLocation(); // Get current path
+  const location = useLocation(); // Get current path
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -24,9 +24,7 @@ const MobileCategoriesBar = () => {
     fetchCategories();
   }, []);
 
-   if (location.pathname === "/MobileAccount") return null;
-   if (location.pathname === "/login") return null;
-   if (location.pathname === "/signup") return null;
+  if (location.pathname !== "/") return null;
 
   return (
     <div className={`overflow-x-auto no-scrollbar flex space-x-2 px-2 py-2 pt-4 ${location.pathname === '/' ? 'mt-0' : 'mt-15'} sm:hidden`}>
@@ -45,7 +43,7 @@ const MobileCategoriesBar = () => {
             </Link>
           </div>
           <Link to={`/subcategories/${encodeURIComponent(category.name)}`}>
-          <span className="text-sm text-center">{category.name}</span>
+            <span className="text-sm text-center">{category.name}</span>
           </Link>
         </div>
       ))}

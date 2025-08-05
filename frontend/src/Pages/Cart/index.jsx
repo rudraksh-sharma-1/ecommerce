@@ -375,7 +375,7 @@ const Cart = () => {
   }
 
   return (
-    <div className="bg-gray-50 py-8 md:py-16">
+    <div className="bg-gray-50 py-8 md:py-16 mt-5">
       <div className="container mx-auto px-4">
         <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center">Your Cart</h1>
 
@@ -612,7 +612,7 @@ const Cart = () => {
                     style={{ backgroundColor: "#3f51b5" }}
                     disabled={enquiryLoading}
                   >
-                    Pay with Razorpay
+                    Place an Order
                   </button>
 
 

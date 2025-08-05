@@ -14,8 +14,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* About section */}
           <div className="footer-column">
-            <div className="mb-0 mt-2">
-              <Link to="/" className="inline-block">
+            <div className="mb-3 mt-2">
+              {/* <Link to="/" className="inline-block">
                 <img 
                   src="/logo.png" 
                   alt="BBMart Logo" 
@@ -25,11 +25,14 @@ const Footer = () => {
                     e.target.src = 'https://placehold.co/200x60?text=BBMart';
                   }}
                 />
-              </Link>
+              </Link> */}
+              <h2>BIG & BEST MART (OPC) PRIVATE LIMITED</h2>
+              <h6>37/1, Central Road K B Sarani, Uttapara Madhyamgram Barasat - II North 24 Parganas WB 700129 IN.</h6>
+              
             </div>
             <p className="text-sm mb-2 text-gray-400">
-              BBMart offers high-quality stationery and office supplies for professionals, 
-              students, and businesses. We provide premium products that inspire creativity 
+              bigbestmart offers high-quality stationery and office supplies for professionals,
+              students, and businesses. We provide premium products that inspire creativity
               and productivity.
             </p>
             <div className="social-icons flex space-x-3">
@@ -85,7 +88,7 @@ const Footer = () => {
               <li className="flex items-center mb-2">
                 <MdOutlinePhone className="text-lg text-gray-400 mr-3" />
                 <a href="tel:+1234567890" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  +91 7059911480 
+                  +91 7059911480
                 </a>
               </li>
               <li className="flex items-center mb-3">
@@ -99,7 +102,7 @@ const Footer = () => {
 
           {/* Map column */}
           <div className="footer-column mt-4">
-            
+
             <div className="rounded-lg overflow-hidden shadow-md border border-gray-700 bg-gray-900">
               <a
                 href="https://maps.google.com/?q=22.7035140,88.4672730"

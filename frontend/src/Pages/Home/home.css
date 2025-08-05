@@ -1,9 +1,7 @@
 /* Mobile Search Bar Styles */
 .mobile-search-bar-container {
-  position: fixed;
-  top: 96px;
-  left: 0;
-  right: 0;
+  position: sticky;
+  top: 0;
   z-index: 998;
   background: #fff;
   border-bottom: 1px solid #e5e7eb;

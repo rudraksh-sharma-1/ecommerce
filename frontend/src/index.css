@@ -5,6 +5,7 @@ body {
     font-optical-sizing: auto;
     background: rgb(230, 229, 213);
     overflow-x: hidden;
+    padding-top: 0!important;
 }
 
 ::-webkit-scrollbar {width: 10px !important; height: 10px !important;}

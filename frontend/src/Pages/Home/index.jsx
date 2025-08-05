@@ -8,6 +8,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import ProductsSlider from "../../components/ProductsSlider";
 import { useLocationContext } from "../../contexts/LocationContext.jsx";
 import VideoBannerSlider  from '../../components/HomeSlider/VideoSlider.jsx'
+import ProductsNew from "../LastMobileProducts/LastMobileProducts.jsx";
 
 // Import Swiper styles
 import "swiper/css";
@@ -432,6 +433,7 @@ export const Home = () => {
             </React.Fragment>
           )
       )}
+        <ProductsNew/>
     </>
   );
 };
