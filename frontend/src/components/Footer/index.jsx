@@ -31,7 +31,7 @@ const Footer = () => {
               
             </div>
             <p className="text-sm mb-2 text-gray-400">
-              BBMart offers high-quality stationery and office supplies for professionals,
+              bigbestmart offers high-quality stationery and office supplies for professionals,
               students, and businesses. We provide premium products that inspire creativity
               and productivity.
             </p>

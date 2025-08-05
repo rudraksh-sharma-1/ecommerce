@@ -9,7 +9,7 @@ const AboutUs = () => {
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">About {getSetting('company_name', 'BBMart')}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">About BIG & BEST MART (OPC) PRIVATE LIMITED {/* {getSetting('company_name', 'BBMart')} */}</h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             {getSetting('about_hero_text', 'Your one-stop destination for quality stationery and custom printing services.')}
           </p>
@@ -73,10 +73,8 @@ const AboutUs = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
               { name: 'Vikash Jha', position: 'Founder & CEO', image: 'Vikas.jpg' },
-    
-              { name: 'Rudraksh Sharma', position: 'Web developer', image: 'Rudra.jpg' }
             ].map((member, index) => (
-              <div key={index} className="bg-white p-4 rounded-lg shadow text-center">
+              <div key={index} className="bg-white p-4 rounded-lg shadow text-center ">
                 <img 
                   src={`/${member.image}`} 
                   alt={member.name} 
