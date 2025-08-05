@@ -53,7 +53,7 @@ const BusinessPartnerLogin = () => {
   };
 
   return (
-    <div className="relative w-full flex items-center justify-center md:justify-end overflow-hidden">
+    <div className="relative w-full flex items-center justify-center md:justify-end overflow-hidden mt-8">
       {/* Background Image (hidden on small screens) */}
       <img
         src="https://i.postimg.cc/XvL3Kv2w/processed-image.png"

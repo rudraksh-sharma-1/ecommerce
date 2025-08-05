@@ -29,7 +29,7 @@
 }
 
 /* Ensure proper touch targets on mobile */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .search-container input,
   .search-button {
     height: 44px; /* Minimum touch target height */

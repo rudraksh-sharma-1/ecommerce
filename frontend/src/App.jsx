@@ -1,5 +1,6 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useState, useEffect } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Home from "./Pages/Home";
@@ -41,7 +42,9 @@ import AnnouncementBar from "./components/AnnouncementBar";
 import CategoriesBar from "./components/CategoriesBar";
 import { LocationProvider } from "./contexts/LocationContext.jsx";
 import LocationModal from "./components/LocationModal/LocationModal.jsx";
+import MainSearchBar from "./components/MainSearchBar/MainSearchBar.jsx";
 import ConditionalMobileCategoriesBar from "./components/CategoriesBar/ConditionalMobileCategoriesBar.jsx";
+import MobileHeader from "./components/Header/MobileHeader.jsx";
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -59,20 +62,30 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const banners = [
-  {
-    id: 1,
-    title: 'Dry Fruits Sale',
-    imageUrl: 'https://your-image-url.com/slide1.jpg',
-    link: '/dryfruits',
-  },
-  {
-    id: 2,
-    title: 'New Offers',
-    imageUrl: 'https://your-image-url.com/slide2.jpg',
-    link: '/offers',
-  },
-];
+    {
+      id: 1,
+      title: 'Dry Fruits Sale',
+      imageUrl: 'https://your-image-url.com/slide1.jpg',
+      link: '/dryfruits',
+    },
+    {
+      id: 2,
+      title: 'New Offers',
+      imageUrl: 'https://your-image-url.com/slide2.jpg',
+      link: '/offers',
+    },
+  ];
   return (
     <>
       <AuthProvider>
@@ -82,14 +95,17 @@ function App() {
               <DynamicHead />
               <BrowserRouter>
                 <AnnouncementBar />
-                <Header />
-                <div className="mobile-search-bar-container w-full px-5 py-4 pt-5 z-999">
+                {isMobile ? <MobileHeader />: <Header/>}
+                {/* <div className="mobile-search-bar-container w-full px-5 py-4 pt-5 z-999">
                   <Search />
+                </div> */}
+                <div className="!sticky top-0">
+                  <MainSearchBar />
                 </div>
                 <LocationModal />
-                 <MobileBannerCarousel />
-                 <MobileCategoriesBar/>
-                 <CategoriesBar className="sm:hidden"/>
+                <MobileBannerCarousel />
+                <MobileCategoriesBar />
+                <CategoriesBar className="sm:hidden" />
                 <Routes>
                   <Route path={"/"} exact={true} element={<Home />} />
                   <Route

@@ -213,9 +213,9 @@ const ProductListing = () => {
   return (
     <div className="product-listing-page-wrapper">
       {/* Search Bar For mobile Screens */}
-      <div className="mobile-search-bar-container block md:hidden w-full mt-3 px-5 py-3">
+      {/* <div className="mobile-search-bar-container block md:hidden w-full mt-3 px-5 py-3">
         <Search />
-      </div>
+      </div> */}
       {/* this div is only for spacing between search bar and product list */}
      {/*  <div className="mt-5 h-12 md:hidden"></div> */}
       <section className="py-3 pb-0 bg-gray-50 product-section ">

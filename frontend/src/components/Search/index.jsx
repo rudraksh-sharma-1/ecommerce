@@ -23,7 +23,7 @@ const Search = () => {
     };
 
     return (
-        <div className={`search-container w-full relative ${isFocused ? 'focused' : ''}`}>
+        <div className={`search-container w-full sticky ${isFocused ? 'focused' : ''}`}>
             <form onSubmit={handleSearch} className="w-full h-full flex">
                 <div className="relative flex-grow">
                     <input 
