@@ -64,6 +64,9 @@ const Footer = () => {
               <li>
                 <Link to="/shipping-returns" className="footer-link">Shipping & Returns</Link>
               </li>
+              <li>
+                <Link to="/privacy-policy" className="footer-link">Privacy Policy</Link>
+              </li>
             </ul>
           </div>
 
