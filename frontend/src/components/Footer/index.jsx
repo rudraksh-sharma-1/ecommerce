@@ -26,12 +26,12 @@ const Footer = () => {
                   }}
                 />
               </Link> */}
-              <h2>BIG & BEST MART (OPC) PRIVATE LIMITED</h2>
-              <h6>37/1, Central Road K B Sarani, Uttapara Madhyamgram Barasat - II North 24 Parganas WB 700129 IN.</h6>
+              <h3>BIG & BEST MART (OPC) PRIVATE LIMITED</h3>
+             
               
             </div>
             <p className="text-sm mb-2 text-gray-400">
-              bigbestmart offers high-quality stationery and office supplies for professionals,
+             <b> Big and best mart</b> offers high-quality stationery and office supplies for professionals,
               students, and businesses. We provide premium products that inspire creativity
               and productivity.
             </p>
