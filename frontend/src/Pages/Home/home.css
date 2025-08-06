@@ -32,6 +32,55 @@ body:has(.announcement-bar) .mobile-search-bar-container {
   }
 }
 
+.shipping-banner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.shipping-banner-container a,
+.shipping-banner-container picture,
+.shipping-banner-container img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.shipping-banner-container img {
+  object-fit: contain; /* Ensures the entire image is visible without cropping */
+}
+
+/* --- Enforce FIXED dimensions --- */
+
+/* Mobile dimensions */
+@media (max-width: 767px) {
+  .shipping-banner-container {
+    width: 312px;
+    height: 110px;
+    margin: 0 auto; /* Center the container */
+    border-radius: 0.75rem; /* Optional: adds rounded corners */
+  }
+}
+
+/* Desktop dimensions */
+@media (min-width: 768px) {
+  .shipping-banner-container {
+    width: 100%; /* Allow container to be flexible */
+    max-width: 1527px; /* Set the max-width as specified */
+    height: 180px;
+    margin: 0 auto; /* Center the container */
+  }
+}
+
+
+
+
+
+
+
+
 /* Mobile search input and button styles */
 /* .mobile-search-bar-container input[type="search"] {
   font-size: 16px !important;

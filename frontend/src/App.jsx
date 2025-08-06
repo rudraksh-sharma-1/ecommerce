@@ -141,10 +141,10 @@ function App() {
                     exact={true}
                     element={<CustomPrinting />}
                   />
-                  <Route
+                  {<Route
                     path="/privacy-policy"
                     element={<PrivacyPolicy />}
-                  />
+                  /> }
                   <Route
                     path={"/terms-of-service"}
                     exact={true}

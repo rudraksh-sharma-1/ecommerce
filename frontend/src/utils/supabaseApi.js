@@ -286,11 +286,25 @@ export async function getUserProfile(userId) {
 
 // BANNERS
 export async function getshipping() {
-  const { data, error } = await supabase.from("shipping_banner").select();
+  const { data, error } = await supabase.from("shipping_banners").select();
   if (error) return { success: false, error: error.message };
   return { success: true, banners: data };
 }
 
+export async function getActiveShippingBanner() {
+  const { data, error } = await supabase
+    .from("shipping_banners")
+    .select("*")
+    .eq("active", true)
+    .limit(1)
+    .single();
+    
+  if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found, which is not an error here
+    return { success: false, error: error.message };
+  }
+  
+  return { success: true, banner: data };
+}
 export async function getAllBanners() {
   const { data, error } = await supabase.from("banners").select();
   if (error) return { success: false, error: error.message };

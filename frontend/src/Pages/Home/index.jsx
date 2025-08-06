@@ -28,6 +28,7 @@ import {
 import { usePromotional } from "../../contexts/PromotionalContext.jsx";
 import FlashSale from "../../components/FlashSale";
 import "./home.css";
+import { getActiveShippingBanner } from "../../utils/supabaseApi";
 
 function ProductTabs({ categories }) {
   const [value, setValue] = useState(0);
@@ -94,6 +95,7 @@ export const Home = () => {
   const [banners, setBanners] = useState([]);
   const [shippingBanners, setShippingBanners] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [shippingBanner, setShippingBanner] = useState(null);
   /* const [defaultAddress, setDefaultAddress] = useState(null); */
 
   // Search state
@@ -145,6 +147,13 @@ export const Home = () => {
       }
 
     fetchAllData();
+    async function fetchShippingBanner() {
+      const { success, banner } = await getActiveShippingBanner();
+      if (success && banner) {
+        setShippingBanner(banner);
+      }
+    }
+    fetchShippingBanner();
   }, [selectedAddress]);
 
 useEffect(() => {
@@ -348,19 +357,62 @@ useEffect(() => {
       {/* ================== PROMOTIONAL BANNER ================== */}
 {/* Desktop version (lg and up) */}
 
-<section className=" lg:block py-4 bg-white">
-{
-  shippingBanners.length > 0 ? (<div className="container px-2">{
- shippingBanners.map((banner) => (
- < div className="promotional-banner mx-auto relative overflow-hidden rounded-xl shadow-lg bg-gradient-to-r from-orange-100 via-red-50 to-orange-100 border-2 border-red-200">  
- <img className="w-full" key={banner.id}
-          src={banner.imageUrl} alt={banner.title}  ></img> </div>   
- 
-        ))}
-      </div>
-   ):(<></>)}
-
-</section>
+ <section className="py-4 bg-white">
+        <div className="container px-4">
+          <div className="promotional-banner w-full lg:w-[95%] mx-auto relative overflow-hidden rounded-xl shadow-lg">
+            {shippingBanner ? (
+              // If an active shipping banner exists, render it
+                <div className="shipping-banner-container">
+                <a href={shippingBanner.link || '#'} target="_blank" rel="noopener noreferrer">
+                  <picture>
+                    {shippingBanner.mobile_image_url && (
+                      <source media="(max-width: 767px)" srcSet={shippingBanner.mobile_image_url} />
+                    )}
+                    <img 
+                      src={shippingBanner.image_url} 
+                      alt={shippingBanner.title} 
+                    />
+                  </picture>
+                </a>
+              </div>
+              // <a href={shippingBanner.link || '#'} target="_blank" rel="noopener noreferrer">
+              //   <picture>
+              //     {shippingBanner.mobile_image_url && (
+              //       <source media="(max-width: 767px)" srcSet={shippingBanner.mobile_image_url} />
+              //     )}
+              //     <img 
+              //       src={shippingBanner.image_url} 
+              //       alt={shippingBanner.title} 
+              //       className="w-full h-auto"
+              //     />
+              //   </picture>
+              // </a>
+            ) : (
+              // Otherwise, render the default content (your original banner)
+              <div className="bg-gradient-to-r from-orange-100 via-red-50 to-orange-100 border-2 border-red-200">
+                <div className="absolute inset-0 opacity-10 pointer-events-none">
+                  <div className="absolute -top-10 -left-10 w-56 h-56 bg-red-400 rounded-full blur-3xl" />
+                  <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-orange-300 rounded-full blur-3xl" />
+                </div>
+                <div className="relative z-10 flex items-center justify-between py-6 px-8">
+                  {/* ... your original default banner content ... */}
+                   <div className="flex items-center gap-5">
+                      <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-500">
+                        <FaShippingFast className="text-white text-2xl" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-bold text-red-800 mb-1">
+                          {getPromoSetting("promo_shipping_title", "Free Shipping")}
+                        </h3>
+                        <p className="text-sm font-semibold text-red-600">Shop now</p>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
 
 {/* <section className="hidden md:block py-4 bg-white">

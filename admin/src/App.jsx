@@ -8,7 +8,7 @@ import '@mantine/spotlight/styles.css';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
 import { Spotlight, spotlight } from '@mantine/spotlight';
-import { FaSearch, FaHome, FaUsers, FaBoxOpen, FaQuestionCircle } from 'react-icons/fa';
+import { FaSearch, FaHome, FaUsers, FaBoxOpen, FaQuestionCircle } from 'react-icons/fa';  
 
 
 // Components
@@ -38,7 +38,7 @@ import WarehouseList from "./Pages/WarehousePages/WarehouseList.jsx";
 import WarehouseProducts from './Pages/WarehousePages/WarehouseProducts.jsx'
 import VideoBannerManagement from "./Pages/VideoBanners/VideoBannerManagement.jsx";
 import AdminOrders from "./Pages/Orders/index.jsx";
-import ShippingBanner from "./Pages/ShippingBanner/ShippingBanner.jsx"
+import ShippingBanner from "./Pages/ShippingBanner/ShippingBanner.jsx";
 
 const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);

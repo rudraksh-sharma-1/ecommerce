@@ -260,7 +260,11 @@ const BannersPage = () => {
             Add New Banner
           </Button>
           <Link to={'/VideoBannerManagement'} className="underline">Go to Video Banner Management</Link>
-           <Link to={'/ShippingBanner'} className="underline">Go to Shipping Banner Management</Link>
+          <Link to={'/ShippingBanner'} className="underline">
+            <Button variant="outline">
+              Manage Shipping Banner
+            </Button>
+          </Link>
         </Group>
 
         <div className="flex flex-col md:flex-row gap-4 mb-4">
