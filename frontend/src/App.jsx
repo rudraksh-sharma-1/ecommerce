@@ -29,7 +29,7 @@ import Wishlist from "./Pages/Wishlist";
 import ResetPassword from "./Pages/ResetPassword";
 import EnquiryHistory from "./Pages/EnquiryHistory"; // Add EnquiryHistory import
 import ComingSoon from "./Pages/ComingSoon"; // Add ComingSoon import
-import PrivacyPolicy from './Pages/PrivacyPolicy';
+// import PrivacyPolicy from './Pages/PrivacyPolicy';
 import TermsOfService from "./Pages/TermsOfService";
 import FAQ from "./Pages/FAQ";
 import ShippingReturns from "./Pages/ShippingReturns";
@@ -141,10 +141,10 @@ function App() {
                     exact={true}
                     element={<CustomPrinting />}
                   />
-                  {<Route
+                  {/* {<Route
                     path="/privacy-policy"
                     element={<PrivacyPolicy />}
-                  /> }
+                  /> } */}
                   <Route
                     path={"/terms-of-service"}
                     exact={true}
