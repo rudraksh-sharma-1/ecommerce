@@ -46,11 +46,10 @@ body:has(.announcement-bar) .mobile-search-bar-container {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover; /* Ensures the image covers the container */
 }
 
-.shipping-banner-container img {
-  object-fit: contain; /* Ensures the entire image is visible without cropping */
-}
+
 
 /* --- Enforce FIXED dimensions --- */
 
