@@ -23,10 +23,12 @@ import {
   getAllProducts,
   getAllCategories,
   getAllBanners,
+  getshipping,
 } from "../../utils/supabaseApi";
 import { usePromotional } from "../../contexts/PromotionalContext.jsx";
 import FlashSale from "../../components/FlashSale";
 import "./home.css";
+import { getActiveShippingBanner } from "../../utils/supabaseApi";
 
 function ProductTabs({ categories }) {
   const [value, setValue] = useState(0);
@@ -91,7 +93,9 @@ export const Home = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [shippingBanners, setShippingBanners] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [shippingBanner, setShippingBanner] = useState(null);
   /* const [defaultAddress, setDefaultAddress] = useState(null); */
 
   // Search state
@@ -143,9 +147,44 @@ export const Home = () => {
       }
 
     fetchAllData();
+    async function fetchShippingBanner() {
+      const { success, banner } = await getActiveShippingBanner();
+      if (success && banner) {
+        setShippingBanner(banner);
+      }
+    }
+    fetchShippingBanner();
   }, [selectedAddress]);
 
-  /* console.log("All Products Fetched:", products); */
+useEffect(() => {
+    const fetchShipping = async () => {
+      try {
+        setLoading(true);
+        const result = await getshipping(); 
+        console.log("resultshipping", result);
+        if (result.success && Array.isArray(result.banners)) {
+          const shipBanner = result.banners.filter(b => b.active && b.position === 'hero' && !b.is_mobile);
+          setShippingBanners(shipBanner.map(b => ({
+            id: b.id,
+            title: b.title,
+            description: b.description,
+            imageUrl: b.image || b.image_url,
+            link: b.link || '#',
+          })));
+          console.log("Shipping Banners:", shipBanner);
+        } else {
+          setShippingBanners([]);
+        }
+      } catch (error) {
+        setError('Failed to load banners');
+        setShippingBanners([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchShipping();
+  }, []);
+  
 
   const getProductsByCategory = (category) => {
     return products
@@ -315,34 +354,126 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Free Shipping Banner - Keep this dynamic for promotional content */}
-      <section className="py-4 bg-white">
+      {/* ================== PROMOTIONAL BANNER ================== */}
+{/* Desktop version (lg and up) */}
+
+ <section className="py-4 bg-white">
         <div className="container px-4">
-          <div className="shipping-banner w-full lg:w-[90%] mx-auto py-4 px-4 sm:px-6 border-2 border-red-200 rounded-lg shadow-sm bg-gradient-to-r from-red-50 to-white">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <FaShippingFast className="text-3xl sm:text-4xl text-red-500" />
-                <span className="text-base sm:text-lg font-semibold uppercase">
-                  {getPromoSetting("promo_shipping_title", "Free Shipping")}
-                </span>
+          <div className="promotional-banner w-full lg:w-[95%] mx-auto relative overflow-hidden rounded-xl shadow-lg">
+            {shippingBanner ? (
+              // If an active shipping banner exists, render it
+                <div className="shipping-banner-container">
+                <a href={shippingBanner.link || '#'} target="_blank" rel="noopener noreferrer">
+                  <picture>
+                    {shippingBanner.mobile_image_url && (
+                      <source media="(max-width: 767px)" srcSet={shippingBanner.mobile_image_url} />
+                    )}
+                    <img 
+                      src={shippingBanner.image_url} 
+                      alt={shippingBanner.title} 
+                    />
+                  </picture>
+                </a>
               </div>
-
-              <div className="text-center sm:text-left">
-                <p className="font-medium text-sm sm:text-base">
-                  {getPromoSetting(
-                    "promo_shipping_description",
-                    "Free delivery on your first order and over ₹500"
-                  )}
-                </p>
+              // <a href={shippingBanner.link || '#'} target="_blank" rel="noopener noreferrer">
+              //   <picture>
+              //     {shippingBanner.mobile_image_url && (
+              //       <source media="(max-width: 767px)" srcSet={shippingBanner.mobile_image_url} />
+              //     )}
+              //     <img 
+              //       src={shippingBanner.image_url} 
+              //       alt={shippingBanner.title} 
+              //       className="w-full h-auto"
+              //     />
+              //   </picture>
+              // </a>
+            ) : (
+              // Otherwise, render the default content (your original banner)
+              <div className="bg-gradient-to-r from-orange-100 via-red-50 to-orange-100 border-2 border-red-200">
+                <div className="absolute inset-0 opacity-10 pointer-events-none">
+                  <div className="absolute -top-10 -left-10 w-56 h-56 bg-red-400 rounded-full blur-3xl" />
+                  <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-orange-300 rounded-full blur-3xl" />
+                </div>
+                <div className="relative z-10 flex items-center justify-between py-6 px-8">
+                  {/* ... your original default banner content ... */}
+                   <div className="flex items-center gap-5">
+                      <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-500">
+                        <FaShippingFast className="text-white text-2xl" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-bold text-red-800 mb-1">
+                          {getPromoSetting("promo_shipping_title", "Free Shipping")}
+                        </h3>
+                        <p className="text-sm font-semibold text-red-600">Shop now</p>
+                      </div>
+                    </div>
+                </div>
               </div>
-
-              <p className="font-bold text-lg sm:text-xl text-red-600">
-                {getPromoSetting("promo_shipping_amount", "Only ₹500/-")}
-              </p>
-            </div>
+            )}
           </div>
         </div>
       </section>
+
+
+{/* <section className="hidden md:block py-4 bg-white">
+  <div className="container px-4">
+    <div className="promotional-banner w-full lg:w-[95%] mx-auto
+                    relative overflow-hidden rounded-xl shadow-lg
+                    bg-gradient-to-r from-orange-100 via-red-50 to-orange-100
+                    border-2 border-red-200">
+    
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute -top-10 -left-10 w-56 h-56 bg-red-400 rounded-full blur-3xl" />
+        <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-orange-300 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 flex items-center justify-between py-6 px-8">
+       
+        <div className="flex items-center gap-5">
+          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-500">
+            <FaShippingFast className="text-white text-2xl" />
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold text-red-800 mb-1">
+              {getPromoSetting("promo_shipping_title", "Free Shipping")}
+            </h3>
+            <p className="text-sm font-semibold text-red-600">Shop now</p>
+          </div>
+        </div>
+
+     
+        <p className="flex-1 text-center font-medium text-gray-800">
+          {getPromoSetting(
+            "promo_shipping_description",
+            "Free delivery on your first order and over ₹500"
+          )}
+        </p>
+
+       
+        <div className="flex items-center gap-3 bg-white/90 px-4 py-2 rounded-md border">
+          <span className="bg-blue-700 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+            BANK
+          </span>
+          <span className="text-sm font-bold text-gray-800">
+            {getPromoSetting("promo_shipping_amount", "Only ₹500/-")}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> */}
+
+{/* Mobile version (below lg) */}
+{/* <section className="md:hidden w-full">
+  <img
+    src={promoImage}
+    alt="Special Mobile Offer"
+    className="w-full h-auto object-cover"
+  />
+</section> */}
+{/* ========================================================= */}
+
+
 
       <VideoBannerSlider/>
 

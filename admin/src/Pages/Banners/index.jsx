@@ -66,6 +66,7 @@ const BannersPage = () => {
     async function getBanners() {
       setLoading(true);
       const { data: banners, error } = await supabase.from('banners').select();
+      console.log(banners)
       if (error) {
         setNotification({ visible: true, message: error.message, color: 'red' });
       } else if (banners && banners.length > 0) {
@@ -259,6 +260,11 @@ const BannersPage = () => {
             Add New Banner
           </Button>
           <Link to={'/VideoBannerManagement'} className="underline">Go to Video Banner Management</Link>
+          <Link to={'/ShippingBanner'} className="underline">
+            <Button variant="outline">
+              Manage Shipping Banner
+            </Button>
+          </Link>
         </Group>
 
         <div className="flex flex-col md:flex-row gap-4 mb-4">

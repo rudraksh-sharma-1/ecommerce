@@ -109,7 +109,127 @@ export async function toggleVideoBannerStatus(id, status) {
   if (error) return { success: false, error: error.message };
   return { success: true };
 }
+//shipping BANNERS
+export async function getshippingBanner() {
+  const { data, error } = await supabase.from("shipping_banners").select().order('created_at', { ascending: false });
+  if (error) return { success: false, error: error.message };
+  return { success: true, banners: data };
+}
 
+// Helper to upload an image to the shipping_banners bucket
+async function uploadShippingBannerImage(imageFile) {
+  if (!imageFile || !(imageFile instanceof File)) {
+    return { url: null, error: null };
+  }
+  const fileExt = imageFile.name.split(".").pop();
+  const fileName = `shipping_${Date.now()}.${fileExt}`;
+  
+  // Use supabaseAdmin for uploads to bypass any potential RLS policies on storage
+  const { error: uploadError } = await supabaseAdmin.storage
+    .from("shippingbanners")
+    .upload(fileName, imageFile);
+  if (uploadError) {
+    return { url: null, error: uploadError.message };
+  }
+  
+  // Getting the public URL can be done with the normal client
+  const { data: urlData } = supabaseAdmin.storage
+    .from("shippingbanners")
+    .getPublicUrl(fileName);
+    
+  return { url: urlData.publicUrl, error: null };
+}
+
+// Add a new shipping banner (CORRECTED)
+export async function addShippingBanner(banner, desktopImageFile, mobileImageFile) {
+  // Deactivate all other banners if this one is active
+  if (banner.active) {
+    // FIX: Use supabaseAdmin to perform the mass update
+    const { error: deactivateError } = await supabaseAdmin.from('shipping_banners').update({ active: false }).neq('id','00000000-0000-0000-0000-000000000000');
+    console.log('error', deactivateError);
+    if (deactivateError) return { success: false, error: deactivateError.message };
+  }
+  const { url: desktopUrl, error: desktopError } = await uploadShippingBannerImage(desktopImageFile);
+  if (desktopError) return { success: false, error: desktopError };
+  
+  const { url: mobileUrl, error: mobileError } = await uploadShippingBannerImage(mobileImageFile);
+  if (mobileError) return { success: false, error: mobileError };
+  
+  const bannerToInsert = { ...banner, image_url: desktopUrl, mobile_image_url: mobileUrl };
+  const { data, error } = await supabaseAdmin.from("shipping_banners").insert([bannerToInsert]).select().single();
+  
+  if (error) return { success: false, error: error.message };
+  return { success: true, banner: data };
+}
+// Update a shipping banner (CORRECTED)
+export async function updateShippingBanner(id, banner, desktopImageFile, mobileImageFile) {
+  // Deactivate all other banners if this one is being set to active
+  if (banner.active) {
+    // FIX: Use supabaseAdmin to perform the mass update
+    const { error: deactivateError } = await supabaseAdmin.from('shipping_banners').update({ active: false }).neq('id', id);
+    if (deactivateError) return { success: false, error: deactivateError.message };
+  }
+
+  let desktopUrl = banner.image_url;
+  if (desktopImageFile) {
+    const { url, error } = await uploadShippingBannerImage(desktopImageFile);
+    if (error) return { success: false, error };
+    desktopUrl = url;
+  }
+  
+  let mobileUrl = banner.mobile_image_url;
+  if (mobileImageFile) {
+    const { url, error } = await uploadShippingBannerImage(mobileImageFile);
+    if (error) return { success: false, error };
+    mobileUrl = url;
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("shipping_banners")
+    .update({ ...banner, image_url: desktopUrl, mobile_image_url: mobileUrl, updated_at: new Date() })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) return { success: false, error: error.message };
+  return { success: true, banner: data };
+}
+
+// Delete a shipping banner
+export async function deleteShippingBanner(id) {
+  const { error } = await supabaseAdmin.from("shipping_banners").delete().eq("id", id);
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}
+
+// Toggle shipping banner status
+export async function toggleShippingBannerStatus(id, active) {
+  try {
+    // --- LOGIC TO ENSURE ONLY ONE BANNER IS ACTIVE ---
+    if (active) {
+    // First, set all other banners to inactive. This requires the RLS policy to allow it.
+    const { error: deactivateError } = await supabaseAdmin
+     .from('shipping_banners')
+     .update({ active: false })
+     .neq('id', id);
+
+    if (deactivateError) {
+     // This will fail if the RLS policy from the previous step is not applied correctly.
+     return { success: false, error: `Failed to deactivate other banners: ${deactivateError.message}` };
+      }
+    }
+   const { error } = await supabaseAdmin
+     .from("shipping_banners")
+      .update({ active })
+      .eq("id", id);
+
+    if (error) return { success: false, error: error.message };
+    return { success: true };
+
+    } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
 // BANNERS
 export async function getAllBanners() {
   const { data, error } = await supabaseAdmin.from("banners").select();
