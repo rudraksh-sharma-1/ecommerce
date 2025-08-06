@@ -5,7 +5,7 @@ const AboutUs = () => {
   const { getSetting } = useSettings();
   
   return (
-    <div className="bg-white py-16">
+    <div className="bg-white py-16 md:mt-0 mt-[-2.7rem]">
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">

@@ -260,8 +260,7 @@
 
 /* Override all possible margin sources for product listing */
 .product-listing-page-wrapper {
-  margin: 0 !important;
-  padding: 0 8px !important;
+  padding: 0 0 !important;
   width: 100vw !important;
   max-width: none !important;
   box-sizing: border-box;

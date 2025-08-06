@@ -2,7 +2,7 @@ import React from 'react';
 
 const ContactUs = () => {
   return (
-    <div className="bg-gray-50 py-16 min-h-[70vh]">
+    <div className="bg-gray-50 py-16 min-h-[70vh] md:mt-0 mt-[-2.7rem]">
       <div className="container mx-auto px-4">
         {/* Page Header */}
         <div className="text-center mb-10">

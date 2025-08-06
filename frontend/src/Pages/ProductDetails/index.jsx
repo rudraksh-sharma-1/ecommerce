@@ -205,7 +205,7 @@ const ProductDetails = () => {
       </div> */}
       {/* this div is only for spacing between search bar and product detail */}
       {/* <div className="mt-5 h-12 md:hidden"></div> */}
-      <div className="py-3 sm:py-5 bg-gray-50 mt-5">
+      <div className="py-3 sm:py-5 bg-gray-50 mt-[-2.7rem] ">
         <div className="container px-4">
           <Breadcrumbs aria-label="breadcrumb" className="text-sm mb-4">
             <Link
