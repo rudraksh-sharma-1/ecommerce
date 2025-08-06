@@ -1,45 +1,45 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import supabase from "../../utils/supabase.ts"; // Adjust the path if needed
+import supabase from "../../utils/supabase.ts";
 
 const SubCategoryPage = () => {
   const { categoryName } = useParams();
+  const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    const fetchSubcategories = async () => {
-      const { data: categoryData, error: categoryError } = await supabase
-        .from("categories")
-        .select("id")
-        .eq("name", decodeURIComponent(categoryName))
-        .single();
-
-      if (categoryError) {
-        console.error("Error fetching category:", categoryError);
-        return;
+    const fetchCategories = async () => {
+      const { data, error } = await supabase.from("categories").select("*");
+      if (!error) {
+        setCategories(data);
+        const matched = data.find(cat => cat.name === decodeURIComponent(categoryName));
+        setSelectedCategory(matched || null);
       }
+    };
+    fetchCategories();
+  }, [categoryName]);
 
-      const category_id = categoryData.id;
+  useEffect(() => {
+    const fetchSubcategories = async () => {
+      if (!selectedCategory) return;
 
-      const { data: subcategoryData, error: subcategoryError } = await supabase
+      const { data, error } = await supabase
         .from("subcategories")
         .select("*")
-        .eq("category_id", category_id);
+        .eq("category_id", selectedCategory.id);
 
-      if (subcategoryError) {
-        console.error("Error fetching subcategories:", subcategoryError);
-      } else {
-        setSubcategories(subcategoryData);
-        if (subcategoryData.length > 0) {
-          setSelectedSubcategory(subcategoryData[0]); // Select first by default
+      if (!error) {
+        setSubcategories(data);
+        if (data.length > 0) {
+          setSelectedSubcategory(data[0]);
         }
       }
     };
-
     fetchSubcategories();
-  }, [categoryName]);
+  }, [selectedCategory]);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -50,96 +50,109 @@ const SubCategoryPage = () => {
         .select("*")
         .eq("subcategory_id", selectedSubcategory.id);
 
-      if (error) {
-        console.error("Error fetching groups:", error);
-      } else {
+      if (!error) {
         setGroups(data);
       }
     };
-
     fetchGroups();
   }, [selectedSubcategory]);
 
   return (
-    <div className="flex flex-row ">
-      {/* Sidebar */}
-      <aside className="md:w-40 sm:w-20 bg-white border-0 rounded shadow-lg shadow-cyan-500/50 h-screen overflow-y-auto p-4 hide-scrollbar">
-        <h2 className="text-xl font-semibold mb-6 text-center text-orange-500">
-          {decodeURIComponent(categoryName)}
-        </h2>
-
-        <ul className="space-y-6">
-          {subcategories.length > 0 ? (
-            subcategories.map((sub, idx) => (
-              <li key={sub.id}>
-                <div
-                  onClick={() => setSelectedSubcategory(sub)}
-                  className={`flex flex-col items-center text-center cursor-pointer transition hover:text-blue-600 ${
-                    selectedSubcategory?.id === sub.id
-                      ? "text-blue-600 font-semibold"
-                      : ""
-                  }`}
+    <div className="flex h-screen w-full overflow-hidden">
+      {/* Fixed Sidebar */}
+      <aside className="w-20 bg-white border-r-0 shadow h-full overflow-y-auto hide-scrollbar fixed left-0 top-0 ">
+        <ul className="flex flex-col items-center">
+          {categories.map(cat => (
+            <li
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat)}
+              className={`flex flex-col items-center text-center justify-between text-xl h-25 cursor-pointer px-2  ${selectedCategory?.id === cat.id
+                ? "bg-amber-50 font-semibold"
+                : "hover:bg-gray-200 text-gray-700"
+                }`} style={{ fontFamily: '"Great Vibes", cursive', color: '#92400e' }}
+            >
+              <div className="border-[0.5px] border-r-0 w-20 h-30 flex flex-col align-middle items-center justify-between ">
+                <img
+                  src={cat.image_url || "https://placehold.co/40x40"}
+                  alt={cat.name}
+                  className="w-20 h-20 object-cover mt-3"
+                />
+                <span
+                  className={`text-xl text-center w-full ${cat.name === "Well-Being" ? "text-sm" : ""
+                    }`}
                 >
-                  <img
-                    src={sub.image_url}
-                    alt="Image"
-                    className="w-15 h-15 rounded-full object-cover border border-gray-300 shadow-sm mb-2"
-                  />
-                  <span className="text-sm">{sub.name}</span>
-                </div>
-                {idx !== subcategories.length - 1 && (
-                  <hr className="my-4 border-gray-200" />
-                )}
-              </li>
-            ))
-          ) : (
-            <li className="text-center text-gray-500">
-              No subcategories found
+                  {cat.name}
+                </span>
+
+              </div>
             </li>
-          )}
+          ))}
         </ul>
       </aside>
 
-      {/* Right Section: Groups */}
-      <div className="flex-1 p-4">
-        <h1 className="text-2xl font-bold mb-6 text-gray-700">
-          {selectedSubcategory
-            ? `${selectedSubcategory.name}`
-            : "Select a Subcategory"}
-        </h1>
+      {/* Main Content */}
+      <div className="ml-20 w-full flex-1 flex flex-col">
+        {/* Fixed Subcategory Bar */}
+        <div className="bg-white fixed top-0 left-20 right-0  w-auto px-2 border-0 shadow-sm">
+          <h1 className="text-xl font-semibold mt-1 mb-1 bg-gradient-to-r from-pink-400 via-yellow-400 to-green-400
+            bg-clip-text text-transparent tracking-wide">
+            {selectedCategory?.name || "Category"}
+          </h1>
 
-        {groups.length > 0 ? (
-          <div className="grid grid-cols-3 gap-4 sm:gap-6">
-            {groups.map((group) => (
-              <Link
-                key={group.id}
-                to={`/productListing?group=${encodeURIComponent(
-                  group.name
-                )}&subcategory=${encodeURIComponent(
-                  selectedSubcategory?.name || ""
-                )}&category=${encodeURIComponent(
-                  decodeURIComponent(categoryName)
-                )}`}
+          <div className="flex space-x-3 overflow-x-auto hide-scrollbar pb-1">
+            {subcategories.map(sub => (
+              <div
+                key={sub.id}
+                onClick={() => setSelectedSubcategory(sub)}
+                className={`flex flex-col items-center min-w-[70px] h-[80px]  rounded-md cursor-pointer ${selectedSubcategory?.id === sub.id
+                  ? "bg-amber-50 text-black"
+                  : "bg-gray-100 text-gray-700"
+                  }`}
               >
-                {/* Mobile version: flat design, no border or box */}
-                <div className="flex flex-col items-center justify-center space-y-2 hover:shadow-xl sm:border sm:rounded-lg sm:h-37 sm:shadow p-2">
-                  <img
-                    src={group.image_url}
-                    alt='group image'
-                    className="aspect-square sm:w-15 sm:h-15 rounded-full object-cover border mb-1"
-                  />
-                  <p className="text-xs sm:text-sm text-center font-medium">
-                    {group.name}
-                  </p>
-                </div>
-              </Link>
+                <img
+                  src={sub.image_url}
+                  alt="Image"
+                  className="w-full h-[55px] mb-1 rounded-t-md"
+                />
+                <span className="text-[11px] text-center truncate w-full px-1">{sub.name}</span>
+              </div>
             ))}
           </div>
-        ) : (
-          <p className="text-gray-500">
-            No groups available for this subcategory.
-          </p>
-        )}
+        </div>
+
+        {/* Scrollable Group Section */}
+        <div className="flex-1 overflow-y-auto px-3 mt-20 pb-6 pt-3">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3">
+            {selectedSubcategory?.name || "Select a Subcategory"}
+          </h3>
+
+          <div className="grid grid-cols-3 gap-2">
+            {groups.map(group => (
+              <div key={group.id} className="flex flex-col items-center text-center">
+                {/* Outer Circle Border */}
+                <div className="w-16 h-16 border rounded-full overflow-hidden bg-gray-300">
+                  <Link
+                    to={`/productListing?group=${encodeURIComponent(group.name)}&subcategory=${encodeURIComponent(selectedSubcategory?.name || "")}&category=${encodeURIComponent(selectedCategory?.name || "")}`}
+                    className="flex items-center align-middle w-full h-full"
+                  >
+                    <img
+                      src={group.image_url}
+                      alt="Image"
+                      className="w-full h-full object-cover"
+                    />
+                  </Link>
+                </div>
+
+                {/* Text below the circle */}
+                <p className="text-[11px] font-medium text-center break-words w-full mt-1 leading-tight">
+                  {group.name}
+                </p>
+
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );

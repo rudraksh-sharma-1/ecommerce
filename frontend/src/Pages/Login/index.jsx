@@ -100,7 +100,7 @@ const Login = () => {
   };
 
   return (
-    <section className="py-8 md:py-16 bg-gray-50">
+    <section className="py-8 md:py-16 bg-gray-50 md:mt-0 mt-[-2.7rem]">
       <div className="container mx-auto px-4">
         <div className="max-w-md mx-auto bg-white p-6 md:p-8 rounded-lg shadow-md">
           <h2 className="text-xl md:text-2xl font-semibold mb-6 text-center">Login to Your Account</h2>

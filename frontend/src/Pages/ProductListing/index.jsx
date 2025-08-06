@@ -211,14 +211,14 @@ const ProductListing = () => {
   };
 
   return (
-    <div className="product-listing-page-wrapper">
+    <div className="product-listing-page-wrapper md:mt-0 mt-[-2.7rem]">
       {/* Search Bar For mobile Screens */}
       {/* <div className="mobile-search-bar-container block md:hidden w-full mt-3 px-5 py-3">
         <Search />
       </div> */}
       {/* this div is only for spacing between search bar and product list */}
      {/*  <div className="mt-5 h-12 md:hidden"></div> */}
-      <section className="py-3 pb-0 bg-gray-50 product-section ">
+      <section className=" bg-gray-50 product-section">
         <div className="w-full px-4">
           <Breadcrumbs aria-label="breadcrumb" className="text-sm flex-wrap">
             <Link
