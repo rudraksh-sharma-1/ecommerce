@@ -23,7 +23,7 @@ const WarehouseList = () => {
 
     try {
       await axios.delete(
-        `https://ecommerce-wvkv.onrender.com/api/warehouse/delete/${id}`
+        `https://ecommerce-8342.onrender.com/api/warehouse/delete/${id}`
       );
       await fetchWarehouses();
     } catch (err) {
@@ -35,7 +35,7 @@ const WarehouseList = () => {
   const fetchWarehouses = async () => {
     try {
       const res = await axios.get(
-        "https://ecommerce-wvkv.onrender.com/api/warehouse/list"
+        "https://ecommerce-8342.onrender.com/api/warehouse/list"
       ); // make sure this route exists
       setWarehouses(res.data);
     } catch (err) {
@@ -166,13 +166,13 @@ const WarehouseList = () => {
                     if (editingWarehouse) {
                       // 🔄 EDIT
                       await axios.put(
-                        `https://ecommerce-wvkv.onrender.com/api/warehouse/update/${editingWarehouse.id}`,
+                        `https://ecommerce-8342.onrender.com/api/warehouse/update/${editingWarehouse.id}`,
                         form
                       );
                     } else {
                       // ➕ ADD
                       await axios.post(
-                        "https://ecommerce-wvkv.onrender.com/api/warehouse/add",
+                        "https://ecommerce-8342.onrender.com/api/warehouse/add",
                         form
                       );
                     }

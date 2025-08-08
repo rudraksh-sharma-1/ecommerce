@@ -14,20 +14,20 @@ const WarehouseProducts = () => {
 
   // Fetch warehouse info
   const fetchWarehouse = async () => {
-    const res = await axios.get(`https://ecommerce-wvkv.onrender.com/api/warehouse/listsingle/${id}`);
+    const res = await axios.get(`https://ecommerce-8342.onrender.com/api/warehouse/listsingle/${id}`);
     setWarehouse(res.data);
   };
 
   // Fetch products mapped to this warehouse
   const fetchWarehouseProducts = async () => {
-    const res = await axios.get(`https://ecommerce-wvkv.onrender.com/api/productwarehouse/warehouse/${id}`);
+    const res = await axios.get(`https://ecommerce-8342.onrender.com/api/productwarehouse/warehouse/${id}`);
     const mapped = res.data.map((item) => item.products);
     setProducts(mapped);
   };
 
   // Fetch all available products
   const fetchAllProducts = async () => {
-    const res = await axios.get(`https://ecommerce-wvkv.onrender.com/api/productsroute/allproducts`);
+    const res = await axios.get(`https://ecommerce-8342.onrender.com/api/productsroute/allproducts`);
     setAllProducts(res.data);
   };
 
@@ -35,7 +35,7 @@ const WarehouseProducts = () => {
     if (!selectedProductId) return;
 
     try {
-      await axios.post("https://ecommerce-wvkv.onrender.com/api/productwarehouse/map", {
+      await axios.post("https://ecommerce-8342.onrender.com/api/productwarehouse/map", {
         product_id: selectedProductId,
         warehouse_id: parseInt(id),
       });
@@ -49,7 +49,7 @@ const WarehouseProducts = () => {
 
   const handleRemoveProduct = async (product_id) => {
     try {
-      await axios.post("https://ecommerce-wvkv.onrender.com/api/productwarehouse/remove", {
+      await axios.post("https://ecommerce-8342.onrender.com/api/productwarehouse/remove", {
         product_id,
         warehouse_id: parseInt(id),
       });

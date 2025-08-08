@@ -768,7 +768,7 @@ export async function addToCart(user_id, product_id, quantity = 1) {
 
 export const getCartItems = async (user_id) => {
   try {
-    const res = await axios.get(`https://ecommerce-wvkv.onrender.com/api/cart/${user_id}`);
+    const res = await axios.get(`https://ecommerce-8342.onrender.com/api/cart/${user_id}`);
     return { success: true, cartItems: res.data.cartItems };
   } catch (err) {
     console.error("Error fetching cart items:", err);
@@ -778,7 +778,7 @@ export const getCartItems = async (user_id) => {
 
 export const updateCartItem = async (cart_item_id, quantity) => {
   try {
-    const res = await axios.put(`https://ecommerce-wvkv.onrender.com/api/cart/update/${cart_item_id}`, { quantity });
+    const res = await axios.put(`https://ecommerce-8342.onrender.com/api/cart/update/${cart_item_id}`, { quantity });
     return { success: true, updated: res.data };
   } catch (err) {
     console.error("Error updating cart item:", err);
@@ -788,7 +788,7 @@ export const updateCartItem = async (cart_item_id, quantity) => {
 
 export const removeCartItem = async (cart_item_id) => {
   try {
-    const res = await axios.delete(`https://ecommerce-wvkv.onrender.com/api/cart/remove/${cart_item_id}`);
+    const res = await axios.delete(`https://ecommerce-8342.onrender.com/api/cart/remove/${cart_item_id}`);
     return { success: true, removed: res.data };
   } catch (err) {
     console.error("Error removing cart item:", err);
@@ -798,7 +798,7 @@ export const removeCartItem = async (cart_item_id) => {
 
 export const clearCart = async (user_id) => {
   try {
-    const res = await axios.delete(`https://ecommerce-wvkv.onrender.com/api/cart/clear/${user_id}`);
+    const res = await axios.delete(`https://ecommerce-8342.onrender.com/api/cart/clear/${user_id}`);
     return { success: true, cleared: res.data };
   } catch (err) {
     console.error("Error clearing cart:", err);
@@ -866,7 +866,7 @@ export async function removeFromWishlist(wishlist_item_id) {
 } */
 
 // --- ORDER MANAGEMENT ---
-const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'https://ecommerce-wvkv.onrender.com/api/order';
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'https://ecommerce-8342.onrender.com/api/order';
 // ORDERS
 export async function getAllOrders() {
   try {
@@ -960,7 +960,7 @@ export async function getUserOrders(user_id) {
 
 export async function getOrderItemsByOrderId(order_id) {
   try {
-    const res = await axios.get(`https://ecommerce-wvkv.onrender.com/api/orderItems/${order_id}`)
+    const res = await axios.get(`https://ecommerce-8342.onrender.com/api/orderItems/${order_id}`)
     return res.data
   }
   catch (error) {
@@ -1552,7 +1552,7 @@ import axios from "axios";
 export async function addUserAddress(userId, address) {
   try {
     const response = await axios.post(
-      "https://ecommerce-wvkv.onrender.com/api/geo-address/createAddress",
+      "https://ecommerce-8342.onrender.com/api/geo-address/createAddress",
       {
         ...address,
         user_id: userId,
@@ -1581,7 +1581,7 @@ export async function addUserAddress(userId, address) {
 export async function updateUserAddress(addressId, address) {
   try {
     const res = await axios.put(
-      `https://ecommerce-wvkv.onrender.com/api/geo-address/update/${addressId}`,
+      `https://ecommerce-8342.onrender.com/api/geo-address/update/${addressId}`,
       address
     );
 
@@ -1606,7 +1606,7 @@ export async function updateUserAddress(addressId, address) {
 export async function deleteUserAddress(addressId) {
   try {
     await axios.delete(
-      `https://ecommerce-wvkv.onrender.com/api/geo-address/delete/${addressId}`
+      `https://ecommerce-8342.onrender.com/api/geo-address/delete/${addressId}`
     );
 
     return { success: true };

@@ -9,7 +9,7 @@ const BusinessUsersList = () => {
 
   const fetchBusinessUsers = async () => {
     try {
-      const res = await axios.get('https://ecommerce-wvkv.onrender.com/api/business/business-users'); // update if deployed
+      const res = await axios.get('https://ecommerce-8342.onrender.com/api/business/business-users'); // update if deployed
       setUsers(res.data);
     } catch (err) {
       console.error('Error fetching business users:', err.message);
