@@ -213,13 +213,17 @@ const ProductItem = ({ product }) => {
         </div>
       </div>
 
-      <div className="mt-2 flex flex-col justify-between flex-1 p-1">
+      <div className="flex flex-col justify-between flex-1 p-1">
         <div>
-          <h3 className="text-xs line-clamp-2 mb-3">{name}</h3>
-          {uom ? <p className='text-xs text-gray-500 mt-1'>{uom}</p> : <p className="text-xs text-gray-500 mt-1">1 Variant</p>}
+          <h3 className="text-xs line-clamp-2 mb-1">{name}</h3>
+          {uom ? <p className='text-xs text-gray-500'>{uom}</p> : <p className="text-xs text-gray-500">1 Variant</p>}
         </div>
+        { old_price != 0 && old_price != undefined && old_price != null && price !=0 ? 
+          <p className='text-xs text-emerald-600'>Save ₹{old_price-price}</p>
+          : <></>
+        }
 
-        <div className="mt-2 flex items-center justify-between">
+        <div className="mt-1 flex items-center justify-between">
           <div className="justify-center text-[13px] bg-yellow-300 px-0.5 py-0.5 rounded-lg">
             <span className="text-black font-semibold mr-1">₹{price.toFixed(0)}</span>
             {old_price != 0 && old_price != undefined && old_price != null && (

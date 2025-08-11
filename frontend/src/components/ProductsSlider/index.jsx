@@ -56,14 +56,14 @@ const ProductsSlider = ({
       <div className="relative">
         <Swiper
           slidesPerView={slidesPerViewMobile}
-          spaceBetween={12}
+          spaceBetween={6}
           navigation={showNavigation && !isMobile}
           pagination={showPagination ? {
             clickable: true,
             dynamicBullets: true
           } : false}
           modules={[Navigation, Pagination]}
-          className="products-swiper px-3"
+          className="products-swiper px-1"
           breakpoints={{
             640: {
               slidesPerView: slidesPerViewTablet,

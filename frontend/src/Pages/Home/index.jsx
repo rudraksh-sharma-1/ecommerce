@@ -306,7 +306,7 @@ useEffect(() => {
 
       {/* Popular Products Section */}
       <section className="bg-white sm:!py-10 !py-0 mt-0">
-        <div className="container px-4">
+        <div className="px-2">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex-1">
               <h2 className="text-xl sm:text-2xl font-semibold mb-1 mt-5">
@@ -331,7 +331,7 @@ useEffect(() => {
 
       {/* Latest Products Section */}
       <section className="sm:!py-10 !py-0  bg-white">
-        <div className="container px-4">
+        <div className="px-2">
           <div className="flex items-center justify-between ">
             <h2 className="text-xl sm:text-2xl font-semibold">
               Latest Products
@@ -358,7 +358,7 @@ useEffect(() => {
 {/* Desktop version (lg and up) */}
 
  <section className="py-4 bg-white">
-        <div className="container px-4">
+        <div className="px-2">
           <div className="promotional-banner w-full lg:w-[95%] mx-auto relative overflow-hidden rounded-xl shadow-lg">
             {shippingBanner ? (
               // If an active shipping banner exists, render it
@@ -479,7 +479,7 @@ useEffect(() => {
 
       {/* Featured Products Section */}
       <section className="sm:!py-10 !py-0  bg-white">
-        <div className="container px-4">
+        <div className="px-2">
           <div className="flex items-center justify-between">
             <h2 className="text-xl sm:text-2xl font-semibold">
               Featured Products
@@ -507,7 +507,7 @@ useEffect(() => {
           products.length > 0 && (
             <React.Fragment key={key}>
               <section className="sm:!py-10 !py-0  bg-white">
-                <div className="container px-4">
+                <div className="px-2">
                   <div className="flex items-center justify-between">
                     <h2 className="text-xl sm:text-2xl font-semibold">
                       {label}
