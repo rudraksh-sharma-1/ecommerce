@@ -34,7 +34,7 @@ const ProductCard = ({ product_id, id, image, name, old_price, price, rating }) 
   return (
     <div className="relative bg-white rounded-lg shadow-md overflow-hidden w-full max-w-[140px] h-[200px] flex flex-col">
       <Link to={`/product/${product_id || id}`}>
-        <div className="w-full h-[140px] bg-gray-300 flex items-center justify-center">
+        <div className="w-full h-[140px] bg-gray-300 flex items-center justify-center overflow-hidden">
           <img
             src={image}
             alt={name}
@@ -56,7 +56,7 @@ const ProductCard = ({ product_id, id, image, name, old_price, price, rating }) 
               {old_price != 0 && old_price &&
                 <span className="line-through text-xs text-gray-500">₹{old_price}</span>
               }
-              <span className="text-md font-bold text-black">₹{price}</span>
+              <span className="text-md font-bold text-black truncate">₹{price}</span>
             </div>
           </div>
         </div>

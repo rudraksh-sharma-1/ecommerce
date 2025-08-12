@@ -31,10 +31,12 @@ const ProductGrid = () => {
 
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-8">
-      {products.map((product) => (
-        <ProductCard key={product.id || product.product_id } {...product} />
-      ))}
+    <div className="flex justify-center">
+      <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-4 px-4 sm:px-6 md:px-8 justify-items-center">
+        {products.map((product) => (
+          <ProductCard key={product.id || product.product_id} {...product} />
+        ))}
+      </div>
     </div>
   );
 };

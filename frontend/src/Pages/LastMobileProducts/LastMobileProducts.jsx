@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 
 const ProductsNew = () => {
   const [isVisible, setIsVisible] = useState(null);
-   useEffect(() => {
+  useEffect(() => {
     const fetchVisibility = async () => {
       const { data, error } = await supabase
         .from("product_grid_settings")
@@ -42,16 +42,20 @@ const ProductsNew = () => {
   }, []);
 
   if (isVisible === null) {
-    return ;
+    return;
   }
 
   if (!isVisible) {
-    return ;
+    return;
   }
   return (
     <div className="md:hidden bg-white">
       {/* <h1 className="text-center">BIGBESTMART DEAL</h1> */}
-      <img src="https://i.postimg.cc/W103N44r/BIGBESTDEALS.png" alt="BigBestMart Daels" className="pl-5"/>
+      <img
+        src="https://i.postimg.cc/W103N44r/BIGBESTDEALS.png"
+        alt="BigBestMart Deals"
+        className="mx-auto w-[90%] max-w-xs"
+      />
       <ProductGrid />
     </div>
   );

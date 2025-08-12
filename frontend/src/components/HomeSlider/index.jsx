@@ -78,8 +78,8 @@ const HomeSlider = () => {
               clickable: true,
               dynamicBullets: true,
             }}
-            spaceBetween={isMobile ? 16 : 0}
-            slidesPerView={isMobile ? 1.2 : 1}
+            spaceBetween={isMobile ? 6 : 0}
+            slidesPerView={isMobile ? 1.1 : 1}
             centeredSlides={isMobile}
             autoplay={banners.length > 1 ? {
               delay: 5000,
@@ -96,7 +96,7 @@ const HomeSlider = () => {
                   <img
                     src={banner.imageUrl}
                     alt={banner.title}
-                    className={`slider-image ${isMobile ? 'mobile-slide-image' : 'border-0 rounded-2xl'}`}
+                    className={`slider-image ${isMobile ? 'mobile-slide-image' : 'border-0 rounded-2xl'} object-contain w-full h-auto max-h-[300px]`}
                     
                     onError={(e) => {
                       e.target.onerror = null;
