@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
-import { useAuth } from "../../contexts/AuthContext"; // adjust path if needed
-import { addToCart } from "../../utils/supabaseApi"; // adjust path if needed
+import { useAuth } from "../../contexts/AuthContext"; 
+import { addToCart } from "../../utils/supabaseApi"; 
 
-const ProductCard = ({ product_id, id, image, name, old_price, price, rating }) => {
+const ProductCard = ({ product_id, id, image, second_preview_image, name, old_price, price, rating }) => {
   const [cartLoading, setCartLoading] = useState(false);
   const [cartAdded, setCartAdded] = useState(false);
   const { currentUser } = useAuth();
+
+  // If not last section, don't render
+
+  // Fallback image logic
+  const displayImage = second_preview_image || image;
 
   const handleAddToCart = async () => {
     if (!currentUser) {
@@ -36,7 +41,7 @@ const ProductCard = ({ product_id, id, image, name, old_price, price, rating }) 
       <Link to={`/product/${product_id || id}`}>
         <div className="w-full h-[140px] bg-gray-300 flex items-center justify-center overflow-hidden">
           <img
-            src={image}
+            src={displayImage}
             alt={name}
             className="h-[140px] w-full object-contain"
             onError={(e) => {
@@ -62,7 +67,7 @@ const ProductCard = ({ product_id, id, image, name, old_price, price, rating }) 
         </div>
       </Link>
 
-      {/* Add to Cart Button */}
+      {/* Optional Add to Cart Button */}
       {/* <button
         onClick={handleAddToCart}
         disabled={cartLoading || !currentUser}
