@@ -10,16 +10,21 @@ const ProductGrid = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        let fetchedProducts = [];
+
         if (selectedAddress) {
           const { latitude, longitude } = selectedAddress;
           const { success, products } = await getNearbyProducts(latitude, longitude);
-          /* console.log("Nearby products:", products); // Debugging */
-          setProducts(success && Array.isArray(products) ? products : []);
+          fetchedProducts = success && Array.isArray(products) ? products : [];
         } else {
           const { success, products } = await getAllProducts();
-          console.log(products)
-          setProducts(success && Array.isArray(products) ? products : []);
+          fetchedProducts = success && Array.isArray(products) ? products : [];
         }
+
+        // Filter only products where is_last_section is true
+        const filtered = fetchedProducts.filter(p => p.is_last_section === true);
+
+        setProducts(filtered);
       } catch (error) {
         console.error("Error fetching products:", error);
         setProducts([]);
@@ -28,7 +33,6 @@ const ProductGrid = () => {
 
     fetchProducts();
   }, [selectedAddress]);
-
 
   return (
     <div className="flex justify-center">

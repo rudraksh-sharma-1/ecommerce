@@ -111,6 +111,8 @@ const ProductsPage = () => {
     is_global: false,
     category: "",
     uom: "",
+    is_last_section: false,
+    second_preview_image: "",
   });
   const itemsPerPage = 10;
   const itemsPerLoad = 10;
@@ -438,6 +440,8 @@ const ProductsPage = () => {
       is_global: false,
       category: "",
       uom: "",
+      is_last_section: false,
+      second_preview_image: "",
     });
     setModalOpen(true);
   };
@@ -753,6 +757,12 @@ const ProductsPage = () => {
                   style={{ textAlign: "center", padding: "12px 8px" }}
                   className="text-gray-800 dark:text-gray-200 font-semibold"
                 >
+                  Is Last Product Page
+                </th>
+                <th
+                  style={{ textAlign: "center", padding: "12px 8px" }}
+                  className="text-gray-800 dark:text-gray-200 font-semibold"
+                >
                   Featured
                 </th>
                 <th
@@ -1045,6 +1055,15 @@ const ProductsPage = () => {
                         ({product.review_count ?? 0})
                       </div>
                     </div>
+                  </td>
+                  <td style={{ textAlign: "center", padding: "8px" }}>
+                    <Badge
+                      color={product.is_last_section ? "yellow" : "gray"}
+                      variant="light"
+                      size="sm"
+                    >
+                      {product.is_last_section ? "Yes" : "No"}
+                    </Badge>
                   </td>
                   <td style={{ textAlign: "center", padding: "8px" }}>
                     <Badge
@@ -1778,6 +1797,14 @@ const ProductsPage = () => {
             }
           />
 
+          <Switch
+            label="All Products Section Visibility"
+            checked={newProduct.is_last_section}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, is_last_section: e.currentTarget.checked })
+            }
+            color="green"
+          />
           <Switch
             label="Active"
             checked={newProduct.active}
