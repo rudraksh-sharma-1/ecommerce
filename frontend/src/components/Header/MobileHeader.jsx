@@ -66,6 +66,7 @@ const MobileHeader = () => {
             <header className="bg-white header-container sticky top-0 z-[100] shadow-sm">
                 {/* Main Header Row */}
                 <div className="flex items-center w-full px-4 py-3 justify-between border-b border-gray-100">
+                    <div className="flex items-center space-x-3">
                     {/* Menu Button */}
                     <button
                         onClick={toggleMenu}
@@ -76,7 +77,7 @@ const MobileHeader = () => {
                     </button>
 
                     {/* Logo and Company Name */}
-                    <div className="flex-1 flex justify-center">
+                    
                         <NavLink to="/" className="flex flex-col items-center">
                             <div className="text-lg font-bold text-gray-800">
                                 {getSetting("company_name", "BigBestMart")}
@@ -125,15 +126,19 @@ const MobileHeader = () => {
 
 
                 {/* Category Filter Tags */}
-                <div className="px-4 py-3 bg-white border-b border-gray-200">
-                    <div className="flex space-x-3 overflow-x-auto scrollbar-hide">
-                        {categories.map((category) => (
-                            <button key={category.id} className="px-1 py-1.5 border border-gray-300 text-sm text-gray-700 hover:bg-gray-50">
-                                <span className="text-gray-700">{category.icon}{category.name}</span>
-                            </button>
-                        ))}
-                    </div>
-                </div>
+               <div className="px-4 py-3 bg-white border-b border-gray-200">
+     <div className="flex gap-4 overflow-x-auto p-2">
+      {categories.map((category) => (
+        <button
+          key={category.id}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white shadow hover:bg-gray-100 transition"
+        >
+          <span className="text-xl">{category.icon}</span>
+          <span className="text-sm font-medium">{category.name}</span>
+        </button>
+      ))}
+    </div>
+</div>
             </header>
 
             {/* Mobile Menu Overlay */}
