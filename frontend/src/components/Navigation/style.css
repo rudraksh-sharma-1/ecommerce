@@ -114,7 +114,7 @@
 button, 
 .nav-button,
 .submenu button {
-  min-height: 44px !important;
+  min-height: 44px ;/* here was the problem */
   min-width: 44px !important;
 }
 

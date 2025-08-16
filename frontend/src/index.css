@@ -122,3 +122,12 @@ footer form input::placeholder{font-size: 14px;}
   clip-path: polygon(0% 0, 100% 0, 100% 100%, 15% 100%);
 
 }
+
+.truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;   /* clamp to 2 lines */
+  line-clamp: 2;           /* standard property for compatibility */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -67,8 +67,9 @@ const VideoWithAutoPlay = ({ src }) => {
       ref={videoRef}
       src={src}
       className=" w-full
+      rounded-2xl
     min-h-[250px]
-    max-h-[600px]
+    max-h-[500px]
     object-cover
     md:max-h-[400px]    
     md:w-[90%]           

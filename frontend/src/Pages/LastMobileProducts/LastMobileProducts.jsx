@@ -49,12 +49,12 @@ const ProductsNew = () => {
     return;
   }
   return (
-    <div className="md:hidden bg-white">
+    <div className="md:hidden bg-cyan-50">
       {/* <h1 className="text-center">BIGBESTMART DEAL</h1> */}
       <img
-        src="https://i.postimg.cc/W103N44r/BIGBESTDEALS.png"
+        src="https://i.postimg.cc/y87hjDY4/BIGBESTDEALS-removebg-preview.png"
         alt="BigBestMart Deals"
-        className="mx-auto w-[90%] max-w-xs"
+        className="mx-auto w-[90%] max-w-xs bg-transparent"
       />
       <ProductGrid />
     </div>
