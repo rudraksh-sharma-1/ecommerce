@@ -27,6 +27,9 @@ import {
   getProductsByGroupName,
   getNearbyProducts,
   getDefaultUserAddress,
+  gettingProductsByGroupName,
+  gettingProductsByCategoryName,
+  gettingProductsBySubcategoryName
 } from "../../utils/supabaseApi";
 
 const ProductListing = () => {
@@ -59,32 +62,32 @@ const ProductListing = () => {
     async function fetchProducts() {
       setLoading(true);
       let productsResult;
-
-      if(selectedAddress===null){
-        productsResult = await getAllProducts();
-      }
-
       const address = selectedAddress;
       const lat = address?.latitude;
       const lon = address?.longitude;
       const hasCoords = lat && lon;
 
-      if (group) {
-        productsResult = hasCoords
-          ? await getProductsByGroupName(group, lat, lon)
-          : await getAllProducts();
-      } else if (subcategory) {
-        productsResult = hasCoords
-          ? await getProductsBySubcategoryName(subcategory, lat, lon)
-          : await getAllProducts();
-      } else if (category) {
-        productsResult = hasCoords
-          ? await getProductsByCategoryName(category, lat, lon)
-          : await getAllProducts();
+      if (!hasCoords) {
+        if (group) {
+          productsResult = await gettingProductsByGroupName(group);
+        } else if (subcategory) {
+          productsResult = await gettingProductsBySubcategoryName(subcategory);
+        } else if (category) {
+          productsResult = await gettingProductsByCategoryName(category);
+          console.log(productsResult)
+        } else {
+          productsResult = await getAllProducts();
+        }
       } else {
-        productsResult = hasCoords
-          ? await getNearbyProducts(lat, lon)
-          : await getAllProducts();
+        if (group) {
+          productsResult = await getProductsByGroupName(group, lat, lon);
+        } else if (subcategory) {
+          productsResult = await getProductsBySubcategoryName(subcategory, lat, lon);
+        } else if (category) {
+          productsResult = await getProductsByCategoryName(category, lat, lon);
+        } else {
+          productsResult = await getNearbyProducts(lat, lon);
+        }
       }
 
       const { success, products } = productsResult;
@@ -217,7 +220,7 @@ const ProductListing = () => {
         <Search />
       </div> */}
       {/* this div is only for spacing between search bar and product list */}
-     {/*  <div className="mt-5 h-12 md:hidden"></div> */}
+      {/*  <div className="mt-5 h-12 md:hidden"></div> */}
       <section className=" bg-gray-50 product-section">
         <div className="w-full px-4">
           <Breadcrumbs aria-label="breadcrumb" className="text-sm flex-wrap">
@@ -235,46 +238,46 @@ const ProductListing = () => {
             {category && !subcategory && !group
               ? null
               : category && (
-                  <Link
-                    underline="hover"
-                    color="inherit"
-                    href={`/productListing?category=${encodeURIComponent(
-                      category
-                    )}`}
-                    className="text-gray-600 hover:text-blue-600 transition-colors"
-                  >
-                    <span className="text-xs sm:text-sm">
-                      {category.charAt(0).toUpperCase() + category.slice(1)}
-                    </span>
-                  </Link>
-                )}
+                <Link
+                  underline="hover"
+                  color="inherit"
+                  href={`/productListing?category=${encodeURIComponent(
+                    category
+                  )}`}
+                  className="text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  <span className="text-xs sm:text-sm">
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  </span>
+                </Link>
+              )}
             {/* Subcategory link if present and not the last item */}
             {subcategory && !group
               ? null
               : subcategory && (
-                  <Link
-                    underline="hover"
-                    color="inherit"
-                    href={`/productListing?subcategory=${encodeURIComponent(
-                      subcategory
-                    )}&category=${encodeURIComponent(category)}`}
-                    className="text-gray-600 hover:text-blue-600 transition-colors"
-                  >
-                    <span className="text-xs sm:text-sm">
-                      {subcategory.charAt(0).toUpperCase() +
-                        subcategory.slice(1)}
-                    </span>
-                  </Link>
-                )}
+                <Link
+                  underline="hover"
+                  color="inherit"
+                  href={`/productListing?subcategory=${encodeURIComponent(
+                    subcategory
+                  )}&category=${encodeURIComponent(category)}`}
+                  className="text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  <span className="text-xs sm:text-sm">
+                    {subcategory.charAt(0).toUpperCase() +
+                      subcategory.slice(1)}
+                  </span>
+                </Link>
+              )}
             {/* Final breadcrumb item (not a link) */}
             <span className="text-xs sm:text-sm font-medium">
               {group
                 ? group.charAt(0).toUpperCase() + group.slice(1)
                 : subcategory
-                ? subcategory.charAt(0).toUpperCase() + subcategory.slice(1)
-                : category
-                ? category.charAt(0).toUpperCase() + category.slice(1)
-                : "All Products"}
+                  ? subcategory.charAt(0).toUpperCase() + subcategory.slice(1)
+                  : category
+                    ? category.charAt(0).toUpperCase() + category.slice(1)
+                    : "All Products"}
             </span>
           </Breadcrumbs>
           <h1 className="text-xl sm:text-2xl font-bold mt-3 mb-5">
@@ -339,33 +342,29 @@ const ProductListing = () => {
                   <div className="flex items-center gap-2">
                     <IconButton
                       onClick={() => setItemView("list")}
-                      className={`!p-2 ${
-                        itemView === "list" ? "!bg-blue-100" : ""
-                      }`}
+                      className={`!p-2 ${itemView === "list" ? "!bg-blue-100" : ""
+                        }`}
                       aria-label="List view"
                     >
                       <ImMenu
-                        className={`${
-                          itemView === "list"
+                        className={`${itemView === "list"
                             ? "text-blue-600"
                             : "text-gray-600"
-                        }`}
+                          }`}
                       />
                     </IconButton>
 
                     <IconButton
                       onClick={() => setItemView("grid")}
-                      className={`!p-2 ${
-                        itemView === "grid" ? "!bg-blue-100" : ""
-                      }`}
+                      className={`!p-2 ${itemView === "grid" ? "!bg-blue-100" : ""
+                        }`}
                       aria-label="Grid view"
                     >
                       <IoGrid
-                        className={`${
-                          itemView === "grid"
+                        className={`${itemView === "grid"
                             ? "text-blue-600"
                             : "text-gray-600"
-                        }`}
+                          }`}
                       />
                     </IconButton>
 
@@ -455,14 +454,14 @@ const ProductListing = () => {
                       >
                         {itemView === "grid"
                           ? currentItems.map((item) => (
-                              <ProductItem key={item.id} product={item} />
-                            ))
+                            <ProductItem key={item.id} product={item} />
+                          ))
                           : currentItems.map((item) => (
-                              <ProductitemListView
-                                key={item.id}
-                                product={item}
-                              />
-                            ))}
+                            <ProductitemListView
+                              key={item.id}
+                              product={item}
+                            />
+                          ))}
                       </div>
                     )}
                   </>

@@ -70,7 +70,7 @@ const ProductCard = ({ product_id, id, image, second_preview_image, name, old_pr
           </div> }
 
           <div className="flex flex-col gap-1">
-            <p className="text-[10px] text-gray-600 truncate-2 ">{name}</p>
+            <p className="text-[10px] font-bold text-gray-600 truncate-2 ">{name}</p>
           </div>
         </div>
       </Link>

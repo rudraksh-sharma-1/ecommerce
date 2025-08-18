@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { getAllCategories } from "../../utils/supabaseApi";
 import { Link, useLocation } from "react-router-dom";
-// Sample Category Data
 
 const MobileCategoriesBar = () => {
   const [categories, setCategories] = useState([]);
@@ -27,23 +26,27 @@ const MobileCategoriesBar = () => {
   if (location.pathname !== "/") return null;
 
   return (
-    <div className={`overflow-x-auto no-scrollbar flex space-x-2 px-2 py-2 pt-4 ${location.pathname === '/' ? 'mt-0' : 'mt-15'} sm:hidden`}>
+    <div
+      className={`grid grid-cols-4 gap-4 px-2 py-4 sm:hidden ${
+        location.pathname === "/" ? "mt-0" : "mt-15"
+      }`}
+    >
       {categories.map((category) => (
         <div
           key={category.id}
-          className="flex-shrink-0 w-24 flex flex-col items-center"
+          className="flex flex-col items-center"
         >
-          <div className="w-24 h-24 rounded-t-full bg-[#e6f5e6] flex items-center justify-center">
+          <div className="w-20 h-20 rounded-t-full bg-[#e6f5e6] flex items-center justify-center">
             <Link to={`/subcategories/${encodeURIComponent(category.name)}`}>
               <img
                 src={category.image_url}
                 alt={category.name}
-                className="w-24 h-24 object-contain"
+                className=" w-18 h-18 object-contain"
               />
             </Link>
           </div>
           <Link to={`/subcategories/${encodeURIComponent(category.name)}`}>
-            <span className="text-sm text-center">{category.name}</span>
+            <span className="text-sm text-center mt-2">{category.name}</span>
           </Link>
         </div>
       ))}

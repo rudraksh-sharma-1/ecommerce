@@ -10,8 +10,24 @@ const SubCategoryPage = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [subcategoryGroups, setSubcategoryGroups] = useState({});
   const [sidebarScrolledToBottom, setSidebarScrolledToBottom] = useState(false);
+  const [isScrollLocked, setIsScrollLocked] = useState(false);
+  const groupSectionRef = useRef(null);
   const sidebarRef = useRef(null);
   const sectionRefs = useRef({});
+
+
+  const handleScroll = (e) => {
+    const el = e.target;
+    const atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight;
+    if (atBottom) {
+      // Lock downward scroll by fixing scrollTop at max scrollTop
+      setIsScrollLocked(true);
+      el.scrollTop = el.scrollHeight - el.clientHeight;
+    } else if (isScrollLocked && el.scrollTop < el.scrollHeight - el.clientHeight) {
+      // Unlock scroll if user scrolls upward
+      setIsScrollLocked(false);
+    }
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -119,25 +135,25 @@ const SubCategoryPage = () => {
             setSidebarScrolledToBottom(true);
           }
         }}
-        className="w-20 bg-white border-r-0 shadow h-full overflow-y-auto hide-scrollbar fixed left-0 top-0 ">
+        className="w-19 bg-gray-200 border-r-0 shadow h-full overflow-y-auto hide-scrollbar fixed left-0 top-0 ">
         <ul className="flex flex-col items-center pb-13">
           {categories.map(cat => (
             <li
               key={cat.id}
               onClick={() => setSelectedCategory(cat)}
               className={`flex flex-col items-center text-center justify-between text-xl h-25 cursor-pointer px-2  ${selectedCategory?.id === cat.id
-                ? "bg-amber-50 font-semibold"
+                ? "bg-white font-semibold"
                 : "hover:bg-gray-200 text-gray-700"
-                }`} style={{ fontFamily: '"Great Vibes", cursive', color: '#92400e' }}
+                }`}
             >
-              <div className="border-[0.5px] border-r-0 w-20 h-30 flex flex-col align-middle items-center justify-center">
+              <div className="border-[0.5px] border-r-0 border-t-0 w-20 h-30 flex flex-col align-middle items-center justify-center">
                 <img
                   src={cat.image_url || "https://placehold.co/40x40"}
                   alt={cat.name}
                   className="w-20 h-20 object-cover "
                 />
                 <span
-                  className={`text-xl text-center w-full ${cat.name === "Well-Being" ? "text-sm" : ""
+                  className={`text-sm text-center w-full ${cat.name === "Well-Being" ? "text-sm" : ""
                     }`}
                 >
                   {cat.name}
@@ -150,43 +166,41 @@ const SubCategoryPage = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="ml-20 w-full flex-1 flex flex-col">
+      <div className="bg-white ml-19 w-full flex-1 flex flex-col">
         {/* Fixed Subcategory Bar */}
-        <div className="bg-white fixed top-0 left-20 right-0  w-auto px-2 border-0 ">
-          <h1 className="text-xl font-semibold mt-1 mb-1 bg-gradient-to-r from-pink-400 via-yellow-400 to-green-400
-            bg-clip-text text-transparent tracking-wide">
+        {/* Fixed Horizontal Bar (styled as requested) */}
+        <div
+          className="fixed top-0 left-19 right-0 w-auto flex items-center h-[85px] justify-between px-5 py-3"
+          style={{
+            background: "linear-gradient(90deg, #fff 30%, #76b3fa 100%)",
+          }}
+        >
+          {/* Category Name (comes first) */}
+          <span className="text-2xl font-semibold text-blue-800">
             {selectedCategory?.name || "Category"}
-          </h1>
-
-          <div className="flex space-x-3 overflow-x-auto hide-scrollbar pb-1">
-            {subcategories.map(sub => (
-              <div
-                key={sub.id}
-                onClick={() => {
-                  setSelectedSubcategory(sub)
-                  const section = sectionRefs.current[sub.id];
-                  if (section) {
-                    section.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }
-                }}
-                className={`flex flex-col items-center min-w-[70px] h-[80px]  rounded-md cursor-pointer ${selectedSubcategory?.id === sub.id
-                  ? "bg-amber-50 text-black"
-                  : "bg-gray-100 text-gray-700"
-                  }`}
-              >
-                <img
-                  src={sub.image_url}
-                  alt="Image"
-                  className="w-full h-[55px] mb-1 rounded-t-md"
-                />
-                <span className="text-[11px] text-center truncate w-full px-1">{sub.name}</span>
-              </div>
-            ))}
-          </div>
+          </span>
+          {/* Category Image, plain with no border/background */}
+          {selectedCategory?.image_url && (
+            <img
+              src={selectedCategory.image_url}
+              alt={selectedCategory?.name || "Category"}
+              className="w-[85px] h-[85px] object-contain"
+              style={{
+                background: "none",
+                border: "none",
+                boxShadow: "none",
+              }}
+            />
+          )}
         </div>
 
+
         {/* Scrollable Group Section */}
-        <div className="flex-1 overflow-y-auto px-2 mt-20 pb-6 pt-3 scrollable-container">
+        <div
+          ref={groupSectionRef}
+          className="flex-1 px-2 mt-9 pb-6 pt-3 scrollable-container overflow-y-auto"
+          onScroll={handleScroll}
+        >
           {subcategories.map((sub, index) => (
             <div key={sub.id} ref={(el) => (sectionRefs.current[sub.id] = el)} className="mb-6 scroll-mt-16">
               {/* Subcategory Title */}
@@ -195,10 +209,10 @@ const SubCategoryPage = () => {
               </h3>
 
               {/* Group Grid */}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3  ">
                 {(subcategoryGroups[sub.name] || []).map(group => (
                   <div key={group.id} className="flex flex-col items-center text-center">
-                    <div className="w-16 h-16 border rounded-full overflow-hidden bg-gray-300">
+                    <div className="w-18 h-18  rounded-full overflow-hidden bg-[#e6f5e6]">
                       <Link
                         to={`/productListing?group=${encodeURIComponent(group.name)}&subcategory=${encodeURIComponent(sub.name)}&category=${encodeURIComponent(selectedCategory?.name || "")}`}
                         className="flex items-center align-middle w-full h-full"
@@ -210,7 +224,7 @@ const SubCategoryPage = () => {
                         />
                       </Link>
                     </div>
-                    <p className="text-[11px] font-medium text-center break-words w-full mt-1 leading-tight">
+                    <p className="text-[11px] font-medium text-center  w-full mt-1 truncate-2">
                       {group.name}
                     </p>
                   </div>

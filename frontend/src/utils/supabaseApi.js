@@ -534,24 +534,39 @@ export async function getAllProducts() {
 }
 
 // Fetch products by subcategory from Supabase
-export async function getProductsBySubcategory(subcategoryId) {
+export async function gettingProductsBySubcategoryName(subcategoryName) {
+  // Step 1: Get subcategory ID by name (case-insensitive)
+  const { data: subcats, error: subcatError } = await supabase
+    .from("subcategories")
+    .select("id")
+    .ilike("name", subcategoryName)
+    .limit(1);
+
+  if (subcatError) return { success: false, error: subcatError.message };
+  if (!subcats || subcats.length === 0) return { success: true, products: [] };
+
+  const subcategoryId = subcats[0].id;
+
+  // Step 2: Fetch products by subcategory ID
   const { data, error } = await supabase
     .from("products")
-    .select(
-      `
-      *, 
+    .select(`
+      *,
       subcategories(id, name, categories(id, name, active))
-    `
-    )
+    `)
     .eq("subcategory_id", subcategoryId)
     .order("created_at", { ascending: false });
+
   if (error) return { success: false, error: error.message };
+
+  // Filter out products where category is inactive
   const filtered = (data || []).filter((product) => {
     if (product.subcategories && product.subcategories.categories) {
       return product.subcategories.categories.active !== false;
     }
     return true;
   });
+
   return { success: true, products: filtered };
 }
 
@@ -596,6 +611,53 @@ export async function getProductsByCategory(categoryId) {
   return { success: true, products: filtered };
 }
 
+export async function gettingProductsByCategoryName(categoryName) {
+  // Step 1: Get category ID by name (case-insensitive)
+  const { data: categories, error: categoryError } = await supabase
+    .from("categories")
+    .select("id")
+    .ilike("name", categoryName)
+    .limit(1);
+
+  if (categoryError) return { success: false, error: categoryError.message };
+  if (!categories || categories.length === 0) return { success: true, products: [] };
+
+  const categoryId = categories[0].id;
+
+  // Step 2: Get all subcategories for that category
+  const { data: subcats, error: subcatError } = await supabase
+    .from("subcategories")
+    .select("id")
+    .eq("category_id", categoryId);
+
+  if (subcatError) return { success: false, error: subcatError.message };
+
+  const subcategoryIds = (subcats || []).map((s) => s.id);
+  if (subcategoryIds.length === 0) return { success: true, products: [] };
+
+  // Step 3: Fetch products with subcategory_id IN (subcategoryIds)
+  const { data, error } = await supabase
+    .from("products")
+    .select(`
+      *,
+      subcategories(id, name, categories(id, name, active))
+    `)
+    .in("subcategory_id", subcategoryIds)
+    .order("created_at", { ascending: false });
+
+  if (error) return { success: false, error: error.message };
+
+  // Filter out inactive categories
+  const filtered = (data || []).filter((product) => {
+    if (product.subcategories && product.subcategories.categories) {
+      return product.subcategories.categories.active !== false;
+    }
+    return true;
+  });
+
+  return { success: true, products: filtered };
+}
+
 // Fetch products by category name from Supabase (using subcategories)
 export async function getProductsByCategoryName(categoryName, lat, lon) {
   const { data, error } = await supabase.rpc(
@@ -615,6 +677,33 @@ export async function getProductsByCategoryName(categoryName, lat, lon) {
   return { success: true, products: data || [] };
 }
 
+export async function gettingProductsByGroupName(groupName) {
+  // Step 1: Get group ID by name (case-insensitive)
+  const { data: groups, error: groupError } = await supabase
+    .from("groups")
+    .select("id")
+    .ilike("name", groupName)
+    .limit(1);
+
+  if (groupError) return { success: false, error: groupError.message };
+  if (!groups || groups.length === 0) return { success: true, products: [] };
+
+  const groupId = groups[0].id;
+
+  // Step 2: Fetch products by group_id
+  const { data, error } = await supabase
+    .from("products")
+    .select(`
+      *,
+      groups(id, name)
+    `)
+    .eq("group_id", groupId)
+    .order("created_at", { ascending: false });
+
+  if (error) return { success: false, error: error.message };
+
+  return { success: true, products: data || [] };
+}
 // Fetch products by group name from Supabase
 export async function getProductsByGroupName(groupName, lat, lon) {
   const { data, error } = await supabase.rpc(

@@ -186,14 +186,14 @@ useEffect(() => {
   }, []);
   
 
-  const getProductsByCategory = (category) => {
+  /* const getProductsByCategory = (category) => {
     return products
       .filter(
         (product) =>
           (product.category || "").toLowerCase() === category.toLowerCase()
       )
       .slice(0, 8);
-  };
+  }; */
 
   const popularProducts = products
     .filter((product) => product.popular)
@@ -305,7 +305,7 @@ useEffect(() => {
       <FlashSale />
 
       {/* Popular Products Section */}
-      <section className="bg-white sm:!py-10 !py-0 mt-0">
+      <section className="bg-white sm:!py-10 !py-0 mt-0 md:flex md:justify-center">
         <div className="px-2 md:container md:px-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex-1">
@@ -330,7 +330,7 @@ useEffect(() => {
       </section>
 
       {/* Latest Products Section */}
-      <section className="sm:!py-10 !py-0  bg-white">
+      <section className="sm:!py-10 !py-0 md:flex md:justify-center bg-white">
         <div className="px-2 md:container md:px-10">
           <div className="flex items-center justify-between ">
             <h2 className="text-xl sm:text-2xl font-semibold">
@@ -357,7 +357,7 @@ useEffect(() => {
       {/* ================== PROMOTIONAL BANNER ================== */}
 {/* Desktop version (lg and up) */}
 
- <section className="py-4 bg-white">
+ <section className="py-4 bg-white md:flex md:justify-center">
         <div className="px-2 md:container md:px-10">
           <div className="promotional-banner w-full lg:w-[95%] mx-auto relative overflow-hidden rounded-xl shadow-lg">
             {shippingBanner ? (
@@ -478,7 +478,7 @@ useEffect(() => {
       <VideoBannerSlider/>
 
       {/* Featured Products Section */}
-      <section className="sm:!py-10 !py-0  bg-white">
+      <section className="sm:!py-10 !py-0 md:flex md:justify-center bg-white">
         <div className="px-2 md:container md:px-10">
           <div className="flex items-center justify-between">
             <h2 className="text-xl sm:text-2xl font-semibold">
@@ -506,7 +506,7 @@ useEffect(() => {
         ({ key, label, products }, index) =>
           products.length > 0 && (
             <React.Fragment key={key}>
-              <section className="sm:!py-10 !py-0  bg-white">
+              <section className="sm:!py-10 !py-0 md:flex md:justify-center bg-white">
                 <div className="px-2 md:container md:px-10">
                   <div className="flex items-center justify-between">
                     <h2 className="text-xl sm:text-2xl font-semibold">
