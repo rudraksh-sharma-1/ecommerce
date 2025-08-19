@@ -46,7 +46,7 @@ const MobileCategoriesBar = () => {
             </Link>
           </div>
           <Link to={`/subcategories/${encodeURIComponent(category.name)}`}>
-            <span className="text-sm text-center mt-2">{category.name}</span>
+            <span className="text-sm text-center flex justify-center">{category.name}</span>
           </Link>
         </div>
       ))}
