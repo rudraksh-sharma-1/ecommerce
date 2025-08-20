@@ -358,47 +358,43 @@ export const Home = () => {
       {/* Desktop version (lg and up) */}
 
       <section className="!p-5 bg-white md:flex md:justify-center">
-        <div className="px-2 md:container md:px-10">
-          <div
-            className="promotional-banner relative overflow-hidden rounded-xl shadow-lg 
-                 md:hidden w-[312px] h-[110px]" // Fixed width 110px and height 150px on mobile only
-          >
-            {shippingBanner ? (
-              // If an active shipping banner exists, render it
-              <div className="shipping-banner-container w-full h-full">
-                <a href={shippingBanner.link || '#'} target="_blank" rel="noopener noreferrer">
-                  <picture>
-                    {shippingBanner.mobile_image_url && (
-                      <source media="(max-width: 767px)" srcSet={shippingBanner.mobile_image_url} />
-                    )}
-                    <img
-                      src={shippingBanner.image_url}
-                      alt={shippingBanner.title}
-                      className="w-full h-full object-cover" // Cover the whole container
-                    />
-                  </picture>
-                </a>
-              </div>
-            ) : (
-              // Default content (also restricted to width 110px)
-              <div className="bg-gradient-to-r from-orange-100 via-red-50 to-orange-100 border-2 border-red-200 w-full h-full">
-                <div className="absolute inset-0 opacity-10 pointer-events-none">
-                  <div className="absolute -top-10 -left-10 w-56 h-56 bg-red-400 rounded-full blur-3xl" />
-                  <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-orange-300 rounded-full blur-3xl" />
-                </div>
-                <div className="relative z-10 flex flex-col items-center justify-center py-6 px-4 h-full">
-                  <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-500 mb-2">
-                    <FaShippingFast className="text-white text-2xl" />
-                  </div>
-                  <h3 className="text-lg font-bold text-red-800 mb-1 text-center">
-                    {getPromoSetting("promo_shipping_title", "Free Shipping")}
-                  </h3>
-                  <p className="text-xs font-semibold text-red-600 text-center">Shop now</p>
-                </div>
-              </div>
-            )}
+
+        {shippingBanner ? (
+          // If an active shipping banner exists, render it
+          <div className="w-full h-full border-0 rounded">
+
+            <picture>
+              {shippingBanner.mobile_image_url && (
+                <source media="(max-width: 767px)" srcSet={shippingBanner.mobile_image_url} />
+              )}
+              <img
+                src={shippingBanner.image_url}
+                alt={shippingBanner.title}
+                className="w-full h-full object-cover rounded-lg" // Cover the whole container
+              />
+            </picture>
+
           </div>
-        </div>
+        ) : (
+          // Default content (also restricted to width 110px)
+          <div className="bg-gradient-to-r from-orange-100 via-red-50 to-orange-100 border-2 border-red-200 w-full h-full">
+            <div className="absolute inset-0 opacity-10 pointer-events-none">
+              <div className="absolute -top-10 -left-10 w-56 h-56 bg-red-400 rounded-full blur-3xl" />
+              <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-orange-300 rounded-full blur-3xl" />
+            </div>
+            <div className="relative z-10 flex flex-col items-center justify-center py-6 px-4 h-full">
+              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-500 mb-2">
+                <FaShippingFast className="text-white text-2xl" />
+              </div>
+              <h3 className="text-lg font-bold text-red-800 mb-1 text-center">
+                {getPromoSetting("promo_shipping_title", "Free Shipping")}
+              </h3>
+              <p className="text-xs font-semibold text-red-600 text-center">Shop now</p>
+            </div>
+          </div>
+        )}
+
+
       </section>
 
 
