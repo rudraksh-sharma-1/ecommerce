@@ -1,14 +1,56 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
+import { MdOutlineShoppingCart } from "react-icons/md";
 import { ChevronRight, MapPin, Bell, ShoppingCart, AlignLeft } from "lucide-react";
 import { useLocationContext } from "../../contexts/LocationContext";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import {
+    getCartItems,
+} from "../../utils/supabaseApi";
 
-const MobileHeader = () => {
+const StyledBadge = styled(Badge)(({ theme }) => ({
+    "& .MuiBadge-badge": {
+        right: 3, // Move badge more to the left to avoid covering text
+        top: 0, // Adjust top position slightly
+        border: `2px solid ${theme.palette.background.paper}`,
+        padding: "0 4px",
+        backgroundColor: "#ff4081",
+        fontSize: "0.7rem",
+        minWidth: "16px",
+        height: "16px",
+    },
+}));
+
+const MobileHeader = ({ toggleMobileMenu }) => {
+    const { currentUser } = useAuth();
+    const [cartCount, setCartCount] = useState(0);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const { selectedAddress, setShowModal, setModalMode } = useLocationContext();
     const location = useLocation();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        async function fetchCart() {
+            if (!currentUser) {
+                setCartCount(0);
+                return;
+            }
+            const { success, cartItems } = await getCartItems(currentUser.id);
+            if (success && cartItems) {
+                const total = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+                setCartCount(total);
+            } else {
+                setCartCount(0);
+            }
+        }
+        fetchCart();
+        // Listen for cart updates
+        window.addEventListener("cartUpdated", fetchCart);
+        return () => window.removeEventListener("cartUpdated", fetchCart);
+    }, [currentUser]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -25,32 +67,37 @@ const MobileHeader = () => {
             <div className="flex items-center w-full p-0 shadow-sm h-13 justify-between">
                 {/* Hamburger icon */}
                 <button className="p-2">
-                    <AlignLeft size={24} />
+                    <AlignLeft size={24} onClick={toggleMobileMenu} />
                 </button>
 
                 {/* Logo */}
-                <div className="flex flex-col ml-2">
+                <div className="flex flex-col mr-4">
                     {/* <span className="font-semibold leading-none text-sm">BigBestmart</span>
                     <span className="text-[10px] text-gray-500 leading-none">A2C Junctions</span> */}
-                    <img src="https://i.postimg.cc/kDP71vDP/Big-Best-Mart-Logo.jpg" alt="Logo" className="w-10"/>
+                    <img src="https://i.postimg.cc/k4SvL710/BBM-Logo.png" alt="Logo" className="w-30 mt-1" />
                 </div>
 
                 {/* Right icons and button */}
                 <div className="flex items-center mr-1">
                     <button className="p-2">
-                        <Bell size={22} />
+                        <Bell size={27} />
                     </button>
+                    <Link
+                        to="/cart"
+                        className="flex items-center  rounded-lg hover:bg-gray-100 transition-colors group"
+                    >
+                        <div className="relative">
+                            <StyledBadge badgeContent={cartCount} color="secondary">
+                                <MdOutlineShoppingCart className="w-7 h-7 text-gray-600 group-hover:text-blue-600" />
+                            </StyledBadge>
+                        </div>
+                    </Link>
                     <button
-                        onClick={() => navigate("/cart")}
-                        className="p-2 !m-0">
-                        <ShoppingCart size={22} />
-                    </button>
-                    <button
-                        onClick={() => navigate("/login")}
-                        className="border px-2 w-[75px] rounded text-sm bg-gray-300 border-gray-400 shadow-md hover:shadow-inner transition-shadow"
+                        onClick={() => { currentUser ? navigate("/MobileAccount") : navigate("/login") }}
+                        className="border px-2 w-[90px] rounded text-sm bg-gray-300 border-gray-400 shadow-md hover:shadow-inner transition-shadow"
                         style={{ minHeight: 27 }}
                     >
-                        Sign in
+                        {currentUser ? `Hello ${currentUser.name.split(" ")[0]}!` : "Signin"}
                     </button>
 
                 </div>

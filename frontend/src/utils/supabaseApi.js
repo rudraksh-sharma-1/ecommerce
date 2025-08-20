@@ -305,6 +305,125 @@ export async function getActiveShippingBanner() {
   
   return { success: true, banner: data };
 }
+
+export async function getshippingBanner() {
+  const { data, error } = await supabase
+    .from("shipping_banners")
+    .select()
+    .order("created_at", { ascending: false });
+  if (error) return { success: false, error: error.message };
+  return { success: true, banners: data };
+}
+
+// Helper to upload an image to the shipping_banners bucket
+async function uploadShippingBannerImage(imageFile) {
+  if (!imageFile || !(imageFile instanceof File)) {
+    return { url: null, error: null };
+  }
+  const fileExt = imageFile.name.split(".").pop();
+  const fileName = `shipping_${Date.now()}.${fileExt}`;
+  const { error: uploadError } = await supabaseAdmin.storage
+    .from("shippingbanners")
+    .upload(fileName, imageFile);
+  if (uploadError) {
+    return { url: null, error: uploadError.message };
+  }
+  const { data: urlData } = supabaseAdmin.storage
+    .from("shippingbanners")
+    .getPublicUrl(fileName);
+  return { url: urlData.publicUrl, error: null };
+}
+
+// Add a new shipping banner - only one image, no link field
+export async function addShippingBanner(banner, imageFile) {
+  // Deactivate all other banners if this one is active
+  /* if (banner.active) {
+    const { error: deactivateError } = await supabaseAdmin
+      .from("shipping_banners")
+      .update({ active: false })
+      .neq('id', id);
+    if (deactivateError)
+      return { success: false, error: deactivateError.message };
+  } */
+  const { url, error } = await uploadShippingBannerImage(imageFile);
+  if (error) return { success: false, error };
+
+  const bannerToInsert = { ...banner, image_url: url };
+  const { data, error: insertError } = await supabaseAdmin
+    .from("shipping_banners")
+    .insert([bannerToInsert])
+    .select();
+  if (insertError)
+    return { success: false, error: insertError.message };
+  return { success: true, banner: data };
+}
+
+// Update a shipping banner - only one image, no link field
+export async function updateShippingBanner(id, banner, imageFile) {
+  // Deactivate all other banners if this one is being set to active
+  if (banner.active) {
+    const { error: deactivateError } = await supabaseAdmin
+      .from("shipping_banners")
+      .update({ active: false })
+      .neq('id', id);
+    if (deactivateError)
+      return { success: false, error: deactivateError.message };
+  }
+
+  let imageUrl = banner.image_url;
+  if (imageFile) {
+    const { url, error } = await uploadShippingBannerImage(imageFile);
+    if (error) return { success: false, error };
+    imageUrl = url;
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("shipping_banners")
+    .update({ ...banner, image_url: imageUrl, updated_at: new Date() })
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) return { success: false, error: error.message };
+  return { success: true, banner: data };
+}
+
+// Delete a shipping banner (no change)
+export async function deleteShippingBanner(id) {
+  const { error } = await supabaseAdmin
+    .from("shipping_banners")
+    .delete()
+    .eq("id", id);
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}
+
+// Toggle banner status - no link, only one active at a time
+export async function toggleShippingBannerStatus(id, active) {
+  try {
+    if (active) {
+      const { error: deactivateError } = await supabaseAdmin
+        .from("shipping_banners")
+        .update({ active: false })
+        .neq("id", id);
+      if (deactivateError) {
+        return {
+          success: false,
+          error: `Failed to deactivate other banners: ${deactivateError.message}`,
+        };
+      }
+    }
+    const { error } = await supabaseAdmin
+      .from("shipping_banners")
+      .update({ active })
+      .eq("id", id);
+
+    if (error) return { success: false, error: error.message };
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
 export async function getAllBanners() {
   const { data, error } = await supabase.from("banners").select();
   if (error) return { success: false, error: error.message };

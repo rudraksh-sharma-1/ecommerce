@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Card, 
-  Title, 
-  Text, 
-  Table, 
-  ActionIcon, 
-  Group, 
-  Button, 
-  TextInput, 
+import {
+  Card,
+  Title,
+  Text,
+  Table,
+  ActionIcon,
+  Group,
+  Button,
+  TextInput,
   Switch,
   Modal,
   Image,
@@ -15,10 +15,10 @@ import {
   Loader,
   Notification
 } from "@mantine/core";
-import { 
-  FaEdit, 
-  FaTrash, 
-  FaPlus, 
+import {
+  FaEdit,
+  FaTrash,
+  FaPlus,
   FaLink,
   FaEye,
   FaUpload
@@ -31,13 +31,12 @@ const ShippingBanner = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
   const [currentBanner, setCurrentBanner] = useState(null);
-  const [newBanner, setNewBanner] = useState({ 
-    title: "", 
-    link: "", 
+  const [newBanner, setNewBanner] = useState({
+    title: "",
     active: true,
   });
-  const [desktopImageFile, setDesktopImageFile] = useState(null);
-  const [mobileImageFile, setMobileImageFile] = useState(null);
+
+  const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState({ visible: false, message: "", color: "" });
@@ -64,17 +63,15 @@ const ShippingBanner = () => {
 
   const openAddModal = () => {
     setCurrentBanner(null);
-    setNewBanner({ title: "", link: "", active: true });
-    setDesktopImageFile(null);
-    setMobileImageFile(null);
+    setNewBanner({ title: "", active: true });
+    setImageFile(null);
     setModalOpen(true);
   };
 
   const openEditModal = (banner) => {
     setCurrentBanner(banner);
     setNewBanner({ ...banner });
-    setDesktopImageFile(null);
-    setMobileImageFile(null);
+    setImageFile(null);
     setModalOpen(true);
   };
 
@@ -88,16 +85,16 @@ const ShippingBanner = () => {
       showNotification("Title is required", "red");
       return;
     }
-    if (!currentBanner && !desktopImageFile) {
+    if (!currentBanner && !imageFile) {
       showNotification("Desktop image is required", "red");
       return;
     }
-    
+
     setSaving(true);
     try {
-      console.log('executing save banner', currentBanner, newBanner, desktopImageFile, mobileImageFile);
+      console.log('executing save banner', currentBanner, newBanner);
       if (currentBanner) {
-        const result = await updateShippingBanner(currentBanner.id, newBanner, desktopImageFile, mobileImageFile);
+        const result = await updateShippingBanner(currentBanner.id, newBanner, imageFile);
         console.log('result', result);
         if (result.success) {
           showNotification("Shipping Banner updated successfully", "green");
@@ -106,8 +103,8 @@ const ShippingBanner = () => {
           showNotification("Error: " + result.error, "red");
         }
       } else {
-        console.log('adding new banner', newBanner, desktopImageFile, mobileImageFile);
-        const result = await addShippingBanner(newBanner, desktopImageFile, mobileImageFile);
+        console.log('adding new banner', newBanner);
+        const result = await addShippingBanner(newBanner, imageFile);
         console.log('result', result);
         if (result.success) {
           showNotification("Shipping Banner added successfully", "green");
@@ -139,7 +136,7 @@ const ShippingBanner = () => {
   const toggleActive = async (id, currentStatus) => {
     // Determine the new status
     const newActiveStatus = !currentStatus;
-    
+
     // Call the API function with the new status
     const result = await toggleShippingBannerStatus(id, newActiveStatus);
 
@@ -165,7 +162,7 @@ const ShippingBanner = () => {
           <Table striped highlightOnHover>
             <thead>
               <tr>
-                <th style={{ width: '220px',textAlign: 'center' }}>Banner</th>
+                <th style={{ width: '220px', textAlign: 'center' }}>Banner</th>
                 <th>Title</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -184,9 +181,9 @@ const ShippingBanner = () => {
                       alignItems: 'center',
                       justifyContent: 'center'
                     }}>
-                      <Image 
-                        src={banner.image_url} 
-                        alt={banner.title} 
+                      <Image
+                        src={banner.image_url}
+                        alt={banner.title}
                         width={200}
                         height={130}
                         fit="contain" // This is equivalent to object-fit: contain
@@ -194,13 +191,25 @@ const ShippingBanner = () => {
                       />
                     </div>
                   </td>
-                  <td>{banner.title}</td>
-                  <td><Switch 
-                        checked={banner.active} 
-                        // Pass both the id and the current status to the handler
-                        onChange={() => toggleActive(banner.id, banner.active)} 
-                      /></td>
-                  <td>
+                  <td className="items-center" style={{
+                    padding: '8px',
+                    textAlign: 'center', // center content horizontally
+                    verticalAlign: 'middle', // center content vertically
+                  }}>{banner.title}</td>
+                  <td className="items-center" style={{
+                    padding: '8px',
+                    textAlign: 'center', // center content horizontally
+                    verticalAlign: 'middle', // center content vertically
+                  }}><Switch
+                      checked={banner.active}
+                      // Pass both the id and the current status to the handler
+                      onChange={() => toggleActive(banner.id, banner.active)}
+                    /></td>
+                  <td className="items-center " style={{
+                    padding: '8px',
+                    textAlign: 'center', // center content horizontally
+                    verticalAlign: 'middle', // center content vertically
+                  }}>
                     <Group spacing={8}>
                       <ActionIcon color="blue" onClick={() => openEditModal(banner)}><FaEdit size={16} /></ActionIcon>
                       <ActionIcon color="teal" onClick={() => openPreviewModal(banner)}><FaEye size={16} /></ActionIcon>
@@ -216,10 +225,15 @@ const ShippingBanner = () => {
 
       <Modal opened={modalOpen} onClose={() => setModalOpen(false)} title={currentBanner ? "Edit Shipping Banner" : "Add Shipping Banner"} size="lg">
         <TextInput label="Title" placeholder="Banner Title" required value={newBanner.title} onChange={(e) => setNewBanner({ ...newBanner, title: e.target.value })} />
-        <TextInput label="Link" placeholder="e.g., /products/category" value={newBanner.link} onChange={(e) => setNewBanner({ ...newBanner, link: e.target.value })} mt="md" />
-        <Switch label="Active" checked={newBanner.active} onChange={(e) => setNewBanner({...newBanner, active: e.currentTarget.checked})} mt="md" />
-        <FileInput label="Desktop Image" description="Recommended dimensions: 1200px x 200px" placeholder="Upload desktop image" accept="image/*" onChange={setDesktopImageFile} mt="md" />
-        <FileInput label="Mobile Image" description="Recommended dimensions: 290px x 110px" placeholder="Upload mobile image" accept="image/*" onChange={setMobileImageFile} mt="md" />
+        <Switch label="Active" checked={newBanner.active} onChange={(e) => setNewBanner({ ...newBanner, active: e.currentTarget.checked })} mt="md" />
+        <FileInput
+          label="Banner Image"
+          description="Recommended: 1200x200px"
+          placeholder="Upload image"
+          accept="image/*"
+          onChange={setImageFile}
+          mt="md"
+        />
         <Group position="right" mt="lg">
           <Button variant="default" onClick={() => setModalOpen(false)}>Cancel</Button>
           <Button color="blue" onClick={handleSaveBanner} loading={saving}>{currentBanner ? "Update Banner" : "Add Banner"}</Button>

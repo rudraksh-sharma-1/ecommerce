@@ -7,7 +7,7 @@ import Tab from "@mui/material/Tab";
 import { useAuth } from "../../contexts/AuthContext";
 import ProductsSlider from "../../components/ProductsSlider";
 import { useLocationContext } from "../../contexts/LocationContext.jsx";
-import VideoBannerSlider  from '../../components/HomeSlider/VideoSlider.jsx'
+import VideoBannerSlider from '../../components/HomeSlider/VideoSlider.jsx'
 import ProductsNew from "../LastMobileProducts/LastMobileProducts.jsx";
 
 // Import Swiper styles
@@ -117,34 +117,34 @@ export const Home = () => {
               selectedAddress.latitude,
               selectedAddress.longitude
             );
-            /* console.log("Selected Address:", selectedAddress); */
-          } else {
-            productFetchFn = getAllProducts;
-          }
-        } catch (err) {
-          console.error("Error determining product fetch method:", err);
+          /* console.log("Selected Address:", selectedAddress); */
+        } else {
           productFetchFn = getAllProducts;
         }
-        
-        const [
-          { success: prodSuccess, products: prodData },
-          { success: catSuccess, categories: catData },
-          { success: banSuccess, banners: banData },
-        ] = await Promise.all([
-          productFetchFn(),
-          getAllCategories(),
-          getAllBanners(),
-        ]);
-        setProducts(
-          prodSuccess && prodData
+      } catch (err) {
+        console.error("Error determining product fetch method:", err);
+        productFetchFn = getAllProducts;
+      }
+
+      const [
+        { success: prodSuccess, products: prodData },
+        { success: catSuccess, categories: catData },
+        { success: banSuccess, banners: banData },
+      ] = await Promise.all([
+        productFetchFn(),
+        getAllCategories(),
+        getAllBanners(),
+      ]);
+      setProducts(
+        prodSuccess && prodData
           ? prodData.map((p) => ({ ...p, id: p.id || p.product_id }))
           : []
-        );
-        /* console.log("Fetching nearby products using address:", products); */
-        setCategories(catSuccess && catData ? catData : []);
-        setBanners(banSuccess && banData ? banData : []);
-        setLoading(false);
-      }
+      );
+      /* console.log("Fetching nearby products using address:", products); */
+      setCategories(catSuccess && catData ? catData : []);
+      setBanners(banSuccess && banData ? banData : []);
+      setLoading(false);
+    }
 
     fetchAllData();
     async function fetchShippingBanner() {
@@ -156,11 +156,11 @@ export const Home = () => {
     fetchShippingBanner();
   }, [selectedAddress]);
 
-useEffect(() => {
+  useEffect(() => {
     const fetchShipping = async () => {
       try {
         setLoading(true);
-        const result = await getshipping(); 
+        const result = await getshipping();
         console.log("resultshipping", result);
         if (result.success && Array.isArray(result.banners)) {
           const shipBanner = result.banners.filter(b => b.active && b.position === 'hero' && !b.is_mobile);
@@ -184,7 +184,7 @@ useEffect(() => {
     };
     fetchShipping();
   }, []);
-  
+
 
   /* const getProductsByCategory = (category) => {
     return products
@@ -293,7 +293,7 @@ useEffect(() => {
   return (
     <>
       {/* Search Bar For mobile Screens */}
-      
+
 
       {/* Add spacer to push content below the search bar on mobile */}
       {/* <div
@@ -355,58 +355,45 @@ useEffect(() => {
       </section>
 
       {/* ================== PROMOTIONAL BANNER ================== */}
-{/* Desktop version (lg and up) */}
+      {/* Desktop version (lg and up) */}
 
- <section className="py-4 bg-white md:flex md:justify-center">
+      <section className="!p-5 bg-white md:flex md:justify-center">
         <div className="px-2 md:container md:px-10">
-          <div className="promotional-banner w-full lg:w-[95%] mx-auto relative overflow-hidden rounded-xl shadow-lg">
+          <div
+            className="promotional-banner relative overflow-hidden rounded-xl shadow-lg 
+                 md:hidden w-[312px] h-[110px]" // Fixed width 110px and height 150px on mobile only
+          >
             {shippingBanner ? (
               // If an active shipping banner exists, render it
-                <div className="shipping-banner-container">
+              <div className="shipping-banner-container w-full h-full">
                 <a href={shippingBanner.link || '#'} target="_blank" rel="noopener noreferrer">
                   <picture>
                     {shippingBanner.mobile_image_url && (
                       <source media="(max-width: 767px)" srcSet={shippingBanner.mobile_image_url} />
                     )}
-                    <img 
-                      src={shippingBanner.image_url} 
-                      alt={shippingBanner.title} 
+                    <img
+                      src={shippingBanner.image_url}
+                      alt={shippingBanner.title}
+                      className="w-full h-full object-cover" // Cover the whole container
                     />
                   </picture>
                 </a>
               </div>
-              // <a href={shippingBanner.link || '#'} target="_blank" rel="noopener noreferrer">
-              //   <picture>
-              //     {shippingBanner.mobile_image_url && (
-              //       <source media="(max-width: 767px)" srcSet={shippingBanner.mobile_image_url} />
-              //     )}
-              //     <img 
-              //       src={shippingBanner.image_url} 
-              //       alt={shippingBanner.title} 
-              //       className="w-full h-auto"
-              //     />
-              //   </picture>
-              // </a>
             ) : (
-              // Otherwise, render the default content (your original banner)
-              <div className="bg-gradient-to-r from-orange-100 via-red-50 to-orange-100 border-2 border-red-200">
+              // Default content (also restricted to width 110px)
+              <div className="bg-gradient-to-r from-orange-100 via-red-50 to-orange-100 border-2 border-red-200 w-full h-full">
                 <div className="absolute inset-0 opacity-10 pointer-events-none">
                   <div className="absolute -top-10 -left-10 w-56 h-56 bg-red-400 rounded-full blur-3xl" />
                   <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-orange-300 rounded-full blur-3xl" />
                 </div>
-                <div className="relative z-10 flex items-center justify-between py-6 px-8">
-                  {/* ... your original default banner content ... */}
-                   <div className="flex items-center gap-5">
-                      <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-500">
-                        <FaShippingFast className="text-white text-2xl" />
-                      </div>
-                      <div>
-                        <h3 className="text-2xl font-bold text-red-800 mb-1">
-                          {getPromoSetting("promo_shipping_title", "Free Shipping")}
-                        </h3>
-                        <p className="text-sm font-semibold text-red-600">Shop now</p>
-                      </div>
-                    </div>
+                <div className="relative z-10 flex flex-col items-center justify-center py-6 px-4 h-full">
+                  <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-500 mb-2">
+                    <FaShippingFast className="text-white text-2xl" />
+                  </div>
+                  <h3 className="text-lg font-bold text-red-800 mb-1 text-center">
+                    {getPromoSetting("promo_shipping_title", "Free Shipping")}
+                  </h3>
+                  <p className="text-xs font-semibold text-red-600 text-center">Shop now</p>
                 </div>
               </div>
             )}
@@ -415,7 +402,9 @@ useEffect(() => {
       </section>
 
 
-{/* <section className="hidden md:block py-4 bg-white">
+
+
+      {/* <section className="hidden md:block py-4 bg-white">
   <div className="container px-4">
     <div className="promotional-banner w-full lg:w-[95%] mx-auto
                     relative overflow-hidden rounded-xl shadow-lg
@@ -463,19 +452,19 @@ useEffect(() => {
   </div>
 </section> */}
 
-{/* Mobile version (below lg) */}
-{/* <section className="md:hidden w-full">
+      {/* Mobile version (below lg) */}
+      {/* <section className="md:hidden w-full">
   <img
     src={promoImage}
     alt="Special Mobile Offer"
     className="w-full h-auto object-cover"
   />
 </section> */}
-{/* ========================================================= */}
+      {/* ========================================================= */}
 
 
 
-      <VideoBannerSlider/>
+      <VideoBannerSlider />
 
       {/* Featured Products Section */}
       <section className="sm:!py-10 !py-0 md:flex md:justify-center bg-white">
@@ -559,12 +548,12 @@ useEffect(() => {
           </div>
         </div>
       </section> */}
-              
+
               {/* {(index + 1) % 2 === 0 && <PromoBanner />} */}
             </React.Fragment>
           )
       )}
-        <ProductsNew/>
+      <ProductsNew />
     </>
   );
 };

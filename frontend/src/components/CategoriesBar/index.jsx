@@ -40,14 +40,14 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-const CategoriesBar = () => {
+const CategoriesBar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const [categories, setCategories] = useState([]);
   const [mobileCategories, setMobileCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasAnnouncementBar, setHasAnnouncementBar] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  /* const [mobileMenuOpen, setMobileMenuOpen] = useState(false); */
   const [allCategories, setAllCategories] = useState([]); // For mobile menu
   const [openSubmenu, setOpenSubmenu] = useState([]); // For mobile menu category/subcategory expansion
   const { currentUser, logout } = useAuth();
@@ -1314,7 +1314,7 @@ const CategoriesBar = () => {
           <span style={{ fontSize: "11px" }}>Category</span>
         </button>
         <button
-          className="mobile-bottom-nav-btn"
+          className="mobile-bottom-nav-btn mt-1"
           aria-label="Cart"
           onClick={() => handleBottomMenu("cart")}
           style={{

@@ -63,6 +63,13 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Toggle function to open/close mobile sidebar menu
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen((prev) => !prev);
+  };
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -95,7 +102,7 @@ function App() {
               <DynamicHead />
               <BrowserRouter>
                 <AnnouncementBar />
-                {isMobile ? <MobileHeader />: <Header/>}
+                {isMobile ? <MobileHeader toggleMobileMenu={toggleMobileMenu} /> : <Header />}
                 {/* <div className="mobile-search-bar-container w-full px-5 py-4 pt-5 z-999">
                   <Search />
                 </div> */}
@@ -105,7 +112,8 @@ function App() {
                 <LocationModal />
                 <MobileBannerCarousel />
                 <MobileCategoriesBar />
-                <CategoriesBar className="sm:hidden" />
+                <CategoriesBar className="sm:hidden" mobileMenuOpen={mobileMenuOpen}
+                  setMobileMenuOpen={setMobileMenuOpen} />
                 <Routes>
                   <Route path={"/"} exact={true} element={<Home />} />
                   <Route
@@ -144,7 +152,7 @@ function App() {
                   {<Route
                     path="/privacy-policy"
                     element={<PrivacyPolicy />}
-                  /> }
+                  />}
                   <Route
                     path={"/terms-of-service"}
                     exact={true}
