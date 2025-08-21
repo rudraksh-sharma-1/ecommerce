@@ -9,6 +9,10 @@ import ProductsSlider from "../../components/ProductsSlider";
 import { useLocationContext } from "../../contexts/LocationContext.jsx";
 import VideoBannerSlider from '../../components/HomeSlider/VideoSlider.jsx'
 import ProductsNew from "../LastMobileProducts/LastMobileProducts.jsx";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+
 
 // Import Swiper styles
 import "swiper/css";
@@ -163,13 +167,11 @@ export const Home = () => {
         const result = await getshipping();
         console.log("resultshipping", result);
         if (result.success && Array.isArray(result.banners)) {
-          const shipBanner = result.banners.filter(b => b.active && b.position === 'hero' && !b.is_mobile);
+          const shipBanner = result.banners.filter(b => b.active);
           setShippingBanners(shipBanner.map(b => ({
             id: b.id,
             title: b.title,
-            description: b.description,
             imageUrl: b.image || b.image_url,
-            link: b.link || '#',
           })));
           console.log("Shipping Banners:", shipBanner);
         } else {
@@ -357,46 +359,50 @@ export const Home = () => {
       {/* ================== PROMOTIONAL BANNER ================== */}
       {/* Desktop version (lg and up) */}
 
-      <section className="!p-5 bg-white md:flex md:justify-center">
-
-        {shippingBanner ? (
-          // If an active shipping banner exists, render it
-          <div className="w-full h-full border-0 rounded">
-
-            <picture>
-              {shippingBanner.mobile_image_url && (
-                <source media="(max-width: 767px)" srcSet={shippingBanner.mobile_image_url} />
-              )}
-              <img
-                src={shippingBanner.image_url}
-                alt={shippingBanner.title}
-                className="w-full h-full object-cover rounded-lg" // Cover the whole container
-              />
-            </picture>
-
+      <section className="!p-5 bg-white md:hidden md:justify-center">
+        {shippingBanners && shippingBanners.length > 0 ? (
+          <div className="w-full h-full border-0 rounded relative">
+            <Slider
+              dots={true}
+              infinite={true}
+              speed={500}
+              slidesToShow={1}
+              slidesToScroll={1}
+              arrows={true}
+              autoplay={true}
+              autoplaySpeed={4000}
+              className="rounded-lg"
+            >
+              {shippingBanners.map((banner) => (
+                <a
+                  href={banner.link}
+                  key={banner.id}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative block"
+                >
+                  <img
+                    src={banner.imageUrl}
+                    alt={banner.title}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  {/* Optional overlay with title and description */}
+                  {(banner.title || banner.description) && (
+                    <div className="absolute bottom-4 left-4 bg-black bg-opacity-60 text-white p-3 rounded">
+                      {banner.title && <h3 className="font-bold">{banner.title}</h3>}
+                      {banner.description && (
+                        <p className="text-sm mt-1">{banner.description}</p>
+                      )}
+                    </div>
+                  )}
+                </a>
+              ))}
+            </Slider>
           </div>
         ) : (
-          // Default content (also restricted to width 110px)
-          <div className="bg-gradient-to-r from-orange-100 via-red-50 to-orange-100 border-2 border-red-200 w-full h-full">
-            <div className="absolute inset-0 opacity-10 pointer-events-none">
-              <div className="absolute -top-10 -left-10 w-56 h-56 bg-red-400 rounded-full blur-3xl" />
-              <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-orange-300 rounded-full blur-3xl" />
-            </div>
-            <div className="relative z-10 flex flex-col items-center justify-center py-6 px-4 h-full">
-              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-500 mb-2">
-                <FaShippingFast className="text-white text-2xl" />
-              </div>
-              <h3 className="text-lg font-bold text-red-800 mb-1 text-center">
-                {getPromoSetting("promo_shipping_title", "Free Shipping")}
-              </h3>
-              <p className="text-xs font-semibold text-red-600 text-center">Shop now</p>
-            </div>
-          </div>
+         <></>
         )}
-
-
       </section>
-
 
 
 

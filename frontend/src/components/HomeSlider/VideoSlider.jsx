@@ -53,6 +53,8 @@ const VideoBannerSlider = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  if(!isMobile) return null
+
   return (
     <div className="w-full flex justify-center items-center ">
       {loading ? (
