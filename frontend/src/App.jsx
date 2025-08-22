@@ -45,6 +45,7 @@ import LocationModal from "./components/LocationModal/LocationModal.jsx";
 import MainSearchBar from "./components/MainSearchBar/MainSearchBar.jsx";
 import ConditionalMobileCategoriesBar from "./components/CategoriesBar/ConditionalMobileCategoriesBar.jsx";
 import MobileHeader from "./components/Header/MobileHeader.jsx";
+import StoreNav from "./components/StoreNav/StoreNav.jsx";
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -106,6 +107,7 @@ function App() {
                 {/* <div className="mobile-search-bar-container w-full px-5 py-4 pt-5 z-999">
                   <Search />
                 </div> */}
+                <StoreNav/>
                 <div className="!sticky top-0">
                   <MainSearchBar />
                 </div>

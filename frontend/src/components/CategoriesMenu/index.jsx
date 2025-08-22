@@ -462,8 +462,8 @@ const CategoriesMenu = () => {
                       </div>
                     )}
                   </div>
-                  {/* Buisness Partner */}
-                  <div className="menu-section">
+                  {/* E-Haat */}
+                  {/* <div className="menu-section">
                     <Link
                       to="/BusinessPartner"
                       className="menu-item main-nav-item"
@@ -471,7 +471,7 @@ const CategoriesMenu = () => {
                     >
                       <span className="nav-item-name">E-Haat </span>
                     </Link>
-                  </div>
+                  </div> */}
 
                   {/* Buisness Partner */}
                   <div className="menu-section">

@@ -1141,11 +1141,11 @@ const CategoriesBar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 </ul>
               </li>
 
-              <li>
+              {/* <li>
                 <Link to="/BusinessPartner" onClick={closeMobileMenu}>
                   E-Haat
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link to="/BusinessPartner" onClick={closeMobileMenu}>
                   Business Partner
