@@ -163,18 +163,8 @@ export async function addShippingBanner(banner, imageFile) {
   return { success: true, banner: data };
 }
 
-// Update a shipping banner - only one image, no link field
+// Update a shipping banner - multiple banners can be active
 export async function updateShippingBanner(id, banner, imageFile) {
-  // Deactivate all other banners if this one is being set to active
-  if (banner.active) {
-    const { error: deactivateError } = await supabaseAdmin
-      .from("shipping_banners")
-      .update({ active: false })
-      .neq('id', id);
-    if (deactivateError)
-      return { success: false, error: deactivateError.message };
-  }
-
   let imageUrl = banner.image_url;
   if (imageFile) {
     const { url, error } = await uploadShippingBannerImage(imageFile);
@@ -188,10 +178,10 @@ export async function updateShippingBanner(id, banner, imageFile) {
     .eq("id", id)
     .select()
     .single();
+
   if (error) return { success: false, error: error.message };
   return { success: true, banner: data };
 }
-
 // Delete a shipping banner (no change)
 export async function deleteShippingBanner(id) {
   const { error } = await supabaseAdmin
@@ -202,21 +192,9 @@ export async function deleteShippingBanner(id) {
   return { success: true };
 }
 
-// Toggle banner status - no link, only one active at a time
+// Toggle banner status - allow multiple active
 export async function toggleShippingBannerStatus(id, active) {
   try {
-    if (active) {
-      const { error: deactivateError } = await supabaseAdmin
-        .from("shipping_banners")
-        .update({ active: false })
-        .neq("id", id);
-      if (deactivateError) {
-        return {
-          success: false,
-          error: `Failed to deactivate other banners: ${deactivateError.message}`,
-        };
-      }
-    }
     const { error } = await supabaseAdmin
       .from("shipping_banners")
       .update({ active })
@@ -228,7 +206,6 @@ export async function toggleShippingBannerStatus(id, active) {
     return { success: false, error: error.message };
   }
 }
-
 // BANNERS
 export async function getAllBanners() {
   const { data, error } = await supabaseAdmin.from("banners").select();
@@ -1274,9 +1251,8 @@ export async function deleteUser(id) {
   if (authError) {
     return {
       success: false,
-      error: `User deleted from DB but failed to delete from Auth: ${
-        authError.message || authError
-      }`,
+      error: `User deleted from DB but failed to delete from Auth: ${authError.message || authError
+        }`,
     };
   }
   return { success: true };
@@ -1328,9 +1304,8 @@ export async function toggleUserStatus(id, isActive) {
   if (authError) {
     return {
       success: false,
-      error: `User status updated in DB but failed to update in Auth: ${
-        authError.message || authError
-      }`,
+      error: `User status updated in DB but failed to update in Auth: ${authError.message || authError
+        }`,
     };
   }
   return { success: true };

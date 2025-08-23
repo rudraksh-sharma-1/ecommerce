@@ -107,10 +107,10 @@ function App() {
                 {/* <div className="mobile-search-bar-container w-full px-5 py-4 pt-5 z-999">
                   <Search />
                 </div> */}
-                <StoreNav/>
                 <div className="!sticky top-0">
                   <MainSearchBar />
                 </div>
+                <StoreNav/>
                 <LocationModal />
                 <MobileBannerCarousel />
                 <MobileCategoriesBar />

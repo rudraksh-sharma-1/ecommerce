@@ -387,14 +387,14 @@ export const Home = () => {
                     className="w-full h-full object-cover rounded-lg"
                   />
                   {/* Optional overlay with title and description */}
-                  {(banner.title || banner.description) && (
+                  {/* {(banner.title || banner.description) && (
                     <div className="absolute bottom-4 left-4 bg-black bg-opacity-60 text-white p-3 rounded">
                       {banner.title && <h3 className="font-bold">{banner.title}</h3>}
                       {banner.description && (
                         <p className="text-sm mt-1">{banner.description}</p>
                       )}
                     </div>
-                  )}
+                  )} */}
                 </a>
               ))}
             </Slider>

@@ -3,9 +3,8 @@
   position: sticky;
   top: 0;
   z-index: 998;
-  background: #fff;
   border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
 }
 
 /* Adjust position when announcement bar is present */

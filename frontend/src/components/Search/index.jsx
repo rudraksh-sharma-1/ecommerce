@@ -33,8 +33,9 @@ const Search = () => {
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                         placeholder="Search for products..." 
-                        className="w-full h-[44px] bg-gray-100 rounded-l-md px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+                        className="w-full !h-[44px] md:h-[44px] bg-gray-100 rounded-l-md px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
                         aria-label="Search"
+                        
                     />
                     {searchTerm && (
                         <IconButton 
