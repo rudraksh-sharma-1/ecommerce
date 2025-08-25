@@ -26,6 +26,10 @@ const MobileCategoriesBar = () => {
   if (location.pathname !== "/") return null;
 
   return (
+    <>
+    <div className="flex justify-center">
+      <img src="https://i.postimg.cc/rmH2JrtW/Shop-By-Category-removebg-preview.png" alt="Shop By Category" className="p-4 pb-0 md:hidden" />
+    </div>
     <div
       className={`grid grid-cols-4 gap-4 px-2 py-4 sm:hidden ${
         location.pathname === "/" ? "mt-0" : "mt-15"
@@ -51,6 +55,7 @@ const MobileCategoriesBar = () => {
         </div>
       ))}
     </div>
+    </>
   );
 };
 

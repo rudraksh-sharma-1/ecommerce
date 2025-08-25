@@ -19,7 +19,7 @@ const MainSearchBar = () => {
     if (isMobile && location.pathname.startsWith("/subcategories")) return null;
 
     return (
-        <div className="mobile-search-bar-container w-full px-5 py-1 ">
+        <div className="mobile-search-bar-container w-full px-2 py-1 ">
             <Search />
         </div>
     );

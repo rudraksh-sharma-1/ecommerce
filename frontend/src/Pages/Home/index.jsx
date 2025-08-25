@@ -165,7 +165,7 @@ export const Home = () => {
       try {
         setLoading(true);
         const result = await getshipping();
-        console.log("resultshipping", result);
+        /* console.log("resultshipping", result); */
         if (result.success && Array.isArray(result.banners)) {
           const shipBanner = result.banners.filter(b => b.active);
           setShippingBanners(shipBanner.map(b => ({
@@ -173,7 +173,7 @@ export const Home = () => {
             title: b.title,
             imageUrl: b.image || b.image_url,
           })));
-          console.log("Shipping Banners:", shipBanner);
+          /* console.log("Shipping Banners:", shipBanner); */
         } else {
           setShippingBanners([]);
         }

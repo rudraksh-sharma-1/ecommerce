@@ -46,6 +46,9 @@ import MainSearchBar from "./components/MainSearchBar/MainSearchBar.jsx";
 import ConditionalMobileCategoriesBar from "./components/CategoriesBar/ConditionalMobileCategoriesBar.jsx";
 import MobileHeader from "./components/Header/MobileHeader.jsx";
 import StoreNav from "./components/StoreNav/StoreNav.jsx";
+import BbmPicks from "./components/BBM Picks/BbmPick.jsx";
+import Stores from "./components/BBM Picks/Stores.jsx";
+import Quickyfy from "./components/BBM Picks/Quickyfy.jsx";
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -80,20 +83,28 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const banners = [
-    {
-      id: 1,
-      title: 'Dry Fruits Sale',
-      imageUrl: 'https://your-image-url.com/slide1.jpg',
-      link: '/dryfruits',
-    },
-    {
-      id: 2,
-      title: 'New Offers',
-      imageUrl: 'https://your-image-url.com/slide2.jpg',
-      link: '/offers',
-    },
-  ];
+  const data = [
+  { image: "https://i.postimg.cc/Tw85NQLJ/Candle2.jpg", label: "Office" },
+  { image: "https://i.postimg.cc/Tw85NQLJ/Candle2.jpg", label: "Packaging" },
+  { image: "https://i.postimg.cc/Tw85NQLJ/Candle2.jpg", label: "Essentia" },
+  { image: "https://i.postimg.cc/Tw85NQLJ/Candle2.jpg", label: "Plus" },
+  { image: "https://i.postimg.cc/Tw85NQLJ/Candle2.jpg", label: "More" },
+];
+  const Seconddata = [
+  { image: "https://i.postimg.cc/zfvZpS8G/digital-digital-art-artwork-futuristic-futuristic-city-hd-wallpaper-preview.jpg", label: "Office" },
+  { image: "https://i.postimg.cc/zfvZpS8G/digital-digital-art-artwork-futuristic-futuristic-city-hd-wallpaper-preview.jpg", label: "Packaging" },
+  { image: "https://i.postimg.cc/zfvZpS8G/digital-digital-art-artwork-futuristic-futuristic-city-hd-wallpaper-preview.jpg", label: "Essentia" },
+  { image: "https://i.postimg.cc/zfvZpS8G/digital-digital-art-artwork-futuristic-futuristic-city-hd-wallpaper-preview.jpg", label: "Plus" },
+  { image: "https://i.postimg.cc/zfvZpS8G/digital-digital-art-artwork-futuristic-futuristic-city-hd-wallpaper-preview.jpg", label: "More" },
+];
+  const Thirddata = [
+  { image: "https://i.postimg.cc/zfFgL0VR/Whats-App-Image-2025-07-24-at-13-27-17.jpg", label: "Office" },
+  { image: "https://i.postimg.cc/zfFgL0VR/Whats-App-Image-2025-07-24-at-13-27-17.jpg", label: "Packaging" },
+  { image: "https://i.postimg.cc/zfFgL0VR/Whats-App-Image-2025-07-24-at-13-27-17.jpg", label: "Essentia" },
+  { image: "https://i.postimg.cc/zfFgL0VR/Whats-App-Image-2025-07-24-at-13-27-17.jpg", label: "Plus" },
+  { image: "https://i.postimg.cc/zfFgL0VR/Whats-App-Image-2025-07-24-at-13-27-17.jpg", label: "More" },
+];
+
   return (
     <>
       <AuthProvider>
@@ -113,6 +124,9 @@ function App() {
                 <StoreNav/>
                 <LocationModal />
                 <MobileBannerCarousel />
+                <Stores title="BBM Picks" items={Seconddata} />
+                <BbmPicks title="Recommended Store" items={data} />
+                <Quickyfy title="Quickyfy" items={Thirddata} />
                 <MobileCategoriesBar />
                 <CategoriesBar className="sm:hidden" mobileMenuOpen={mobileMenuOpen}
                   setMobileMenuOpen={setMobileMenuOpen} />

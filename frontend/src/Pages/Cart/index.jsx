@@ -225,7 +225,7 @@ const Cart = () => {
             razorpay_signature,
           } = response;
 
-         /*  console.log(response) */
+          /*  console.log(response) */
           // Step 3: Verify payment signature before saving order
           const verification = await axios.post("https://ecommerce-8342.onrender.com/api/payment/verify-payment", {
             razorpay_payment_id,
@@ -405,70 +405,103 @@ const Cart = () => {
                     <div key={item.cart_item_id} className="p-3 sm:p-4 cart-item">
                       {/* Mobile Layout */}
                       <div className="block sm:hidden">
-                        {/* Mobile: Image and Details Row */}
-                        <div className="flex items-start gap-3 mb-3">
-                          <div className="cart-product-image flex-shrink-0">
+                        {/* Mobile: Image, Details, Quantity, and Price in a single row */}
+                        <div className="flex items-center justify-between gap-3 py-2 border-b border-gray-200">
+
+                          {/* Product Image */}
+                          <div className="cart-product-image flex-shrink-0 w-12 h-12">
                             <img
                               src={item.image}
                               alt={item.name}
+                              className="w-full h-full object-cover rounded-md"
                               loading="lazy"
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = `https://placehold.co/200x200/f0f0f0/666?text=${encodeURIComponent(item.name.charAt(0))}`;
+                                e.target.src = `https://placehold.co/200x200/f0f0f0/666?text=${encodeURIComponent(
+                                  item.name.charAt(0)
+                                )}`;
                               }}
                             />
                           </div>
 
-                          <div className="flex-grow min-w-0">
-                            <h3 className="font-medium text-gray-900 mb-1 line-clamp-2 product-name text-sm">{item.name}</h3>
-                            <p className="text-xs text-gray-600 mb-1">Category: {item.category}</p>
+                          {/* Product Details */}
+                          <div className="flex flex-col flex-grow min-w-0">
+                            <h3 className="text-gray-900 line-clamp-2 product-name text-xs leading-snug">
+                              {item.name}
+                            </h3>
+                            <p className="text-xs text-gray-600">
+                              {item.uom || "1 Variable"}
+                            </p>
                             {item.customization && (
-                              <p className="text-xs text-gray-600 mb-1 line-clamp-1">Customization: {item.customization}</p>
+                              <p className="text-xs text-gray-500 line-clamp-1">
+                                Customization: {item.customization}
+                              </p>
                             )}
-                            <p className="text-sm font-medium text-gray-900">₹{item.price.toFixed(2)}</p>
                           </div>
-                        </div>
 
-                        {/* Mobile: Quantity and Total Row */}
-                        <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
-                          <div className="flex items-center gap-2">
+                          {/* Quantity Controls - Fixed size & compact */}
+                          <div
+                            className="flex-shrink-0 flex items-center border border-pink-400 rounded-md overflow-hidden"
+                            style={{ height: "26px", width: "70px" }} // fixed size of box
+                          >
+                            {/* Minus */}
                             <button
-                              onClick={() => updateQuantity(item.cart_item_id, item.quantity - 1)}
-                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors bg-white"
+                              onClick={() =>
+                                updateQuantity(item.cart_item_id, item.quantity - 1)
+                              }
                               disabled={item.quantity <= 1}
+                              className="flex items-center justify-center text-pink-500 font-medium disabled:text-gray-300 disabled:cursor-not-allowed"
+                              style={{
+                                width: "20px",
+                                height: "26px",
+                                fontSize: "14px",
+                                lineHeight: "1",
+                              }}
                             >
                               -
                             </button>
-                            <input
-                              type="number"
-                              min="1"
-                              value={item.quantity}
-                              onChange={(e) => {
-                                const newQty = parseInt(e.target.value);
-                                if (newQty > 0) updateQuantity(item.cart_item_id, newQty);
-                              }}
-                              className="w-12 h-8 border border-gray-300 rounded text-center text-sm focus:outline-none focus:border-blue-500"
-                            />
+
+                            {/* Quantity */}
+                            <span
+                              className="flex items-center justify-center font-medium text-gray-800 bg-white"
+                              style={{ width: "30px", height: "26px", fontSize: "12px" }}
+                            >
+                              {item.quantity}
+                            </span>
+
+                            {/* Plus */}
                             <button
-                              onClick={() => updateQuantity(item.cart_item_id, item.quantity + 1)}
-                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors bg-white"
+                              onClick={() =>
+                                updateQuantity(item.cart_item_id, item.quantity + 1)
+                              }
+                              className="flex items-center justify-center text-pink-500 font-medium"
+                              style={{
+                                width: "20px",
+                                height: "26px",
+                                fontSize: "14px",
+                                lineHeight: "1",
+                              }}
                             >
                               +
                             </button>
                           </div>
 
-                          <div className="text-right">
-                            <p className="font-medium text-gray-900 mb-1">₹{(item.price * item.quantity).toFixed(2)}</p>
+                          {/* Price + Remove */}
+                          <div className="text-right ml-2">
+                            <p className="font-medium text-gray-900 text-sm">
+                              ₹{(item.price * item.quantity).toFixed(2)}
+                            </p>
                             <button
                               onClick={() => removeItem(item.cart_item_id)}
-                              className="text-red-500 hover:text-red-700 flex items-center gap-1 text-sm transition-colors"
+                              className="text-red-500 hover:text-red-700 flex items-center justify-end gap-1 text-xs transition-colors"
                             >
-                              <MdDelete size={14} />
+                              <MdDelete size={12} />
                               Remove
                             </button>
                           </div>
                         </div>
                       </div>
+
 
                       {/* Desktop Layout */}
                       <div className="hidden sm:flex items-start sm:items-center gap-4">

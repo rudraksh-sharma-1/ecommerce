@@ -53,7 +53,7 @@ const MobileBannerCarousel = () => {
   if (pathname !== "/" || banners.length === 0 || loading || error) return null;
 
   return (
-    <div className="block md:hidden mt-5 mx-1">
+    <div className="block md:hidden mt-2 mx-1">
       <div className="overflow-hidden rounded-xl shadow-lg" ref={emblaRef}>
         <div className="flex">
           {banners.map((banner, index) => (
